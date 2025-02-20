@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Searchbar from "./searchbar/src/components/Searchbar"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           >
             Read our docs
           </a>
+          <Searchbar/>
         </div>
       </body>
     </html>
