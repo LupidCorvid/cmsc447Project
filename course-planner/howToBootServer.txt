@@ -1,2 +1,7 @@
 npm run dev: builds and starts the project
     Once ran, open http://localhost:3000 on browser
+
+Anything in the \app\ directory pertains to the website. tsconfig.json will automatically update when you change things in the folder. 
+I think both .js and .tsx are valid file namesbut .tsx probably allows for more of reacts framework so use that.
+
+Each function is a part of the page and the return statement is the html that should output
