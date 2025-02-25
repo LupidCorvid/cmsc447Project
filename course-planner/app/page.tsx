@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Searchbar from "./searchbar/src/components/Searchbar"
-
+import DynamicList from "./searchbar/src/components/DynamicList"
 function App() {
   return (
     <html>
@@ -16,6 +16,7 @@ function App() {
             Read our docs
           </a>
           <Searchbar/>
+          <DynamicList/>
         </div>
       </body>
     </html>
