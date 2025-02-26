@@ -1,6 +1,9 @@
 npm run dev: builds and starts the project
     Once ran, open http://localhost:3000 on browser
 
+npm install --save react-helmet --legacy-peer-deps
+    For using <script> in .tsx files
+
 Anything in the \app\ directory pertains to the website. tsconfig.json will automatically update when you change things in the folder. 
 I think both .js and .tsx are valid file namesbut .tsx probably allows for more of reacts framework so use that.
 
