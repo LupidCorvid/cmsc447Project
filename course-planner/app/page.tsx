@@ -1,4 +1,10 @@
 import Image from "next/image";
+import {Helmet} from "react-helmet";
+import "./database.js";
+
+function DisplayDatabase(){
+  readXlsxFile("TestDatabase.xlsx")
+}
 
 function App() {
   return (
@@ -15,6 +21,11 @@ function App() {
             Read our docs
           </a>
         </div>
+
+        <script>
+          readXlsxFile()
+        </script>
+
       </body>
     </html>
   );

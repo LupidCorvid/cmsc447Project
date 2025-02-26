@@ -8,14 +8,29 @@ Planning/Links:
 */
 
 import readXlsxFile from 'read-excel-file'
+import convertToJson from "read-excel-file/map"
+const readXlsxFile = require('read-excel-file/node') //From package's website
 
-//Code is from package's website
-const readXlsxFile = require('read-excel-file/node')
+const map = {
+  'COURSE': {
+    'course': {
+      'NAME': 'courseName',
+      'NUMBER': 'courseNumber'
+    }
+  }
+}
 
 // File path.
-readXlsxFile('/path/to/file').then((rows) => {
-  // `rows` is an array of rows
-  // each row being an array of cells.
+// `rows` is an array of rows
+// each row being an array of cells.
+readXlsxFile(file, { map }).then(({ rows }) => {
+  /*rows == [{
+    course: {
+      courseName: 'CMSC',
+      courseNumber: 201
+    }
+  }]*/
+  console.log(rows);
 })
 
 // Readable Stream.
