@@ -1,13 +1,17 @@
 import React from "react";
 import Image from "next/image";
-import { Helmet } from "react-helmet"; //I don't know why it's erroring
-import readXlsxFile from "./database.js";
-
-function DisplayDatabase(){
-  readXlsxFile("TestDatabase.xlsx")
-}
+//import { Helmet } from "react-helmet"; //I don't know why it's erroring
+import  readXlsxFile from "./Database/database.js";
+import  printToConsole  from "./Database/database.js";
+import {printToConsole1} from "./Database/test1.tsx";
 
 function App() {
+  //readXlsxFile("./Database/TestDatabase.xlsx");
+
+  //Issue: typescript files (.tsx) dont seem to like external parameters 
+  //printToConsole("./Database/TestDatabase.xlsx");
+  printToConsole1("./Database/TestDatabase.xlsx");
+  
   return (
     <html>
       <body>
@@ -22,10 +26,8 @@ function App() {
             Read our docs
           </a>
         </div>
-        <Helmet>
-          <script>
-          </script>
-        </Helmet>
+        <script>
+        </script>
       </body>
     </html>
   );

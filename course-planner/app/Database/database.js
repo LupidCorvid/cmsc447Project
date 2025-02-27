@@ -23,7 +23,7 @@ const map = {
 // File path.
 // `rows` is an array of rows
 // each row being an array of cells.
-readXlsxFile(file, { map }).then(({ rows }) => {
+readXlsxFile({file}, { map }).then(({ rows }) => {
   /*rows == [{
     course: {
       courseName: 'CMSC',
@@ -33,7 +33,6 @@ readXlsxFile(file, { map }).then(({ rows }) => {
   console.log(rows);
 })
 
-/*
 // Readable Stream.
 readXlsxFile(fs.createReadStream('/path/to/file')).then((rows) => {
   // `rows` is an array of rows
@@ -45,4 +44,10 @@ readXlsxFile(Buffer.from(fs.readFileSync('/path/to/file'))).then((rows) => {
   // `rows` is an array of rows
   // each row being an array of cells.
 })
-  */
+
+export function printToConsole(file){
+  readXlsxFile(file, map);
+}
+
+export default readXlsxFile;
+  
