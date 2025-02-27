@@ -33,6 +33,7 @@ readXlsxFile(file, { map }).then(({ rows }) => {
   console.log(rows);
 })
 
+/*
 // Readable Stream.
 readXlsxFile(fs.createReadStream('/path/to/file')).then((rows) => {
   // `rows` is an array of rows
@@ -44,3 +45,4 @@ readXlsxFile(Buffer.from(fs.readFileSync('/path/to/file'))).then((rows) => {
   // `rows` is an array of rows
   // each row being an array of cells.
 })
+  */

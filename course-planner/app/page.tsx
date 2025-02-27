@@ -1,6 +1,7 @@
+import React from "react";
 import Image from "next/image";
-import {Helmet} from "react-helmet";
-import "./database.js";
+import { Helmet } from "react-helmet"; //I don't know why it's erroring
+import readXlsxFile from "./database.js";
 
 function DisplayDatabase(){
   readXlsxFile("TestDatabase.xlsx")
@@ -21,11 +22,10 @@ function App() {
             Read our docs
           </a>
         </div>
-
-        <script>
-          readXlsxFile()
-        </script>
-
+        <Helmet>
+          <script>
+          </script>
+        </Helmet>
       </body>
     </html>
   );
