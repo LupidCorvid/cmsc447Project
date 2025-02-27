@@ -3,9 +3,9 @@ import React, {useState} from 'react'
 import {ScrollView} from 'react-dom'
 
 //Display elements in box
-const DynamicList = () =>
+const DynamicList = (props) =>
 {
-    const elements = ["Component", "component2", "Comper3"];
+    //var elements = ["Component", "component2", "Comper3"];
 
     return(
         <div style={{
@@ -13,7 +13,7 @@ const DynamicList = () =>
             overflowY:'scroll',
             height:'200px',
             width:'150px'}}>
-            {elements.map((element, i) => {
+            {props.elements.map((element, i) => {
                 return <div key={i}>{element}</div>
             })}
         </div>
