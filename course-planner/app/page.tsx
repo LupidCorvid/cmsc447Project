@@ -1,16 +1,23 @@
 import React from "react";
 import Image from "next/image";
-//import { Helmet } from "react-helmet"; //I don't know why it's erroring
-import  readXlsxFile from "./Database/database.js";
-import  printToConsole  from "./Database/database.js";
-import {printToConsole1} from "./Database/test1.tsx";
+import  { printToConsole }  from "./Database/database.js";
+
+const filepath = "./Database/TestDatabase.xlsx";
+
+const map = {
+  'COURSE': {
+    'course': {
+      'NAME': 'courseName',
+      'NUMBER': 'courseNumber'
+    }
+  }
+}
 
 function App() {
-  //readXlsxFile("./Database/TestDatabase.xlsx");
 
-  //Issue: typescript files (.tsx) dont seem to like external parameters 
-  //printToConsole("./Database/TestDatabase.xlsx");
-  printToConsole1("./Database/TestDatabase.xlsx");
+  printToConsole();
+
+  //console.log(readXlsxFile(filepath));
   
   return (
     <html>

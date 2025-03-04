@@ -9,45 +9,19 @@ Planning/Links:
 
 import readXlsxFile from 'read-excel-file'
 import convertToJson from "read-excel-file/map"
-const readXlsxFile = require('read-excel-file/node') //From package's website
 
-const map = {
-  'COURSE': {
-    'course': {
-      'NAME': 'courseName',
-      'NUMBER': 'courseNumber'
+export function printToConsole(){
+  const filepath = "/TestDatabase.xlsx"; //"./Database/TestDatabase.xlsx"
+  const map = {
+    'COURSE': {
+      'course': {
+        'NAME': 'courseName',
+        'NUMBER': 'courseNumber'
+      }
     }
   }
+  console.log(readXlsxFile(filepath)); //console.log is fine. The readXlsxFile function is saying invalid zip data
 }
 
-// File path.
-// `rows` is an array of rows
-// each row being an array of cells.
-readXlsxFile({file}, { map }).then(({ rows }) => {
-  /*rows == [{
-    course: {
-      courseName: 'CMSC',
-      courseNumber: 201
-    }
-  }]*/
-  console.log(rows);
-})
-
-// Readable Stream.
-readXlsxFile(fs.createReadStream('/path/to/file')).then((rows) => {
-  // `rows` is an array of rows
-  // each row being an array of cells.
-})
-
-// Buffer.
-readXlsxFile(Buffer.from(fs.readFileSync('/path/to/file'))).then((rows) => {
-  // `rows` is an array of rows
-  // each row being an array of cells.
-})
-
-export function printToConsole(file){
-  readXlsxFile(file, map);
-}
-
-export default readXlsxFile;
+//export default readXlsxFile;
   
