@@ -7,11 +7,12 @@ Planning/Links:
 -Import table data every time on launch (of main server)
 */
 
-import readXlsxFile from 'read-excel-file'
+import readXlsxFile from "read-excel-file" //read-excel-file/node
 import convertToJson from "read-excel-file/map"
+//const { rows, errors } = convertToJson(data, schema, options)
 
 export function printToConsole(){
-  const filepath = "/TestDatabase.xlsx"; //"./Database/TestDatabase.xlsx"
+  const filepath = "public/TestDatabase.xlsx"; //"./Database/TestDatabase.xlsx" //"TestDatabase.xlsx"
   const map = {
     'COURSE': {
       'course': {
@@ -20,7 +21,12 @@ export function printToConsole(){
       }
     }
   }
-  console.log(readXlsxFile(filepath)); //console.log is fine. The readXlsxFile function is saying invalid zip data
+  //console.log("test")
+  //console.log(readXlsxFile(filepath)); //console.log is fine. The readXlsxFile function is saying invalid zip data
+
+  readXlsxFile(filepath).then((rows) => {
+    console.log(rows)
+  })
 }
 
 //export default readXlsxFile;
