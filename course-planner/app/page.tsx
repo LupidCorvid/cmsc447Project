@@ -23,6 +23,7 @@ const DItem = () => {
 }
 
 function App() {
+  const tester = ["A", "B", "C"];
     return (
       <html>
         <body>
@@ -36,7 +37,7 @@ function App() {
             >
               Read our docs
             </a>
-            <DynamicList/>
+            <DynamicList elements={tester}/>
           </div>
             <DndContext>
                 <DItem/>

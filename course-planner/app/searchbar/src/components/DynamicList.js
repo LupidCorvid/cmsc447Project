@@ -3,6 +3,26 @@ import React, {useState} from 'react'
 import {ScrollView} from 'react-dom'
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 
+//NEED TO CHANGE THIS TO BE IMPORTED
+const DItem = () => {
+    const {attributes, listeners, setNodeRef, transform} = useDraggable(
+        {id: 'draggable-item',}
+    );
+    const style = {
+        transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : '',
+        padding: '20px',
+        backgroundColor: 'lightblue',
+        cursor: 'grab',
+        width: '100px',
+        textAlign: 'center',
+    }
+    return (
+        <div ref={setNodeRef} {...listeners} {...attributes} style = {style}>
+            item
+        </div>
+    )
+}
+
 //Display elements in box
 const DynamicList = (props) =>
 {
