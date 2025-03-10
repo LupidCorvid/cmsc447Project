@@ -1,6 +1,7 @@
 'use client';
 import React, {useState} from 'react'
 import {ScrollView} from 'react-dom'
+import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 
 //Display elements in box
 const DynamicList = (props) =>
@@ -14,7 +15,9 @@ const DynamicList = (props) =>
             height:'200px',
             width:'150px'}}>
             {props.elements.map((element, i) => {
-                return <div key={i}>{element}</div>
+                return <div key={i}><DndContext>
+                <DItem/>
+            </DndContext></div>
             })}
         </div>
         

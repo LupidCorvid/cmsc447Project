@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import DynamicList from "./searchbar/src/components/DynamicList";
 
 const DItem = () => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
@@ -35,6 +36,7 @@ function App() {
             >
               Read our docs
             </a>
+            <DynamicList/>
           </div>
             <DndContext>
                 <DItem/>
