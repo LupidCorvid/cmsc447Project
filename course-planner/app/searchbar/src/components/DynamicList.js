@@ -4,7 +4,7 @@ import {ScrollView} from 'react-dom'
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 
 //NEED TO CHANGE THIS TO BE IMPORTED
-const DItem = () => {
+const DItem = ({text}) => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
         {id: 'draggable-item',}
     );
@@ -16,9 +16,10 @@ const DItem = () => {
         width: '100px',
         textAlign: 'center',
     }
+
     return (
         <div ref={setNodeRef} {...listeners} {...attributes} style = {style}>
-            item
+            {text}
         </div>
     )
 }
@@ -26,17 +27,31 @@ const DItem = () => {
 //Display elements in box
 const DynamicList = (props) =>
 {
-    //var elements = ["Component", "component2", "Comper3"];
+    var elements = ["Component", "component2", "Comper3"];
+
+    const onEndDrag =  ((props) =>
+    {
+        if(props.over == null)
+            return;
+
+        if(typeof(props.over) == typeof(DynamicList) & props.over != this);
+        {
+            elements.pop();
+            props.over.elements.push(this);
+        }
+
+    });
 
     return(
         <div style={{
             borderStyle:'solid',
             overflowY:'scroll',
+            overflowX:'hidden',
             height:'200px',
             width:'150px'}}>
             {props.elements.map((element, i) => {
-                return <div key={i}><DndContext>
-                <DItem/>
+                return <div key={i}><DndContext onDragEnd={onEndDrag}>
+                <DItem text={element}/>
             </DndContext></div>
             })}
         </div>
