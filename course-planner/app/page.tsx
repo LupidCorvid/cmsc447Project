@@ -15,12 +15,17 @@ const map = {
 
 function App() {
 
-  printToConsole();
+  //printToConsole();
 
   //console.log(readXlsxFile(filepath));
   
   return (
     <html>
+      <head>
+        <script src="./read-excel-file.min.js"></script>
+        <script src="./lib/promise-polyfill.min.js"></script>
+        <script src="./lib/prism.js"></script>
+      </head>
       <body>
         <div className="App">
           <h1>Hello World!</h1>
@@ -34,6 +39,10 @@ function App() {
           </a>
         </div>
         <script>
+          var input = document.getElementById('input');
+          readXlsxFile(input.files[0]).then(function(rows){
+            //document.getElementById('result').style.display = 'block'
+          })
         </script>
       </body>
     </html>

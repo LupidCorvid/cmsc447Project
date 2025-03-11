@@ -24,10 +24,23 @@ export function printToConsole(){
   //console.log("test")
   //console.log(readXlsxFile(filepath)); //console.log is fine. The readXlsxFile function is saying invalid zip data
 
-  readXlsxFile(filepath).then((rows) => {
-    console.log(rows)
-  })
-}
+  var input = document.getElementById('input')
+  var input = 
 
-//export default readXlsxFile;
-  
+  readXlsxFile(input.files[0]).then(function(data) {
+    // `data` is an array of rows
+    // each row being an array of cells.
+    // document.getElementById('result').innerText = JSON.stringify(data, null, 2)
+    document.getElementById('loading').style.display = 'none'
+    document.getElementById('result').style.display = 'block'
+    document.getElementById('result-data').innerHTML = Prism.highlight(
+      JSON.stringify(data, null, 2),
+      Prism.languages.javascript,
+      'javascript'
+    )
+  })
+
+  /*readXlsxFile(filepath).then((rows) => {
+    console.log(rows)
+  })*/
+}
