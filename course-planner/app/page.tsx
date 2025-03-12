@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import DynamicList from "./searchbar/src/components/DynamicList";
 
@@ -23,7 +23,10 @@ const DItem = () => {
 }
 
 function App() {
-  const tester = ["A", "B", "C"];
+  const [tester, settester] = useState([])
+  useEffect(() => {
+    settester(['A', 'B', 'C']);
+  }, []);
     return (
       <html>
         <body>
@@ -37,11 +40,9 @@ function App() {
             >
               Read our docs
             </a>
-            <DynamicList elements={tester} listId="1"/>
-            <DynamicList elements={tester} listId="2"/>
+            <DynamicList elements={tester} setElements={settester} />
           </div>
             <DndContext>
-                <DItem/>
             </DndContext>
         </body>
       </html>

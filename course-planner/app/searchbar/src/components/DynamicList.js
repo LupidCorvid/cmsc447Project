@@ -6,7 +6,7 @@ import { closestCorners, DndContext, useDraggable, useDroppable } from '@dnd-kit
 //NEED TO CHANGE THIS TO BE IMPORTED
 const DItem = (props) => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
-        {id: 'draggable-item',}
+        {id: props.id,}
     );
     const style = {
         transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : '',
@@ -32,7 +32,11 @@ function Droppable(props)
 
 
     return (
-        <div ref={setNodeRef}>
+        <div ref={setNodeRef} style = {{
+            borderStyle:'solid',
+            height:'300px',
+            width:'200px'
+        }}>
             {props.children}
         </div>
     );
@@ -41,10 +45,9 @@ function Droppable(props)
 //Display elements in box
 //A possible reference for how to do this:
 //https://stackblitz.com/edit/react-1j37eg?file=src%2FApp.js
-const DynamicList = (props) =>
+const DynamicList = ({elements, setElements}) =>
 {
-    var elements = ["Component", "component2", "Comper3"];
-
+    const [droppedItems, setDroppedItems] = useState([])
 
     const onEndDrag =  event =>
     {
@@ -53,7 +56,7 @@ const DynamicList = (props) =>
 
         console.log(event);
         //Always seems to be null
-        if(active == null)
+        if(!active || !over)
             return;
 
         console.log("self not null")
@@ -61,30 +64,49 @@ const DynamicList = (props) =>
             return;
         console.log("not null")
 
-        if(over instanceof DynamicList && over != this);
-        {
-            elements.pop(this);
-            over.elements.push(this);
+        if(over.id === 'drop-zone'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems.includes(active.id)) {
+                setDroppedItems((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'og-list'){
+            setDroppedItems((prev) => prev.filter(item => item !== active.id));
+            if (!elements.includes(active.id)) {
+                setElements((prev) => [...prev, active.id]);
+            }
         }
     };
 
     return(
-        <DndContext onDragEnd={onEndDrag} collisiondetection="true">
-        <Droppable id={props.listId}>
+        <DndContext onDragEnd={onEndDrag} collisionDetection={closestCorners}>
         <div style={{
             borderStyle:'solid',
-            overflowY:'scroll',
-            overflowX: 'hidden',
-            height:'200px',
-            width:'150px'}} collisiondetection="true">
-            {props.elements.map((element, i) => {
-                return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
-                collisionDetection={closestCorners}>
-                <DItem text={element}/>
-            </DndContext></div>
-            })}
+            //            overflowY:'scroll',
+            //           overflowX: 'hidden',
+            //height:'200px',
+            //width:'150px'
+            }} >
+            
+            <Droppable id = "og-list">
+            {elements.map((element) => (
+                <DItem key = {element} id = {element} text = {element}/>
+            
+            ))}
 
-        </div></Droppable></DndContext>
+        </Droppable>
+        
+        {/*drop area*/}
+        <Droppable id="drop-zone">
+                    {droppedItems.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+                </Droppable>
+
+
+
+        </div>
+        </DndContext>
         
     );
 }
