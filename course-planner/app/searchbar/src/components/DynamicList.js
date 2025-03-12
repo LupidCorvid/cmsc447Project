@@ -70,6 +70,12 @@ const DynamicList = ({elements, setElements}) =>
                 setDroppedItems((prev) => [...prev, active.id]);
             }
         }
+        if(over.id === 'og-list'){
+            setDroppedItems((prev) => prev.filter(item => item !== active.id));
+            if (!elements.includes(active.id)) {
+                setElements((prev) => [...prev, active.id]);
+            }
+        }
     };
 
     return(
