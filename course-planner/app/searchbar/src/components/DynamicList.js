@@ -1,7 +1,7 @@
 'use client';
 import React, {useState} from 'react'
 import {ScrollView} from 'react-dom'
-import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import { closestCorners, DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 
 //NEED TO CHANGE THIS TO BE IMPORTED
 const DItem = ({text}) => {
@@ -24,33 +24,59 @@ const DItem = ({text}) => {
     )
 }
 
+function Droppable(props)
+{
+    const {overMe, nodeRef} = useDroppable({
+        id:props.id
+    });
+
+    return (
+        <div ref={nodeRef} style={style}>
+            {props.children}
+        </div>
+    );
+}
+
 //Display elements in box
+//A possible reference for how to do this:
+//https://stackblitz.com/edit/react-1j37eg?file=src%2FApp.js
 const DynamicList = (props) =>
 {
     var elements = ["Component", "component2", "Comper3"];
 
-    const onEndDrag =  ((props) =>
+
+    const onEndDrag =  event =>
     {
-        if(props.over == null)
+        
+        const {self, over} = event;
+
+        console.log(event);
+        //Always seems to be null
+        if(self == null)
             return;
 
-        if(typeof(props.over) == typeof(DynamicList) & props.over != this);
-        {
-            elements.pop();
-            props.over.elements.push(this);
-        }
+        console.log("self not null")
+        if(over == null)
+            return;
+        console.log("not null")
 
-    });
+        if(over instanceof DynamicList && over != this);
+        {
+            elements.pop(this);
+            over.elements.push(this);
+        }
+    };
 
     return(
         <div style={{
             borderStyle:'solid',
             overflowY:'scroll',
-            overflowX:'hidden',
+            overflowX: 'hidden',
             height:'200px',
             width:'150px'}}>
             {props.elements.map((element, i) => {
-                return <div key={i}><DndContext onDragEnd={onEndDrag}>
+                return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
+                collisionDetection={closestCorners}>
                 <DItem text={element}/>
             </DndContext></div>
             })}
