@@ -35,9 +35,13 @@ function App() {
             >
               Read our docs
             </a>
+<<<<<<< Updated upstream
+=======
+            <DynamicList elements={tester}/>
+>>>>>>> Stashed changes
           </div>
             <DndContext>
-                <DItem/>
+
             </DndContext>
         </body>
       </html>
