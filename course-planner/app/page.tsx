@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom/client';
 import Image from "next/image";
 import  { printToConsole }  from "./Database/database.js";
 
@@ -12,6 +13,10 @@ const map = {
     }
   }
 }
+
+//const container = document.getElementById('root');
+//const demo = ReactDOM.createRoot(container);
+//demo.render(<p>Hello</p>);
 
 function App() {
 
@@ -27,6 +32,7 @@ function App() {
         <script src="./lib/prism.js"></script>
       </head>
       <body>
+        
         <div className="App">
           <h1>Hello World!</h1>
           <a
@@ -38,15 +44,21 @@ function App() {
             Read our docs
           </a>
         </div>
+
+        <p id="demo">Helloo</p>
+
         <script>
-          var input = document.getElementById('input');
-          readXlsxFile(input.files[0]).then(function(rows){
-            //document.getElementById('result').style.display = 'block'
-          })
+          
         </script>
       </body>
     </html>
   );
 }
+
+/*
+readXlsxFile(path).then(function(rows){
+            //document.getElementById('result').style.display = 'block'
+          })
+*/
 
 export default App;
