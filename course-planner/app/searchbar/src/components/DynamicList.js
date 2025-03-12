@@ -4,7 +4,7 @@ import {ScrollView} from 'react-dom'
 import { closestCorners, DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 
 //NEED TO CHANGE THIS TO BE IMPORTED
-const DItem = ({text}) => {
+const DItem = (props) => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
         {id: 'draggable-item',}
     );
@@ -19,19 +19,20 @@ const DItem = ({text}) => {
 
     return (
         <div ref={setNodeRef} {...listeners} {...attributes} style = {style}>
-            {text}
+            {props.text}
         </div>
     )
 }
 
 function Droppable(props)
 {
-    const {overMe, nodeRef} = useDroppable({
+    const {isOver, setNodeRef} = useDroppable({
         id:props.id
     });
 
+
     return (
-        <div ref={nodeRef} style={props.style}>
+        <div ref={setNodeRef}>
             {props.children}
         </div>
     );
@@ -68,7 +69,7 @@ const DynamicList = (props) =>
     };
 
     return(
-        <DndContext>
+        <DndContext onDragEnd={onEndDrag} collisiondetection="true">
         <Droppable id={props.listId}>
         <div style={{
             borderStyle:'solid',
