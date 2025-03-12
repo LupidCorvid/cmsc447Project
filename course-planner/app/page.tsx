@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import DynamicList from "./searchbar/src/components/DynamicList";
 
 const DItem = () => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
@@ -22,6 +23,7 @@ const DItem = () => {
 }
 
 function App() {
+  const tester = ["A", "B", "C"];
     return (
       <html>
         <body>
@@ -35,17 +37,13 @@ function App() {
             >
               Read our docs
             </a>
-<<<<<<< Updated upstream
-=======
             <DynamicList elements={tester}/>
->>>>>>> Stashed changes
           </div>
             <DndContext>
-
+                <DItem/>
             </DndContext>
         </body>
       </html>
       
     );
   }
-  export default App;
