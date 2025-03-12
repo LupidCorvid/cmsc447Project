@@ -2,23 +2,28 @@
 import React, {useState} from 'react'
 import {ScrollView} from 'react-dom'
 import { closestCorners, DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import styles from "./page.module.css";
 
 //NEED TO CHANGE THIS TO BE IMPORTED
 const DItem = (props) => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
         {id: 'draggable-item',}
     );
-    const style = {
+    /*const style = {
         transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : '',
         padding: '20px',
         backgroundColor: 'lightblue',
         cursor: 'grab',
         width: '100px',
         textAlign: 'center',
+    }*/
+
+    const transformStyle = {
+        transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : ''
     }
 
     return (
-        <div ref={setNodeRef} {...listeners} {...attributes} style = {style}>
+        <div ref={setNodeRef} {...listeners} {...attributes} className={styles.draggableStyle} style={transformStyle}>
             {props.text}
         </div>
     )
@@ -32,7 +37,7 @@ function Droppable(props)
 
 
     return (
-        <div ref={setNodeRef}>
+        <div ref={setNodeRef} classname={styles.plannerStyle}>
             {props.children}
         </div>
     );

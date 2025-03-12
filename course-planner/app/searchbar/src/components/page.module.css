@@ -1,0 +1,29 @@
+body {
+    background-color: rgb(247, 234, 213);
+    color: rgb(136, 120, 93);
+    padding: 40px;
+    font-family: Sans-Serif;
+    text-align: center;
+}
+
+.draggableStyle {
+    padding: 20px;
+    color: rgb(34, 31, 25);
+    background-color: rgb(120, 248, 150);
+    cursor: grab;
+    width: 100px;
+    font-family: Sans-Serif;
+    text-align: center;
+}
+
+.plannerStyle {
+    background-color: rgb(88, 70, 48);
+}
+
+.headerStyle {
+    color: rgb(34, 31, 25);
+    font-family: Sans-Serif;
+    font-size: 28px;
+    text-align: left;
+}
+  
