@@ -37,8 +37,8 @@ function App() {
             >
               Read our docs
             </a>
-            <DynamicList elements={tester}/>
-            <DynamicList elements={tester}/>
+            <DynamicList elements={tester} listId="1"/>
+            <DynamicList elements={tester} listId="2"/>
           </div>
             <DndContext>
                 <DItem/>

@@ -31,7 +31,7 @@ function Droppable(props)
     });
 
     return (
-        <div ref={nodeRef} style={style}>
+        <div ref={nodeRef} style={props.style}>
             {props.children}
         </div>
     );
@@ -48,11 +48,11 @@ const DynamicList = (props) =>
     const onEndDrag =  event =>
     {
         
-        const {self, over} = event;
+        const {active, over} = event;
 
         console.log(event);
         //Always seems to be null
-        if(self == null)
+        if(active == null)
             return;
 
         console.log("self not null")
@@ -68,19 +68,22 @@ const DynamicList = (props) =>
     };
 
     return(
+        <DndContext>
+        <Droppable id={props.listId}>
         <div style={{
             borderStyle:'solid',
             overflowY:'scroll',
             overflowX: 'hidden',
             height:'200px',
-            width:'150px'}}>
+            width:'150px'}} collisiondetection="true">
             {props.elements.map((element, i) => {
                 return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
                 collisionDetection={closestCorners}>
                 <DItem text={element}/>
             </DndContext></div>
             })}
-        </div>
+
+        </div></Droppable></DndContext>
         
     );
 }
