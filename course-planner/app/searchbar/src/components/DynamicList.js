@@ -71,21 +71,45 @@ const DynamicList = (props) =>
         }
     };
 
-    return(
-        <DndContext onDragEnd={onEndDrag} collisiondetection="true">
-        <Droppable id={props.listId}>
-        <div className={styles.plannerStyle} collisiondetection="true">
+    //PLANNER
+    if(props.listId == 1){
+        return(
+            <DndContext onDragEnd={onEndDrag} collisiondetection="true">
+            <Droppable id={props.listId}>
+            <div className={styles.plannerScrollStyle} collisiondetection="true">
+                
+                {props.elements.map((element, i) => {
+                    return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
+                    collisionDetection={closestCorners}>
+                    <DItem text={element}/>
+                </DndContext></div>
+                })}
+    
+            </div></Droppable></DndContext>
             
-            {props.elements.map((element, i) => {
-                return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
-                collisionDetection={closestCorners}>
-                <DItem text={element}/>
-            </DndContext></div>
-            })}
+        );
+    }
 
-        </div></Droppable></DndContext>
-        
-    );
+    //COURSE SEARCH
+    else if(props.listId == 2){
+        return(
+            <DndContext onDragEnd={onEndDrag} collisiondetection="true">
+            <Droppable id={props.listId}>
+            <div className={styles.searchScrollStyle} collisiondetection="true">
+                
+                {props.elements.map((element, i) => {
+                    return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
+                    collisionDetection={closestCorners}>
+                    <DItem text={element}/>
+                </DndContext></div>
+                })}
+    
+            </div></Droppable></DndContext>
+            
+        );
+    }
+
+    
 }
 
 /*

@@ -1,6 +1,7 @@
 'use client';
 import React, {useState} from 'react'
 import DynamicList from "./DynamicList"
+import styles from "./page.module.css";
 
 const Searchbar = () =>
 {
@@ -30,10 +31,10 @@ const Searchbar = () =>
     return <div>
     <input
     type="text"
-    placeholder = "Class name..."
+    placeholder = "Course name..."
     onChange={filterChanged}
     value={searchInput}
-    style={{width:"150px"}}>
+    className={styles.searchbarStyle}>
     </input>
     <DynamicList elements={filteredInputs}>
     </DynamicList>
