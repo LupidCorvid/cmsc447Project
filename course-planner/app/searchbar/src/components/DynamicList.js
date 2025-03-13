@@ -73,7 +73,7 @@ const DynamicList = ({elements, setElements}) =>
             else
             {
                 //return true;
-                return element.toLowerCase().includes(searchInput);
+                return element.includes(searchInput);
             }
         })
 
