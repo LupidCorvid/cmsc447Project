@@ -47,7 +47,14 @@ function Droppable(props)
 //https://stackblitz.com/edit/react-1j37eg?file=src%2FApp.js
 const DynamicList = ({elements, setElements}) =>
 {
-    const [droppedItems, setDroppedItems] = useState([])
+    const [droppedItems1, setDroppedItems1] = useState([])
+    const [droppedItems2, setDroppedItems2] = useState([])
+    const [droppedItems3, setDroppedItems3] = useState([])
+    const [droppedItems4, setDroppedItems4] = useState([])
+    const [droppedItems5, setDroppedItems5] = useState([])
+    const [droppedItems6, setDroppedItems6] = useState([])
+    const [droppedItems7, setDroppedItems7] = useState([])
+    const [droppedItems8, setDroppedItems8] = useState([])
 
     const onEndDrag =  event =>
     {
@@ -64,16 +71,123 @@ const DynamicList = ({elements, setElements}) =>
             return;
         console.log("not null")
 
-        if(over.id === 'drop-zone'){
-            setElements((prev) => prev.filter(item => item !== active.id));
-            if (!droppedItems.includes(active.id)) {
-                setDroppedItems((prev) => [...prev, active.id]);
-            }
-        }
+
         if(over.id === 'og-list'){
-            setDroppedItems((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
             if (!elements.includes(active.id)) {
                 setElements((prev) => [...prev, active.id]);
+            }
+        }
+        //drop zones 1-8
+        if(over.id === 'drop-zone1'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems1.includes(active.id)) {
+                setDroppedItems1((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'drop-zone2'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems2.includes(active.id)) {
+                setDroppedItems2((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'drop-zone3'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems3.includes(active.id)) {
+                setDroppedItems3((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'drop-zone4'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems4.includes(active.id)) {
+                setDroppedItems4((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'drop-zone5'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems5.includes(active.id)) {
+                setDroppedItems5((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'drop-zone6'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems6.includes(active.id)) {
+                setDroppedItems6((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'drop-zone7'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems8((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems7.includes(active.id)) {
+                setDroppedItems7((prev) => [...prev, active.id]);
+            }
+        }
+        if(over.id === 'drop-zone8'){
+            setElements((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems2((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems3((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems4((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems5((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems6((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems7((prev) => prev.filter(item => item !== active.id));
+            setDroppedItems1((prev) => prev.filter(item => item !== active.id));
+            if (!droppedItems8.includes(active.id)) {
+                setDroppedItems8((prev) => [...prev, active.id]);
             }
         }
     };
@@ -96,15 +210,47 @@ const DynamicList = ({elements, setElements}) =>
 
         </Droppable>
         
-        {/*drop area*/}
-        <Droppable id="drop-zone">
-                    {droppedItems.map((item) => (
+        {/*drop area 1-8*/}
+        <Droppable id="drop-zone1">
+                    {droppedItems1.map((item) => (
                         <DItem key={item} id={item} text={item} />
                     ))}
-                </Droppable>
-
-
-
+        </Droppable>
+        <Droppable id="drop-zone2">
+                    {droppedItems2.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+        </Droppable>
+        <Droppable id="drop-zone3">
+                    {droppedItems3.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+        </Droppable>
+        <Droppable id="drop-zone4">
+                    {droppedItems4.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+        </Droppable>
+        <Droppable id="drop-zone5">
+                    {droppedItems5.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+        </Droppable>
+        <Droppable id="drop-zone6">
+                    {droppedItems6.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+        </Droppable>
+        <Droppable id="drop-zone7">
+                    {droppedItems7.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+        </Droppable>
+        <Droppable id="drop-zone8">
+                    {droppedItems8.map((item) => (
+                        <DItem key={item} id={item} text={item} />
+                    ))}
+        </Droppable>
         </div>
         </DndContext>
         
