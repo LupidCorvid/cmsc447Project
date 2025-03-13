@@ -1,13 +1,13 @@
 'use client';
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import DynamicList from "./DynamicList"
 
 const Searchbar = () =>
 {
     //Need to find data format for the table
-    const [searchInput, setSearchInput] = useState("");
+    const [searchInput, setSearchInput] = useState([]);
     const input = ["tester", "tester2"];
-
+    
     const filterChanged = (e) =>
     {
         setSearchInput(e.target.value)

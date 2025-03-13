@@ -2,7 +2,7 @@
 import React, { useState,useEffect } from 'react';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import DynamicList from "./searchbar/src/components/DynamicList";
-
+import Searchbar from "./searchbar/src/components/Searchbar"
 const DItem = () => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
         {id: 'draggable-item',}

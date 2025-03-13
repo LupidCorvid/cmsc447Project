@@ -56,6 +56,27 @@ const DynamicList = ({elements, setElements}) =>
     const [droppedItems7, setDroppedItems7] = useState([])
     const [droppedItems8, setDroppedItems8] = useState([])
 
+
+    const [searchInput, setSearchInput] = useState([]);
+
+    const filterChanged = (e) =>
+    {
+        setSearchInput(e.target.value)
+    }
+
+    const filteredInputs = elements.filter((element) =>
+        {
+            if(searchInput === '')
+            {
+                return element;
+            }
+            else
+            {
+                //return true;
+                return element.toLowerCase().includes(searchInput);
+            }
+        })
+
     const onEndDrag =  event =>
     {
         
@@ -193,7 +214,15 @@ const DynamicList = ({elements, setElements}) =>
     };
 
     return(
+        
         <DndContext onDragEnd={onEndDrag} collisionDetection={closestCorners}>
+            <input
+            type="text"
+            placeholder = "Class name..."
+            onChange={filterChanged}
+            value={searchInput}
+            style={{width:"150px"}}>
+            </input>
         <div style={{
             borderStyle:'solid',
             //            overflowY:'scroll',
@@ -203,7 +232,7 @@ const DynamicList = ({elements, setElements}) =>
             }} >
             
             <Droppable id = "og-list">
-            {elements.map((element) => (
+            {filteredInputs.map((element) => (
                 <DItem key = {element} id = {element} text = {element}/>
             
             ))}
