@@ -29,11 +29,20 @@ Major: {userMajor} &nbsp;
 
 */
 
+
+
 function App() {
+  const [value, setValue] = useState("HTML");
+  
   const tester = ["CMSC 201", "CMSC 202", "CMSC 203"];
   const tester2 = ["CMSC 331", "CMSC 341", "CMSC 304"];
   var userMajor = "Undecided";
   var recCredits = 0;
+
+  function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
+    setValue(event.target.value);
+  }
+
     return (
       <html>
         <body>
@@ -44,15 +53,18 @@ function App() {
               <div id="Planner" style={{float: 'left'}}>
                 <h1 className={styles.headerStyle} style={{float:'left'}}>My Planner</h1>
                 <p className={styles.textStyle} style={{clear:'both', float:'left', textAlign:'left', lineHeight: 1.7}}>
-                  Major: &nbsp;
-                  <select name="majors" id="majors" className={styles.majorDecideStyle}>
-                    <option value="IDK">Undecided</option>
-                    <option value="CMSC">Computer Science</option>
-                    <option value="CMPE">Computer Engineering</option>
-                    <option value="IS">Information Systems</option>
+                  Major: &nbsp; {value}
+
+                  
+
+                  <select value={value} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
+                    <option value={"IDK"}>Undecided</option>
+                    <option value={"CMSC"}>Computer Science</option>
+                    <option value={"CMPE"}>Computer Engineering</option>
+                    <option value={"IS"}>Information Systems</option>
                   </select>
                   <br/>
-                  Recommended Credits per Semester: &nbsp; {recCredits}
+                  Recommended Credits per Semester: {recCredits}
                 </p>
 
                 <div className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
