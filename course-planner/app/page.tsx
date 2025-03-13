@@ -28,21 +28,26 @@ function App() {
       <html>
         <body>
           <div className="App">
-            
-            <div style={{clear: 'both'}}>
-              <h1 className={styles.headerStyle} style={{float: 'left'}}>My Planner</h1>
-              <h1 className={styles.headerStyle} style={{float: 'right'}}>Course Search</h1>
-            </div>
 
             <div style={{clear: 'both'}}>
-              <div className={styles.plannerStyle} style={{float: 'left'}}>
-                <DynamicList elements={tester} listId="1"/>
+              
+              <div id="Planner" style={{float: 'left'}}>
+                <h1 className={styles.headerStyle} style={{float:'left'}}>My Planner</h1>
+
+                <div className={styles.plannerStyle} style={{clear:'both', float: 'left'}}>
+                  <DynamicList elements={tester} listId="1"/>
+                </div>
               </div>
 
-              <div className={styles.plannerStyle} style={{float: 'right'}}>
+              <div id="Class Search" style={{float: 'right'}}>
+
+                <h1 className={styles.headerStyle} style={{float:'left'}}>Course Search</h1>
+                <div className={styles.plannerStyle} style={{clear:'both', float: 'right'}}>
                 <p>Search for a class</p>
-              </div>
+                </div>
 
+              </div>
+            
             </div>
 
           </div>
