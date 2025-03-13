@@ -35,7 +35,8 @@ function Droppable(props)
         <div ref={setNodeRef} style = {{
             borderStyle:'solid',
             height:'300px',
-            width:'200px'
+            width:'200px',
+            //overflowY:"scroll"
         }}>
             {props.children}
         </div>

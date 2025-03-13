@@ -25,7 +25,7 @@ const DItem = () => {
 function App() {
   const [tester, settester] = useState([])
   useEffect(() => {
-    settester(['A', 'B', 'C']);
+    settester(['MATH 221', 'CMSC 304', 'CMSC 447', 'STAT 355', 'PHYS 122']);
   }, []);
     return (
       <html>
