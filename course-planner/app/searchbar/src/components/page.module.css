@@ -17,13 +17,16 @@ body {
 }
 
 .plannerStyle {
-    background-color: rgb(88, 70, 48);
+    border-style: solid;
+    overflow-Y: scroll;
+    overflow-X: hidden;
+    height: 500px;
+    width: 500px;
 }
 
 .headerStyle {
     color: rgb(34, 31, 25);
     font-family: Sans-Serif;
     font-size: 28px;
-    text-align: left;
 }
   

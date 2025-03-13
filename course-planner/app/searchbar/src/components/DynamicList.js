@@ -37,7 +37,7 @@ function Droppable(props)
 
 
     return (
-        <div ref={setNodeRef} classname={styles.plannerStyle}>
+        <div ref={setNodeRef}>
             {props.children}
         </div>
     );
@@ -50,10 +50,8 @@ const DynamicList = (props) =>
 {
     var elements = ["Component", "component2", "Comper3"];
 
-
     const onEndDrag =  event =>
     {
-        
         const {active, over} = event;
 
         console.log(event);
@@ -76,12 +74,8 @@ const DynamicList = (props) =>
     return(
         <DndContext onDragEnd={onEndDrag} collisiondetection="true">
         <Droppable id={props.listId}>
-        <div style={{
-            borderStyle:'solid',
-            overflowY:'scroll',
-            overflowX: 'hidden',
-            height:'200px',
-            width:'150px'}} collisiondetection="true">
+        <div className={styles.plannerStyle} collisiondetection="true">
+            
             {props.elements.map((element, i) => {
                 return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
                 collisionDetection={closestCorners}>
@@ -93,5 +87,28 @@ const DynamicList = (props) =>
         
     );
 }
+
+/*
+return(
+        <DndContext onDragEnd={onEndDrag} collisiondetection="true">
+        <Droppable id={props.listId}>
+        <div style={{
+            borderStyle:'solid',
+            overflowY:'scroll',
+            overflowX: 'hidden',
+            height:'200px',
+            width:'150px'}} collisiondetection="true">
+            
+            {props.elements.map((element, i) => {
+                return <div key={i} collisiondetection="true"><DndContext onDragEnd={onEndDrag}
+                collisionDetection={closestCorners}>
+                <DItem text={element}/>
+            </DndContext></div>
+            })}
+
+        </div></Droppable></DndContext>
+        
+    );
+*/
 //{elements.map((element, i) => React.createElement(element, {Key:i}))}
 export default DynamicList;
