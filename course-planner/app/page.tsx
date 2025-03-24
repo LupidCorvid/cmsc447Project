@@ -29,11 +29,19 @@ function App() {
 
   //Idea: 2D list for semesters that will add a new list for each semester
   const [semesters, updateSemesters] = useState([['MATH 221', 'CMSC 304']]);
-  const myList = ['a', 'b']
+  const [myList, updateList] =  useState(['v'])
 
   function addSemester(){
-    //updateSemesters(semesters => semesters.push([]));
-    myList.push('c')
+    //get elements from previous list
+    //Append new stuff
+    //Pass through update function
+    
+    //Do this in a seperate js file and send here
+    let newList = myList;
+    newList.push('a');
+    console.log("click");
+
+    updateList(myList => newList); //Not doing anything on click but randomly updates regardless hi ihe
   }
   useEffect(() => {
     settester(['MATH 221', 'CMSC 304', 'CMSC 447', 'STAT 355', 'PHYS 122']);
@@ -42,7 +50,7 @@ function App() {
       <html>
         <body>
           <button onClick ={addSemester}>Click me</button>
-
+          <p>{myList}</p>
           <div className="App">
             <h1>Hello World!</h1>
             <a
