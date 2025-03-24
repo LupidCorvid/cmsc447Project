@@ -22,14 +22,27 @@ const DItem = () => {
     )
 }
 
+
+
 function App() {
   const [tester, settester] = useState([])
+
+  //Idea: 2D list for semesters that will add a new list for each semester
+  const [semesters, updateSemesters] = useState([['MATH 221', 'CMSC 304']]);
+  const myList = ['a', 'b']
+
+  function addSemester(){
+    //updateSemesters(semesters => semesters.push([]));
+    myList.push('c')
+  }
   useEffect(() => {
     settester(['MATH 221', 'CMSC 304', 'CMSC 447', 'STAT 355', 'PHYS 122']);
   }, []);
     return (
       <html>
         <body>
+          <button onClick ={addSemester}>Click me</button>
+
           <div className="App">
             <h1>Hello World!</h1>
             <a
