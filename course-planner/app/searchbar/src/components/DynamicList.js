@@ -3,7 +3,8 @@ import React, {useState} from 'react'
 import {ScrollView} from 'react-dom'
 import { closestCorners, DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 
-//NEED TO CHANGE THIS TO BE IMPORTED
+//NEED TO CHANGE THIS TO BE IMPORTED (for readiblitys sake and reuse elsewhere)
+//A class for an item/element that can be drag and dropped
 const DItem = (props) => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable(
         {id: props.id,}
@@ -24,6 +25,7 @@ const DItem = (props) => {
     )
 }
 
+//A zone where things can be dropped
 function Droppable(props)
 {
     const {isOver, setNodeRef} = useDroppable({
@@ -43,11 +45,13 @@ function Droppable(props)
     );
 }
 
+//The actual dynamic list itself
 //Display elements in box
 //A possible reference for how to do this:
 //https://stackblitz.com/edit/react-1j37eg?file=src%2FApp.js
 const DynamicList = ({elements, setElements}) =>
 {
+    //Semesters as lists
     const [droppedItems1, setDroppedItems1] = useState([])
     const [droppedItems2, setDroppedItems2] = useState([])
     const [droppedItems3, setDroppedItems3] = useState([])
@@ -65,6 +69,7 @@ const DynamicList = ({elements, setElements}) =>
         setSearchInput(e.target.value)
     }
 
+    //Searchbar functionality
     const filteredInputs = elements.filter((element) =>
         {
             if(searchInput === '')
@@ -74,10 +79,12 @@ const DynamicList = ({elements, setElements}) =>
             else
             {
                 //return true;
+                //element -> base elements you're working with (full class roster)
                 return element.includes(searchInput);
             }
         })
-
+    
+    //An event for whenever you let an item go after its dragged over a droppable section
     const onEndDrag =  event =>
     {
         
@@ -93,7 +100,8 @@ const DynamicList = ({elements, setElements}) =>
             return;
         console.log("not null")
 
-
+        //Each of these blocks checks what list it's being dropped into, then remove the item form every other list
+        //Then add in the item to the current list you dropped it into
         if(over.id === 'og-list'){
             setDroppedItems1((prev) => prev.filter(item => item !== active.id));
             setDroppedItems2((prev) => prev.filter(item => item !== active.id));
