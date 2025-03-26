@@ -3,24 +3,6 @@ import React, { useState,useEffect } from 'react';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import DynamicList from "./searchbar/src/components/DynamicList";
 import Searchbar from "./searchbar/src/components/Searchbar"
-const DItem = () => {
-    const {attributes, listeners, setNodeRef, transform} = useDraggable(
-        {id: 'draggable-item',}
-    );
-    const style = {
-        transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : '',
-        padding: '20px',
-        backgroundColor: 'lightblue',
-        cursor: 'grab',
-        width: '100px',
-        textAlign: 'center',
-    }
-    return (
-        <div ref={setNodeRef} {...listeners} {...attributes} style = {style}>
-            item
-        </div>
-    )
-}
 
 function App() {
   const [tester, settester] = useState([])
@@ -40,7 +22,7 @@ function App() {
             >
               Read our docs
             </a>
-            <DynamicList elements={tester} setElements={settester} />
+            {/*<DynamicList elements={tester} setElements={settester} />*/}
           </div>
             <DndContext>
             </DndContext>
