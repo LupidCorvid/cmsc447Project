@@ -1,12 +1,23 @@
 'use client';
 import React, { useState,useEffect } from 'react';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
-import DynamicList from "./searchbar/src/components/DynamicList";
+//import DynamicList from "./searchbar/src/components/DynamicList";
 import Searchbar from "./searchbar/src/components/Searchbar"
 import Droppable from "./searchbar/src/components/DragAndDropTest";
-import styles from "./page.module.css";
+import styles from "./searchbar/src/components/page.module.css";
 
 function Planner(){
+  const [userMajor, setValue] = useState("Undecided"); //A state variable
+                                                       //The value userMajor is stored and can be used wherever needed
+  
+  const tester = ["CMSC 201", "CMSC 202", "CMSC 203"];
+  const tester2 = ["CMSC 331", "CMSC 341", "CMSC 304"];
+  var recCredits = 0;
+
+  function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
+    setValue(event.target.value);
+  }
+
   return(
     <html>
         <body>
@@ -32,7 +43,6 @@ function Planner(){
                 </p>
 
                 <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
-                  <DynamicList elements={tester} listId="1"/>
                 </div>
 
                 <div id="Notifications"  style={{clear:"left", lineHeight: .1}}>
@@ -49,8 +59,7 @@ function Planner(){
                 </h1>
 
                 <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
-                  <div style={{padding: '15px'}}> <Searchbar/> </div>
-                  <DynamicList elements={tester2} listId="2"/>
+                  <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
                 </div>
 
               </div>
@@ -64,13 +73,9 @@ export default function App() {
     return (
       <html>
         <body>
-          <div className="App">
-            <h1>Hello World!</h1>
-            {/*<DynamicList elements={tester} setElements={settester} />*/}
-            {/*<Droppable elements={tester} />*/}
+          <div>
+            <Planner/>
           </div>
-            <DndContext>
-            </DndContext>
         </body>
       </html>
       
