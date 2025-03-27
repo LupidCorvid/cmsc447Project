@@ -8,16 +8,18 @@ import {DItemType, PlannerProps, CourseSearchProps, SemesterProps} from './searc
 import { RenderSemester } from './searchbar/src/components/Semester';
 
 const defaultItems: DItemType[] = [
-  {id:"CMSC 201", semester: 1},
+  {id:"CMSC 201", semester: 2},
 ]
 const defaultSemesters: SemesterProps[] = [
-  {semester_id:1, name: "Fall 2022", courses:defaultItems},
-  {semester_id:2, name: "Spring 2023",  courses:[]}
+  {semester_id:1, name: "Fall 2022", courses:[]},
+  {semester_id:2, name: "Spring 2023",  courses:defaultItems}
 ]
 
 function Planner(){
-  const [semesters, setSemesters] = useState(defaultSemesters); //An array of semesters in the planner
+  const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
+  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  
   var recCredits = 0;
 
   function handleDragEnd(event: DragEndEvent){
@@ -45,7 +47,12 @@ function Planner(){
         } : course,
       ),
     );
+    
     console.log(plannerCourses)
+  }
+
+  function updateCoursesInSemester(){
+    return 
   }
 
   //Render all of the semesters
@@ -57,7 +64,8 @@ function Planner(){
           <RenderSemester 
             semester_id={semester.semester_id} 
             name={semester.name} 
-            courses={semester.courses.filter((course:DItemType) => course.semester === semester.semester_id)}/>
+            courses={plannerCourses.filter((course:DItemType) => course.semester === semester.semester_id)}
+            key={semester.semester_id}/>
           )}
         </DndContext>
       </div>
@@ -137,7 +145,6 @@ function CourseSearch(){
 }
 
 export default function App() {
-  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   return (
     <html>
       <body>
