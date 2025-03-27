@@ -1,83 +1,185 @@
 'use client';
 import React, { useState,useEffect } from 'react';
-import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core';
 //import DynamicList from "./searchbar/src/components/DynamicList";
 import Searchbar from "./searchbar/src/components/Searchbar"
 import Droppable from "./searchbar/src/components/DragAndDropTest";
 import styles from "./searchbar/src/components/page.module.css";
+import RenderDItem from "./searchbar/src/components/DItem";
+
+//In order to use DItems as a state array, it needs to be a tyescript struct here
+type DItemType = {
+  id: string;
+  semester: number; //0 = course search
+}
+type PlannerProps = {
+  id: string;
+  numSemesters: number;
+  courses: DItemType[];
+}
+type CourseSearchProps = {
+  id: string;
+  courses: DItemType[];
+}
+type SemesterProps = {
+  id: number;
+  name: string;
+  courses: DItemType[];
+}
+
+const defaultItems: DItemType[] = [
+  {id:"CMSC 201", semester: 1},
+  {id:"CMSC 202", semester: 1}, 
+  {id:"CMSC 203", semester: 1}
+]
+const defaultSemesters: SemesterProps[] = [
+  {id:1, name: "Fall 2022", courses:defaultItems},
+  {id:2, name: "Spring 2023",  courses:[]}
+]
+
+
 
 function Planner(){
-  const [userMajor, setValue] = useState("Undecided"); //A state variable
-                                                       //The value userMajor is stored and can be used wherever needed
-  
-  const tester = ["CMSC 201", "CMSC 202", "CMSC 203"];
-  const tester2 = ["CMSC 331", "CMSC 341", "CMSC 304"];
+  //const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  const [semesters, setSemesters] = useState(defaultSemesters); //An array of semesters in the planner
+  const [userMajor, setValue] = useState("Undecided"); //The user's major
   var recCredits = 0;
 
+  //Render all of the semesters
+  //Functionality:
+        //For i in range numSemesters
+          //Render a semester object
+          //For every class in semester
+              //Render class object
+  function PopulatePlanner(){
+
+    //Renders each course that belongs to the semester
+    function RenderSemester(semester: SemesterProps){
+      
+      useDroppable({id: semester.id }) //Makes it so that the semester is a drop zone
+
+      return(
+        <div className ={styles.dropZoneStyle}>
+          {semester.courses.map((course) =>
+            <RenderDItem {...course} key={course.id} />
+          )}
+        </div>
+      );
+    }
+
+    return(
+      <div>
+        {semesters.map((semester) =>
+          <RenderSemester {...semester} key={semester.id}/>
+        )}
+        
+      </div>
+    );
+  }
+  
   function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
     setValue(event.target.value);
   }
 
   return(
-    <html>
-        <body>
-              <div id="Planner" style={{float: 'left'}}>
+    <div key="Planner" style={{float: 'left'}}>
 
-                <h1 className={styles.headerStyle} style={{float:'left'}}>
-                  My Planner
-                </h1>
+      <h1 className={styles.headerStyle} style={{float:'left'}}>
+        My Planner
+      </h1>
 
-                <p id="Text Under Planner" className={styles.textStyle} style={{clear:'both', float:'left', textAlign:'left', lineHeight: 1.7}}>
-                  Major: &nbsp;
+      <p id="Text Under Planner" className={styles.textStyle} style={{clear:'both', float:'left', textAlign:'left', lineHeight: 1.7}}>
+        Major: &nbsp;
 
-                  <select id="Update Major Dropdown" value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
-                    <option value={"Undecided"}>Undecided</option>
-                    <option value={"Computer Science"}>Computer Science</option>
-                    <option value={"Computer Engineering"}>Computer Engineering</option>
-                    <option value={"Information Systems"}>Information Systems</option>
-                  </select>
+        <select id="Update Major Dropdown" value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
+          <option value={"Undecided"}>Undecided</option>
+          <option value={"Computer Science"}>Computer Science</option>
+          <option value={"Computer Engineering"}>Computer Engineering</option>
+          <option value={"Information Systems"}>Information Systems</option>
+        </select>
 
-                  <br/>
+        <br/>
 
-                  Recommended Credits per Semester: {recCredits}
-                </p>
+        Recommended Credits per Semester: {recCredits}
+      </p>
 
-                <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
-                </div>
+      <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
+        {PopulatePlanner()}
+      </div>
 
-                <div id="Notifications"  style={{clear:"left", lineHeight: .1}}>
-                  <p className={styles.notificationStyle}>*The following courses in your planner do not meet prerequisite requirements:</p>
-                  <br/>
-                  <p className={styles.notificationStyle}>*This plan does not meet graduation requirements for {userMajor}</p>
-                </div>
-              </div>
+      <div id="Notifications"  style={{clear:"left", lineHeight: .1}}>
+        <p className={styles.notificationStyle}>*The following courses in your planner do not meet prerequisite requirements:</p>
+        <br/>
+        <p className={styles.notificationStyle}>*This plan does not meet graduation requirements for {userMajor}</p>
+      </div>
+    </div>
+  );
+}
 
-              <div id="Course Search" style={{float: 'right'}}>
+function CourseSearch(){
+  const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); //An array of DItems
 
-                <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
-                  Course Search
-                </h1>
+  const tester = ["CMSC 331", "CMSC 341", "CMSC 304"]; //Stuff to fill the state array with. Replace with database info later
 
-                <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
-                  <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
-                </div>
+   //Where all of the courses will go
+   function PopulateCourseSerach(){
 
-              </div>
-        </body>
-      </html>
+    return(
+      <div>
+        {searchItems.map((item) => 
+            <RenderDItem {...item} key={item.id}/>
+          )}
+      </div>
+    );
+  }
+
+  return(
+    <div id="Course Search" style={{float: 'right'}}>
+
+      <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
+        Course Search
+      </h1>
+
+      <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+        <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
+        {PopulateCourseSerach()}
+      </div>
+
+    </div>
   );
 }
 
 export default function App() {
-  const [tester, settester] = useState(['MATH 221', 'CMSC 304', 'CMSC 447', 'STAT 355', 'PHYS 122'])
-    return (
-      <html>
-        <body>
-          <div>
-            <Planner/>
-          </div>
-        </body>
-      </html>
-      
+  const [tester, setCourses] = useState([{id:"CMSC 201", semester: 1 },{id:"CMSC 202", semester: 1}, {id:"CMSC 203", semester: 1 }])
+  function handleDragEnd(event: DragEndEvent){
+    const {active, over} = event; //active: The task we're actually dropping
+                                  //over: if you are over something that is droppable
+    if (!over) return;
+    const courseId = active.id as string; //Must typecast this
+    const newSemester = over.id as DItemType['semester'] //The column id, so the semester id
+    
+    //This is the updater function of the state array tester
+    //Takes all of the tasks, and ONLY in the one that is equal to the one that is currently active, 
+    //we give it a new status (semester) and update the state
+    setCourses(()=>
+      tester.map((course) =>
+        (course.id === courseId) ? {
+          ...course,
+          semester: newSemester
+        } : course
+      )
     );
+  }
+
+  return (
+    <html>
+      <body>
+        <DndContext onDragEnd={handleDragEnd}>
+          <Planner/>
+          <CourseSearch/>
+        </DndContext>
+      </body>
+    </html>
+    
+  );
   }

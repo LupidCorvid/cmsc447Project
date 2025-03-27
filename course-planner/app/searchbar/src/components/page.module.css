@@ -24,18 +24,21 @@ body {
     margin: 15px 15px 15px 15px;
 }
 
+.dropZoneStyle{
+    background-color: rgb(144, 137, 137);
+    height: 100px;
+    width: 400px;
+    overflow-Y: scroll;
+    overflow-X: hidden;
+    margin: 10px;
+    padding-bottom: 10px;
+}
+
 .plannerStyle {
     border-style: solid;
     background-color: rgb(241, 241, 241);
     height: 450px;
     width: 450px;
-}
-
-.dropZoneStyle{
-    border-style: solid;
-    background-color: rgb(144, 137, 137);
-    height: 50px;
-    width: 100px;
 }
 
 .plannerScrollStyle{
