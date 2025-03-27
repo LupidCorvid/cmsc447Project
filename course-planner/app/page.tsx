@@ -3,49 +3,23 @@ import React, { useState,useEffect } from 'react';
 import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
 
 import Searchbar from "./searchbar/src/components/Searchbar"
-import Droppable from "./searchbar/src/components/DragAndDropTest";
 import styles from "./searchbar/src/components/page.module.css";
-import RenderDItem from "./searchbar/src/components/DItem";
-
-//In order to use DItems as a state array, it needs to be a tyescript struct here
-type DItemType = {
-  id: string;
-  semester: number; //0 = course search
-}
-type PlannerProps = {
-  id: string;
-  numSemesters: number;
-  courses: DItemType[];
-}
-type CourseSearchProps = {
-  id: string;
-  courses: DItemType[];
-}
-type SemesterProps = {
-  id: number;
-  name: string;
-  courses: DItemType[];
-}
+import {DItemType, PlannerProps, CourseSearchProps, SemesterProps} from './searchbar/src/components/types';
+import { RenderSemester } from './searchbar/src/components/Semester';
 
 const defaultItems: DItemType[] = [
   {id:"CMSC 201", semester: 1},
 ]
 const defaultSemesters: SemesterProps[] = [
-  {id:1, name: "Fall 2022", courses:defaultItems},
-  {id:2, name: "Spring 2023",  courses:[]}
+  {semester_id:1, name: "Fall 2022", courses:defaultItems},
+  {semester_id:2, name: "Spring 2023",  courses:[]}
 ]
-
-/*
-  {id:"CMSC 202", semester: 1}, 
-  {id:"CMSC 203", semester: 1}
-*/
 
 function Planner(){
   const [semesters, setSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   var recCredits = 0;
 
-  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   function handleDragEnd(event: DragEndEvent){
     console.log("Fired handleDragEnd")
     const {active, over} = event; //active: The task we're actually dropping
@@ -59,53 +33,32 @@ function Planner(){
 
     console.log("overID:", over.id)
     console.log("activeID: ", active.id)
-    //console.log(courseId)
-    //console.log(newSemester)
     
     //This is the updater function of the state array tester
-    //Takes all of the tasks, and ONLY in the one that is equal to the one that is currently active, 
-    //we give it a new status (semester) and update the state
+    //Finds the course we just dragged in the list of courses and updates the semester
     updatePlannerCourses(()=>
-      plannerCourses.map((course) =>
+      plannerCourses.map((course:DItemType) =>
+      
         (course.id === courseId) ? {
-          ...course,
+          id: course.id,
           semester: newSemester
         } : course,
       ),
     );
+    console.log(plannerCourses)
   }
 
   //Render all of the semesters
-  //Functionality:
-        //For i in range numSemesters
-          //Render a semester object
-          //For every class in semester
-              //Render class object
   function PopulatePlanner(){
-
-    //Renders each course that belongs to the semester
-    function RenderSemester(semester: SemesterProps, courses:DItemType[]){
-      console.log("Rendered semester")
-      //setNodeRef: a reference to the div that we want to apply this to
-      //useDroppable: DnD kit hook that marks a section as a drop zone. Defines the ID for the drop zone
-      const { setNodeRef } = useDroppable({id: semester.id }); //Makes it so that the semester is a drop zone
-
-      return(
-        //setNodeRef: a marker so that useDroppable knows to apply its functionality to this specific div
-        <div ref={setNodeRef} className ={styles.dropZoneStyle} key={semester.id}>
-          {semester.courses.map((course) =>
-            <RenderDItem {...course} key={course.id} />
-          )}
-        </div>
-      );
-    }
-
     return(
       <div>
-        <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+        <DndContext onDragEnd={handleDragEnd}>
         {semesters.map((semester) =>
-          RenderSemester({...semester}, semester.courses.filter((course:DItemType) => course.semester === semester.id))
-        )}
+          <RenderSemester 
+            semester_id={semester.semester_id} 
+            name={semester.name} 
+            courses={semester.courses.filter((course:DItemType) => course.semester === semester.semester_id)}/>
+          )}
         </DndContext>
       </div>
     );
@@ -160,9 +113,9 @@ function CourseSearch(){
 
     return(
       <div>
-        {searchItems.map((item) => 
+        {/*searchItems.map((item) => 
             <RenderDItem {...item} key={item.id}/>
-          )}
+          )*/}
       </div>
     );
   }
@@ -184,12 +137,13 @@ function CourseSearch(){
 }
 
 export default function App() {
-
+  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   return (
     <html>
       <body>
           <Planner/>
           <CourseSearch/>
+          <DndContext></DndContext>
       </body>
     </html>
     
