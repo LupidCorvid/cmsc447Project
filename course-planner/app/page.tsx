@@ -1,6 +1,6 @@
 'use client';
 import React, { useState,useEffect } from 'react';
-import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import Droppable from "./searchbar/src/components/DragAndDropTest";
@@ -51,7 +51,7 @@ function Planner(){
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
     if (!over) {
-      console.log("Not over", over.id)
+      console.log("Not over")
       return;
     }
     const courseId = active.id as string; //Must typecast this
@@ -102,7 +102,7 @@ function Planner(){
 
     return(
       <div>
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
         {semesters.map((semester) =>
           RenderSemester({...semester}, semester.courses.filter((course:DItemType) => course.semester === semester.id))
         )}
