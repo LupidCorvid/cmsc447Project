@@ -1,7 +1,7 @@
 'use client';
 import React, { useState,useEffect } from 'react';
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core';
-//import DynamicList from "./searchbar/src/components/DynamicList";
+
 import Searchbar from "./searchbar/src/components/Searchbar"
 import Droppable from "./searchbar/src/components/DragAndDropTest";
 import styles from "./searchbar/src/components/page.module.css";
@@ -50,12 +50,17 @@ function Planner(){
     console.log("Fired handleDragEnd")
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
-    if (!over) return;
+    if (!over) {
+      console.log("Not over", over.id)
+      return;
+    }
     const courseId = active.id as string; //Must typecast this
     const newSemester = over.id as DItemType['semester'] //The column id, so the semester id
 
-    console.log(courseId)
-    console.log(newSemester)
+    console.log("overID:", over.id)
+    console.log("activeID: ", active.id)
+    //console.log(courseId)
+    //console.log(newSemester)
     
     //This is the updater function of the state array tester
     //Takes all of the tasks, and ONLY in the one that is equal to the one that is currently active, 
@@ -179,36 +184,10 @@ function CourseSearch(){
 }
 
 export default function App() {
-  //const [tester, setCourses] = useState<DItemType[]>(defaultItems)
-  /* const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
-  function handleDragEnd(event: DragEndEvent){
-    console.log("Fired handleDragEnd")
-    const {active, over} = event; //active: The task we're actually dropping
-                                  //over: if you are over something that is droppable
-    if (!over) return;
-    const courseId = active.id as string; //Must typecast this
-    const newSemester = over.id as DItemType['semester'] //The column id, so the semester id
-
-    console.log(courseId)
-    console.log(newSemester)
-    
-    //This is the updater function of the state array tester
-    //Takes all of the tasks, and ONLY in the one that is equal to the one that is currently active, 
-    //we give it a new status (semester) and update the state
-    updatePlannerCourses(()=>
-      plannerCourses.map((course) =>
-        (course.id === courseId) ? {
-          ...course,
-          semester: newSemester
-        } : course
-      )
-    );
-  } */
 
   return (
     <html>
       <body>
-        
           <Planner/>
           <CourseSearch/>
       </body>
