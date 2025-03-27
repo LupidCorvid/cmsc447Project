@@ -29,21 +29,46 @@ type SemesterProps = {
 
 const defaultItems: DItemType[] = [
   {id:"CMSC 201", semester: 1},
-  {id:"CMSC 202", semester: 1}, 
-  {id:"CMSC 203", semester: 1}
 ]
 const defaultSemesters: SemesterProps[] = [
   {id:1, name: "Fall 2022", courses:defaultItems},
   {id:2, name: "Spring 2023",  courses:[]}
 ]
 
-
+/*
+  {id:"CMSC 202", semester: 1}, 
+  {id:"CMSC 203", semester: 1}
+*/
 
 function Planner(){
-  //const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   const [semesters, setSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   var recCredits = 0;
+
+  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  function handleDragEnd(event: DragEndEvent){
+    console.log("Fired handleDragEnd")
+    const {active, over} = event; //active: The task we're actually dropping
+                                  //over: if you are over something that is droppable
+    if (!over) return;
+    const courseId = active.id as string; //Must typecast this
+    const newSemester = over.id as DItemType['semester'] //The column id, so the semester id
+
+    console.log(courseId)
+    console.log(newSemester)
+    
+    //This is the updater function of the state array tester
+    //Takes all of the tasks, and ONLY in the one that is equal to the one that is currently active, 
+    //we give it a new status (semester) and update the state
+    updatePlannerCourses(()=>
+      plannerCourses.map((course) =>
+        (course.id === courseId) ? {
+          ...course,
+          semester: newSemester
+        } : course,
+      ),
+    );
+  }
 
   //Render all of the semesters
   //Functionality:
@@ -54,12 +79,15 @@ function Planner(){
   function PopulatePlanner(){
 
     //Renders each course that belongs to the semester
-    function RenderSemester(semester: SemesterProps){
-      
-      useDroppable({id: semester.id }) //Makes it so that the semester is a drop zone
+    function RenderSemester(semester: SemesterProps, courses:DItemType[]){
+      console.log("Rendered semester")
+      //setNodeRef: a reference to the div that we want to apply this to
+      //useDroppable: DnD kit hook that marks a section as a drop zone. Defines the ID for the drop zone
+      const { setNodeRef } = useDroppable({id: semester.id }); //Makes it so that the semester is a drop zone
 
       return(
-        <div className ={styles.dropZoneStyle}>
+        //setNodeRef: a marker so that useDroppable knows to apply its functionality to this specific div
+        <div ref={setNodeRef} className ={styles.dropZoneStyle} key={semester.id}>
           {semester.courses.map((course) =>
             <RenderDItem {...course} key={course.id} />
           )}
@@ -69,10 +97,11 @@ function Planner(){
 
     return(
       <div>
+        <DndContext onDragEnd={handleDragEnd}>
         {semesters.map((semester) =>
-          <RenderSemester {...semester} key={semester.id}/>
+          RenderSemester({...semester}, semester.courses.filter((course:DItemType) => course.semester === semester.id))
         )}
-        
+        </DndContext>
       </div>
     );
   }
@@ -150,34 +179,38 @@ function CourseSearch(){
 }
 
 export default function App() {
-  const [tester, setCourses] = useState([{id:"CMSC 201", semester: 1 },{id:"CMSC 202", semester: 1}, {id:"CMSC 203", semester: 1 }])
+  //const [tester, setCourses] = useState<DItemType[]>(defaultItems)
+  /* const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   function handleDragEnd(event: DragEndEvent){
+    console.log("Fired handleDragEnd")
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
     if (!over) return;
     const courseId = active.id as string; //Must typecast this
     const newSemester = over.id as DItemType['semester'] //The column id, so the semester id
+
+    console.log(courseId)
+    console.log(newSemester)
     
     //This is the updater function of the state array tester
     //Takes all of the tasks, and ONLY in the one that is equal to the one that is currently active, 
     //we give it a new status (semester) and update the state
-    setCourses(()=>
-      tester.map((course) =>
+    updatePlannerCourses(()=>
+      plannerCourses.map((course) =>
         (course.id === courseId) ? {
           ...course,
           semester: newSemester
         } : course
       )
     );
-  }
+  } */
 
   return (
     <html>
       <body>
-        <DndContext onDragEnd={handleDragEnd}>
+        
           <Planner/>
           <CourseSearch/>
-        </DndContext>
       </body>
     </html>
     

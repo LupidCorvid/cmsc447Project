@@ -28,8 +28,6 @@ body {
     background-color: rgb(144, 137, 137);
     height: 100px;
     width: 400px;
-    overflow-Y: scroll;
-    overflow-X: hidden;
     margin: 10px;
     padding-bottom: 10px;
 }
