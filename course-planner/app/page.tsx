@@ -4,12 +4,14 @@ import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } 
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
-import {DItemType, PlannerProps, CourseSearchProps, SemesterProps} from './searchbar/src/components/types';
+import {DItemType, SemesterProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
 
+//Debug Draggable items
 const defaultItems: DItemType[] = [
   {id:"CMSC 201", semester: 2},
 ]
+//Debug Semesters
 const defaultSemesters: SemesterProps[] = [
   {semester_id:1, name: "Fall 2022", courses:[]},
   {semester_id:2, name: "Spring 2023",  courses:defaultItems}
@@ -20,8 +22,10 @@ function Planner(){
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   
-  var recCredits = 0;
+  var recCredits = 0; //Recommended credits per semester
 
+  //Handles when the user lets go of a dragged object
+  //Checks if the final spot was in a semester and updates the item accordingly
   function handleDragEnd(event: DragEndEvent){
     console.log("Fired handleDragEnd")
     const {active, over} = event; //active: The task we're actually dropping
@@ -30,32 +34,28 @@ function Planner(){
       console.log("Not over")
       return;
     }
-    const courseId = active.id as string; //Must typecast this
-    const newSemester = over.id as DItemType['semester'] //The column id, so the semester id
-
-    console.log("overID:", over.id)
-    console.log("activeID: ", active.id)
+    const courseId = active.id as string; //Note: Must typecast this
+    const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
     
-    //This is the updater function of the state array tester
-    //Finds the course we just dragged in the list of courses and updates the semester
+    //Updater function for plannerCourses
+    //Finds the course we just dragged in the list of courses and updates its semester property
     updatePlannerCourses(()=>
       plannerCourses.map((course:DItemType) =>
-      
         (course.id === courseId) ? {
           id: course.id,
           semester: newSemester
         } : course,
       ),
     );
-    
-    console.log(plannerCourses)
   }
 
+  //TODO: maybe delete
   function updateCoursesInSemester(){
     return 
   }
 
-  //Render all of the semesters
+  //Renders all of the semesters using a loop
+  //Each semester renders the courses associated with it using the .filter() function
   function PopulatePlanner(){
     return(
       <div>
@@ -72,6 +72,7 @@ function Planner(){
     );
   }
   
+  //Updates the value of userMajor
   function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
     setValue(event.target.value);
   }
@@ -111,22 +112,24 @@ function Planner(){
   );
 }
 
+//TODO: Work In Progress
 function CourseSearch(){
-  const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); //An array of DItems
+  //Debug: An array of DItems
+  //const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); 
 
   const tester = ["CMSC 331", "CMSC 341", "CMSC 304"]; //Stuff to fill the state array with. Replace with database info later
 
+   //TODO: Implement
    //Where all of the courses will go
    function PopulateCourseSerach(){
-
-    return(
-      <div>
-        {/*searchItems.map((item) => 
-            <RenderDItem {...item} key={item.id}/>
-          )*/}
-      </div>
-    );
-  }
+      return(
+        <div>
+          {/*searchItems.map((item) => 
+              <RenderDItem {...item} key={item.id}/>
+            )*/}
+        </div>
+      );
+    }
 
   return(
     <div id="Course Search" style={{float: 'right'}}>
