@@ -14,7 +14,8 @@ const defaultItems: DItemType[] = [
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
   {semester_id:1, name: "Fall 2022", courses:[]},
-  {semester_id:2, name: "Spring 2023",  courses:defaultItems}
+  {semester_id:2, name: "Spring 2023",  courses:defaultItems},
+  {semester_id:3, name: "Spring 2023",  courses:defaultItems}
 ]
 
 function Planner(){
@@ -49,7 +50,7 @@ function Planner(){
     );
   }
 
-  //TODO: maybe delete
+  //TODO: implementation of dynamic semesters
   function updateCoursesInSemester(){
     return 
   }
