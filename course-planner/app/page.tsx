@@ -9,7 +9,7 @@ import { RenderSemester } from './searchbar/src/components/Semester';
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
-  {id:"CMSC 201", semester: 1},
+  {id:"CMSC 201", prereqs: [], semester: 1},
 ]
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
@@ -47,6 +47,7 @@ function Planner(){
       plannerCourses.map((course:DItemType) =>
         (course.id === courseId) ? {
           id: course.id,
+          prereqs: [],
           semester: newSemester
         } : course,
       ),
