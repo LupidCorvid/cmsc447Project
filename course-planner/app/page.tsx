@@ -9,11 +9,14 @@ import { RenderSemester } from './searchbar/src/components/Semester';
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
-  {id:"CMSC 201", prereqs: [], semester: 1},
+  {id:"CMSC 201", prereqs: [], semester: 0},
 ]
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
-  {semester_id:1, name: "Fall 2022", courses:defaultItems}
+]
+//Past courses semester
+const pastCoursesSem: SemesterProps[] = [
+  {semester_id:0, name: "Past Courses", courses:defaultItems}
 ]
 
 function Planner(){
@@ -31,11 +34,9 @@ function Planner(){
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
   function handleDragEnd(event: DragEndEvent){
-    console.log("Fired handleDragEnd")
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
     if (!over) {
-      console.log("Not over")
       return;
     }
     const courseId = active.id as string; //Note: Must typecast this
@@ -54,9 +55,13 @@ function Planner(){
     );
   }
 
+  //Adds a new semester
   function updateCoursesInSemester(){
-    let newId = semesters.length + 1;
-    let newName = "New semester" //TODO: Let user name the semester
+    let newId = semesters.length + 1; //Must be 1 because semesters.length starts at 0
+    let newName = "New semester " + (newId) //TODO: Let user name the semester
+
+    //print semesters in order (does not include Past Semesters)
+    //print past courses
     updateSemesters(
       [...semesters,
         {semester_id:newId, name: newName, courses:[]}
@@ -79,6 +84,11 @@ function Planner(){
             courses={plannerCourses.filter((course:DItemType) => course.semester === semester.semester_id)}
             key={semester.semester_id}/>
           )}
+        <RenderSemester
+          semester_id={0}
+          name={"Past Courses"}
+          courses={plannerCourses.filter((course:DItemType) => course.semester === 0)}
+          key={0} />
         </DndContext>
       </div>
     );
