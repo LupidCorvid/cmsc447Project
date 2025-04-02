@@ -20,7 +20,12 @@ function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+
+  //TODO: Implement prereq checking and then enable these variables
+  let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
+  let gradreqErrorMsg = ""//"*This plan does not meet graduation requirements for " + userMajor;
   
+  //TODO: implement this and use this variable for storing the value
   var recCredits = 0; //Recommended credits per semester
 
   //Handles when the user lets go of a dragged object
@@ -50,7 +55,7 @@ function Planner(){
 
   function updateCoursesInSemester(){
     let newId = semesters.length + 1;
-    let newName = "" //TODO: Let user name the semester
+    let newName = "New semester" //TODO: Let user name the semester
     updateSemesters(
       [...semesters,
         {semester_id:newId, name: newName, courses:[]}
@@ -61,9 +66,10 @@ function Planner(){
 
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
+  //TODO: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
   function PopulatePlanner(){
     return(
-      <div>
+      <div className={styles.plannerScrollStyle}>
         <DndContext onDragEnd={handleDragEnd}>
         {semesters.map((semester) =>
           <RenderSemester 
@@ -110,9 +116,9 @@ function Planner(){
       </div>
 
       <div id="Notifications"  style={{clear:"left", lineHeight: .1}}>
-        <p className={styles.notificationStyle}>*The following courses in your planner do not meet prerequisite requirements:</p>
+        <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
         <br/>
-        <p className={styles.notificationStyle}>*This plan does not meet graduation requirements for {userMajor}</p>
+        <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
       </div>
     </div>
   );

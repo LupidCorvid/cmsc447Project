@@ -18,6 +18,7 @@ export function RenderSemester({semester_id, name, courses}:SemesterProps){
     return(
     //setNodeRef: a marker so that useDroppable knows to apply its functionality to this specific div
     <div ref={setNodeRef} className ={styles.dropZoneStyle}>
+        <div className={styles.semTitleStyle}>{name}</div>
         {courses.map((course) =>
             {return <RenderDItem course={course} key={course.id} />;
         })}

@@ -33,8 +33,8 @@ body {
 
 .plannerScrollStyle{
     overflow-Y: scroll;
-    overflow-X: hidden;
-    height: var(--boxHeight);
+    overflow-X: visible;
+    height: 410px;
     width: var(--boxWidth);
 }
 .searchScrollStyle{
@@ -79,7 +79,7 @@ body {
 
 .dropZoneStyle{
     background-color: rgb(216, 206, 206);
-    height: 100px;
+    min-height: 100px;
     width: 400px;
     margin: 10px;
     padding-bottom: 10px;
@@ -88,13 +88,17 @@ body {
 .addSemBtnStyle{
     width: 150px;
     height: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: flex;
     color: var(--primaryTextColor);
-    background-color: rgb(213, 207, 182);
+    background-color: rgb(216, 206, 206);
 }
 
 .semTitleStyle{
-    color:rgb(164, 155, 155);
+    color:rgb(132, 124, 124);
     font-size:20px;
+    padding: 10px;
     font-weight: bold;
     text-align: left;
 }
