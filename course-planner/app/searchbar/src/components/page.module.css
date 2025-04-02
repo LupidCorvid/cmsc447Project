@@ -84,4 +84,11 @@ body {
     font-weight: bold;
     float:left;
 }
+
+.addSemBtnStyle{
+    width: 150px;
+    height: 25px;
+    color: var(--primaryTextColor);
+    background-color: rgb(213, 207, 182);
+}
   

@@ -9,13 +9,11 @@ import { RenderSemester } from './searchbar/src/components/Semester';
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
-  {id:"CMSC 201", semester: 2},
+  {id:"CMSC 201", semester: 1},
 ]
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
-  {semester_id:1, name: "Fall 2022", courses:[]},
-  {semester_id:2, name: "Spring 2023",  courses:defaultItems},
-  {semester_id:3, name: "Spring 2023",  courses:defaultItems}
+  {semester_id:1, name: "Fall 2022", courses:defaultItems}
 ]
 
 function Planner(){
@@ -50,8 +48,14 @@ function Planner(){
     );
   }
 
-  //TODO: implementation of dynamic semesters
   function updateCoursesInSemester(){
+    let newId = semesters.length + 1;
+    let newName = "" //TODO: Let user name the semester
+    updateSemesters(
+      [...semesters,
+        {semester_id:newId, name: newName, courses:[]}
+      ]
+    )
     return 
   }
 
@@ -101,6 +105,7 @@ function Planner(){
       </p>
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
+        <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
         {PopulatePlanner()}
       </div>
 
