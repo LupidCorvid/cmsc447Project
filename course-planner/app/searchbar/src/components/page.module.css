@@ -1,0 +1,105 @@
+:root {
+    --boxWidth: 450px;
+    --boxHeight: 450px;
+    --searchBoxHeight: 390px;
+    --primaryTextColor: rgb(34, 31, 25);
+    --bodyTextStyle: 18px;
+}
+
+body {
+    background-color: rgb(241, 241, 241);
+    padding: 40px;
+    font-family: Sans-Serif;
+    text-align: center;
+}
+
+.draggableStyle {
+    padding: 20px;
+    color: rgb(34, 31, 25);
+    background-color: rgb(129, 128, 209);
+    cursor: grab;
+    width: 100px;
+    font-family: Sans-Serif;
+    text-align: center;
+    margin: 15px 15px 15px 15px;
+}
+
+.plannerStyle {
+    border-style: solid;
+    background-color: rgb(241, 241, 241);
+    height: 450px;
+    width: 450px;
+}
+
+.plannerScrollStyle{
+    overflow-Y: scroll;
+    overflow-X: visible;
+    height: 410px;
+    width: var(--boxWidth);
+}
+.searchScrollStyle{
+    overflow-Y: scroll;
+    overflow-X: hidden;
+    height: var(--searchBoxHeight);
+    width: var(--boxWidth);
+}
+
+.searchbarStyle{
+    padding: 10px;
+    float: left;
+    width: 200px;
+}
+
+.headerStyle {
+    color: var(--primaryTextColor);
+    font-family: Sans-Serif;
+    font-size: 35px;
+    line-height: .1;
+}
+
+.textStyle{
+    color: var(--primaryTextColor);
+    font-family: Sans-Serif;
+    font-size: var(--bodyTextStyle);
+    font-weight: bold;
+}
+
+.majorDecideStyle{
+    padding: 3px; 
+    font-size: 16px;
+}
+
+.notificationStyle{
+    color: rgb(230, 32, 32);
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    float:left;
+}
+
+.dropZoneStyle{
+    background-color: rgb(216, 206, 206);
+    min-height: 100px;
+    width: 400px;
+    margin: 10px;
+    padding-bottom: 10px;
+}
+
+.addSemBtnStyle{
+    width: 150px;
+    height: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: flex;
+    color: var(--primaryTextColor);
+    background-color: rgb(216, 206, 206);
+}
+
+.semTitleStyle{
+    color:rgb(132, 124, 124);
+    font-size:20px;
+    padding: 10px;
+    font-weight: bold;
+    text-align: left;
+}
+  
