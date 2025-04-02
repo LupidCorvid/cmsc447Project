@@ -16,20 +16,12 @@ body {
 .draggableStyle {
     padding: 20px;
     color: rgb(34, 31, 25);
-    background-color: rgb(120, 248, 150);
+    background-color: rgb(129, 128, 209);
     cursor: grab;
     width: 100px;
     font-family: Sans-Serif;
     text-align: center;
     margin: 15px 15px 15px 15px;
-}
-
-.dropZoneStyle{
-    background-color: rgb(144, 137, 137);
-    height: 100px;
-    width: 400px;
-    margin: 10px;
-    padding-bottom: 10px;
 }
 
 .plannerStyle {
@@ -85,10 +77,25 @@ body {
     float:left;
 }
 
+.dropZoneStyle{
+    background-color: rgb(216, 206, 206);
+    height: 100px;
+    width: 400px;
+    margin: 10px;
+    padding-bottom: 10px;
+}
+
 .addSemBtnStyle{
     width: 150px;
     height: 25px;
     color: var(--primaryTextColor);
     background-color: rgb(213, 207, 182);
+}
+
+.semTitleStyle{
+    color:rgb(164, 155, 155);
+    font-size:20px;
+    font-weight: bold;
+    text-align: left;
 }
   
