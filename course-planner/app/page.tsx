@@ -100,18 +100,23 @@ function Planner(){
     setValue(event.target.value);
   }
 
-  if(semesters.length > 0)
+  function UpdateRecCredits()
   {
-    var takenCredits = 0;
-    pastCoursesSem[0].courses.forEach(element =>
-      takenCredits += element.credits
-    );
-    recCredits = Math.ceil(((120 - takenCredits)/semesters.length));
+    if(semesters.length > 0)
+    {
+      var takenCredits = 0;
+      plannerCourses.filter((course:DItemType) => course.semester === 0).forEach(element =>
+        takenCredits += element.credits
+      );
+      recCredits = Math.ceil(((120 - takenCredits)/semesters.length));
+    }
+    else
+    {
+      recCredits = 0;
+    }
+    console.log(pastCoursesSem[0].courses)
   }
-  else
-  {
-    recCredits = 0;
-  }
+  UpdateRecCredits();
 
   return(
     <div key="Planner" style={{float: 'left'}}>
