@@ -6,7 +6,6 @@ import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
-import { Tangerine } from 'next/font/google';
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
