@@ -9,7 +9,7 @@ import { RenderSemester } from './searchbar/src/components/Semester';
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
-  {id:"CMSC 201", prereqs: [], semester: 0},
+  {id:"CMSC 201", prereqs: [], semester: 0, credits:3},
 ]
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
@@ -27,9 +27,6 @@ function Planner(){
   //TODO: Implement prereq checking and then enable these variables
   let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
   let gradreqErrorMsg = ""//"*This plan does not meet graduation requirements for " + userMajor;
-  
-  //TODO: implement this and use this variable for storing the value
-  var recCredits = 0; //Recommended credits per semester
 
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
@@ -49,7 +46,8 @@ function Planner(){
         (course.id === courseId) ? {
           id: course.id,
           prereqs: [],
-          semester: newSemester
+          semester: newSemester,
+          credits: 3 //TODO: This just hard sets it for now
         } : course,
       ),
     );
@@ -59,7 +57,6 @@ function Planner(){
   function updateCoursesInSemester(){
     let newId = semesters.length + 1; //Must be 1 because semesters.length starts at 0
     let newName = "New semester " + (newId) //TODO: Let user name the semester
-
     //print semesters in order (does not include Past Semesters)
     //print past courses
     updateSemesters(
@@ -99,6 +96,19 @@ function Planner(){
     setValue(event.target.value);
   }
 
+  function GetRecCredits()
+  {
+    if(semesters.length > 0)
+    {
+      var takenCredits = 0;
+      plannerCourses.filter((course:DItemType) => course.semester === 0).forEach(element =>
+        takenCredits += element.credits
+      );
+      return Math.ceil(((120 - takenCredits)/semesters.length));
+    }
+    return 0
+  }
+
   return(
     <div key="Planner" style={{float: 'left'}}>
 
@@ -118,7 +128,7 @@ function Planner(){
 
         <br/>
 
-        Recommended Credits per Semester: {recCredits}
+        Recommended Credits per Semester: {GetRecCredits()}
       </p>
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
