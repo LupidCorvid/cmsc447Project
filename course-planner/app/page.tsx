@@ -28,9 +28,6 @@ function Planner(){
   //TODO: Implement prereq checking and then enable these variables
   let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
   let gradreqErrorMsg = ""//"*This plan does not meet graduation requirements for " + userMajor;
-  
-  //TODO: implement this and use this variable for storing the value
-  var recCredits = 120; //Recommended credits per semester
 
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
@@ -100,7 +97,7 @@ function Planner(){
     setValue(event.target.value);
   }
 
-  function UpdateRecCredits()
+  function GetRecCredits()
   {
     if(semesters.length > 0)
     {
@@ -108,15 +105,10 @@ function Planner(){
       plannerCourses.filter((course:DItemType) => course.semester === 0).forEach(element =>
         takenCredits += element.credits
       );
-      recCredits = Math.ceil(((120 - takenCredits)/semesters.length));
+      return Math.ceil(((120 - takenCredits)/semesters.length));
     }
-    else
-    {
-      recCredits = 0;
-    }
-    console.log(pastCoursesSem[0].courses)
+    return 0
   }
-  UpdateRecCredits();
 
   return(
     <div key="Planner" style={{float: 'left'}}>
@@ -137,7 +129,7 @@ function Planner(){
 
         <br/>
 
-        Recommended Credits per Semester: {recCredits}
+        Recommended Credits per Semester: {GetRecCredits()}
       </p>
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
