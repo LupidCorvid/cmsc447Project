@@ -103,10 +103,10 @@ function Planner(){
   if(semesters.length > 0)
   {
     var takenCredits = 0;
-    semesters[0].courses.forEach(element =>
+    pastCoursesSem[0].courses.forEach(element =>
       takenCredits += element.credits
     );
-    recCredits = (((120 - takenCredits)/semesters.length));
+    recCredits = Math.ceil(((120 - takenCredits)/semesters.length));
   }
   else
   {
