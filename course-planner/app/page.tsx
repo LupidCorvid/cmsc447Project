@@ -6,6 +6,7 @@ import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
+import {checkPrereq, findIndexByID, checkMultiple} from "./searchbar/src/components/PrerequisiteCheck";
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
@@ -180,7 +181,11 @@ function CourseSearch(){
   );
 }
 
+import jsonContent from "./searchbar/src/components/test.json";
 export default function App() {
+  let mylist = [""];
+  const classList = jsonContent.name;
+  checkPrereq(classList, "CMSC 447", 3, mylist);
   return (
     <html>
       <body>
