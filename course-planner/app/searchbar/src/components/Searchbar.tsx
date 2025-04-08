@@ -40,8 +40,11 @@ const Searchbar = () =>
         <div>
             <input type="text" placeholder = "Class name..." onChange={filterChanged} value={searchInput} className={styles.searchbarStyle}></input>
             <div id="List of courses by filter" className={styles.searchScrollStyle}>
-                {filteredInputs.map((course) =>
-                {return <RenderDItem course={course} key={course.id} />; })}
+                {
+                (searchInput.length == 0) ? <div>Enter a filter to get started</div> :
+                filteredInputs.map((course) =>
+                {return <RenderDItem course={course} key={course.id} />; }) 
+                }
             </div>
         </div>
     );
