@@ -28,11 +28,11 @@ const Searchbar = () =>
     {
         if(searchInput === '')
         {
-            return;
+            return true;
         }
         else
         {
-            return element.id.toLowerCase().includes(searchInput);
+            return element.id.toLowerCase().includes(searchInput.toLowerCase());
         }
     })
 
