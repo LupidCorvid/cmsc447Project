@@ -38,8 +38,9 @@ body {
     width: var(--boxWidth);
 }
 .searchScrollStyle{
-    overflow-Y: scroll;
-    overflow-X: hidden;
+    overflow-Y: visible;
+    overflow-X: visible;
+    padding-top: 60px;
     height: var(--searchBoxHeight);
     width: var(--boxWidth);
 }

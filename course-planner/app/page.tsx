@@ -120,6 +120,7 @@ function Planner(){
   }
 
   return(
+    <div>
     <div key="Planner" style={{float: 'left'}}>
 
       <h1 className={styles.headerStyle} style={{float:'left'}}>
@@ -153,38 +154,23 @@ function Planner(){
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
       </div>
     </div>
+
+    <div id="Course Search" style={{float: 'right'}}>
+        <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
+          Course Search
+        </h1>
+        <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+          <DndContext onDragEnd={handleDragEnd}>
+            <Searchbar/>
+          </DndContext>
+        </div>
+      </div>
+    </div>
   );
 }
 
 //TODO: Work In Progress
 function CourseSearch(){
-  //Debug: An array of DItems
-  //const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); 
-
-   //TODO: Implement
-   //Where all of the courses will go
-   function PopulateCourseSerach(){
-      return(
-        <div>
-        </div>
-      );
-    }
-
-  return(
-    <div id="Course Search" style={{float: 'right'}}>
-
-      <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
-        Course Search
-      </h1>
-
-      <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
-        <DndContext onDragEnd={handleDragEnd}>
-          <Searchbar/>
-        </DndContext>
-      </div>
-
-    </div>
-  );
 }
 
 import jsonContent from "./searchbar/src/components/test.json";
@@ -200,7 +186,6 @@ export default function App() {
     <html>
       <body>
           <Planner/>
-          <CourseSearch/>
           <DndContext></DndContext>
       </body>
     </html>
