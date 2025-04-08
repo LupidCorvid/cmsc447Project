@@ -94,7 +94,7 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
 }
 
 export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNotMet){
-    console.log("start search");
+    console.log("start major check");
     let firstLayer = true;
     let secondLayer = false;
     let thirdLayer = true;
@@ -119,6 +119,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                         //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
                         //being missing
                         tempPrereqsNotMetList.push(prereqList[i][j][k]);
+                        console.log("missing" + prereqList[i][j][k]);
                     }
                 }else{
                     prereqClass = classList[findIndexByID(prereqList[i][j][k], classList)]
@@ -127,6 +128,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                         //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
                         //being missing
                         tempPrereqsNotMetList.push(prereqList[i][j][k]); 
+                        console.log("missing" + prereqList[i][j][k]);
                     }
                 console.log(thirdLayer);
                 }
@@ -141,10 +143,12 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
         }
         if(!secondLayer){
             firstLayer = false;
+            console.log("Missing parts: " + tempPrereqsNotMetList);
             tempPrereqsNotMetList.forEach((e) =>
             {
                 listPrereqsNotMet.push(e);
             }); // If the OR condition didn't save it, include each of the things that failed
+            tempPrereqsNotMetList = [""];
         }
         console.log("firstLayer:", firstLayer);
     }
@@ -152,9 +156,9 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
         //append classID to listPrereqsNotMet
         //for state support, use: setList(list => [...list, classID])
         //listPrereqsNotMet.push(classID);
-        console.log("not met");
+        console.log("major not met");
     }else{
-        console.log("met");
+        console.log("major met");
     }
 }
 

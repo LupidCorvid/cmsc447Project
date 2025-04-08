@@ -6,7 +6,7 @@ import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
-import {checkPrereq, findIndexByID, checkMultiple} from "./searchbar/src/components/PrerequisiteCheck";
+import {checkPrereq, findIndexByID, checkMultiple, checkMajor} from "./searchbar/src/components/PrerequisiteCheck";
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
@@ -195,6 +195,10 @@ export default function App() {
   let mylist = [""];
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
+  let majorList = [""];
+  checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
+  console.log(majorList);
   return (
     <html>
       <body>
