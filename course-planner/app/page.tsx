@@ -161,16 +161,11 @@ function CourseSearch(){
   //Debug: An array of DItems
   //const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); 
 
-  const tester = ["CMSC 331", "CMSC 341", "CMSC 304"]; //Stuff to fill the state array with. Replace with database info later
-
    //TODO: Implement
    //Where all of the courses will go
    function PopulateCourseSerach(){
       return(
         <div>
-          {/*searchItems.map((item) => 
-              <RenderDItem {...item} key={item.id}/>
-            )*/}
         </div>
       );
     }
@@ -183,8 +178,9 @@ function CourseSearch(){
       </h1>
 
       <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
-        <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
-        {PopulateCourseSerach()}
+        <DndContext onDragEnd={handleDragEnd}>
+          <Searchbar/>
+        </DndContext>
       </div>
 
     </div>
