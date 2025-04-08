@@ -22,9 +22,9 @@ const pastCoursesSem: SemesterProps[] = [
 
 const majors: MajorProps[] =
 [
-  {name:"Computer Science", reqCourses:""},
-  {name:"Computer Engineering", reqCourses:""},
-  {name:"Information Systems", reqCourses:""}
+  {name:"Computer Science", reqCourses:[]},
+  {name:"Computer Engineering", reqCourses:[]},
+  {name:"Information Systems", reqCourses:[]}
 ]
 
 function Planner(){

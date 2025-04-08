@@ -28,5 +28,5 @@ export type SemesterProps = {
 
 export type MajorProps = {
   name: string;
-  reqCourses: string; //This string will need to be parsed similar to course prereqs
+  reqCourses: string[][][]; //This string will need to be parsed similar to course prereqs
 }
