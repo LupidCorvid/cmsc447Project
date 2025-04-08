@@ -40,8 +40,10 @@ function Planner(){
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
   function handleDragEnd(event: DragEndEvent){
+    console.log("Fired");
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
+    console.log("active: ", active, "over: ", over);
     if (!over) {
       return;
     }
@@ -60,6 +62,8 @@ function Planner(){
         } : course,
       ),
     );
+
+    //TODO: if the dragged course is not in the planner (came from course search)
   }
 
   //Adds a new semester
@@ -78,7 +82,7 @@ function Planner(){
 
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
-  //TODO: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
+  //NOTE: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
   function PopulatePlanner(){
     return(
       <div className={styles.plannerScrollStyle}>
@@ -121,6 +125,7 @@ function Planner(){
 
   return(
     <div>
+      <DndContext onDragEnd={handleDragEnd}>
     <div key="Planner" style={{float: 'left'}}>
 
       <h1 className={styles.headerStyle} style={{float:'left'}}>
@@ -148,7 +153,7 @@ function Planner(){
         {PopulatePlanner()}
       </div>
 
-      <div id="Notifications"  style={{clear:"left", lineHeight: .1}}>
+      <div id="Notifications" style={{clear:"left", lineHeight: .1}}>
         <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
         <br/>
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
@@ -160,16 +165,19 @@ function Planner(){
           Course Search
         </h1>
         <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
-          <DndContext onDragEnd={handleDragEnd}>
+          
             <Searchbar/>
-          </DndContext>
+          
         </div>
       </div>
+      </DndContext>
     </div>
   );
 }
 
-//TODO: Work In Progress
+//Note: in order to drag and drop, the drop spot must be in the same div as the draggable item
+
+//Work In Progress
 function CourseSearch(){
 }
 
