@@ -28,7 +28,7 @@ const Searchbar = () =>
     {
         if(searchInput === '')
         {
-            return true;
+            return false; //Don't show until user searches for something
         }
         else
         {
