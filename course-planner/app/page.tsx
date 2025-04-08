@@ -6,6 +6,7 @@ import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
+import { renderToHTML } from 'next/dist/server/render';
 
 //Debug Draggable items
 const defaultItems: DItemType[] = [
@@ -18,6 +19,11 @@ const defaultSemesters: SemesterProps[] = [
 const pastCoursesSem: SemesterProps[] = [
   {semester_id:0, name: "Past Courses", courses:defaultItems}
 ]
+
+export function rem(course:DItemType){
+  console.log("yay!");
+  course.semester = -2;
+}
 
 function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
@@ -67,10 +73,39 @@ function Planner(){
     return 
   }
 
+  //Checks the planner for courses of semester_id = -2 and removes them
+  function scanPlannerListForRemoval() {
+
+    for (let i = 0; i < plannerCourses.length; i++){
+      //Set a temp array to modify
+      let tempArr = [...plannerCourses];
+      let rerenderFlag = false;
+
+      //If course has semester -2, remove it from temparr
+      if (plannerCourses[i].semester === -2){
+        rerenderFlag = true;
+        console.log("Get rid of it");
+
+        //Remove by making a copy and setting state array to the copy
+        tempArr.splice(i, 1); //index, deleteCount
+        i -= 1;
+      }
+
+      //Update the main array with temparr values
+      if(rerenderFlag){
+        updatePlannerCourses(
+          [...tempArr]
+        );
+      }
+    }
+  }
+
+
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
   //TODO: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
   function PopulatePlanner(){
+    scanPlannerListForRemoval();
     return(
       <div className={styles.plannerScrollStyle}>
         <DndContext onDragEnd={handleDragEnd}>
@@ -192,3 +227,4 @@ export default function App() {
     
   );
   }
+

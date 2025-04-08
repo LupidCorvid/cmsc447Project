@@ -14,13 +14,13 @@ body {
 }
 
 .draggableStyle {
-    padding: 20px;
+    padding: 15px;
     color: rgb(34, 31, 25);
     background-color: rgb(129, 128, 209);
     cursor: grab;
-    width: 100px;
+    width: 150px;
     font-family: Sans-Serif;
-    text-align: center;
+    text-align: left;
     margin: 15px 15px 15px 15px;
 }
 
@@ -93,6 +93,18 @@ body {
     display: flex;
     color: var(--primaryTextColor);
     background-color: rgb(216, 206, 206);
+}
+
+.remCourseBtnStyle{
+    width:25px;
+    height:25px;
+    background-color: rgb(201, 88, 88);
+}
+
+.courseInfoBtnStyle{
+    width:25px;
+    height:25px;
+    background-color: rgb(195, 209, 202);
 }
 
 .semTitleStyle{
