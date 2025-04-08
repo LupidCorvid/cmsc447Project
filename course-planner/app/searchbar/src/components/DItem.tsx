@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import {useDraggable} from '@dnd-kit/core';
 import styles from "./page.module.css";
 import { DItemType } from './types';
-import {rem} from '../../page.tsx';
 
 type DItemProps = {
     course: DItemType;
@@ -26,9 +25,6 @@ export function RenderDItem({course}:DItemProps) {
     //TODO: not saving changes
     function removeFromPlanner(){
         console.log("removeFromPlanner triggered");
-        //course.semester = -2;
-        //course = Object.assign(course, {...course, semester: -2});
-        //console.log("debug: ", course.semester);
     }
 
     function showCourseInfo(){
