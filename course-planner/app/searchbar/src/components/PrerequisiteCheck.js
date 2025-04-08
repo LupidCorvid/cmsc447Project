@@ -35,7 +35,7 @@ export function checkMultiple(classList, prereqString, prereqPlacement, classID)
 //class ID is a string in the format of department level EX: "CMSC 201"
 //semesterPlaced is a number indicating which semester it was placed in
 //listPrereqsNotMet is a list that is changed with this function. If prerequisites are not met, classID is passed in
-export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMet){
+export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMet, setList){
     console.log("start search");
     let firstLayer = true;
     let secondLayer = false;
@@ -84,7 +84,7 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
     if(firstLayer == false){
         //append classID to listPrereqsNotMet
         //for state support, use: setList(list => [...list, classID])
-        listPrereqsNotMet.push(classID);
+        setList(listPrereqsNotMet => [...listPrereqsNotMet, classID]);
         console.log("not met");
     }else{
         console.log("met");

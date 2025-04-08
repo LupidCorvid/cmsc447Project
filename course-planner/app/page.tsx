@@ -7,11 +7,10 @@ import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
 import {checkPrereq, findIndexByID, checkMultiple} from "./searchbar/src/components/PrerequisiteCheck";
+import jsonContent from "./searchbar/src/components/test.json";
 
 //Debug Draggable items
-const defaultItems: DItemType[] = [
-  {id:"CMSC 201", prereqs: [], semester: 0, credits:3},
-]
+const defaultItems: DItemType[] = jsonContent.name;
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
 ]
@@ -24,13 +23,16 @@ function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
-
+  //store unmet prerequisites to display in error message
+  const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
   //TODO: Implement prereq checking and then enable these variables
   let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
   let gradreqErrorMsg = ""//"*This plan does not meet graduation requirements for " + userMajor;
 
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
+      //setUnmetPrereqs([]);
+
   function handleDragEnd(event: DragEndEvent){
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
@@ -46,12 +48,18 @@ function Planner(){
       plannerCourses.map((course:DItemType) =>
         (course.id === courseId) ? {
           id: course.id,
-          prereqs: [],
+          prerequisites: [],
           semester: newSemester,
           credits: 3 //TODO: This just hard sets it for now
         } : course,
       ),
+      
     );
+    setUnmetPrereqs([]);
+    checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+    if(unmetPrereqs.length > 0){
+      prereqErrorMsg = "The following courses do not meet prerequisites: " + unmetPrereqs.join(", ");
+    }
   }
 
   //Adds a new semester
@@ -181,17 +189,13 @@ function CourseSearch(){
   );
 }
 
-import jsonContent from "./searchbar/src/components/test.json";
+
 export default function App() {
-  let mylist = [""];
-  const classList = jsonContent.name;
-  checkPrereq(classList, "CMSC 447", 3, mylist);
   return (
     <html>
       <body>
           <Planner/>
           <CourseSearch/>
-          <DndContext></DndContext>
       </body>
     </html>
     
