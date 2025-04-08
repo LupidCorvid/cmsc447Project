@@ -20,12 +20,13 @@ const pastCoursesSem: SemesterProps[] = [
   {semester_id:0, name: "Past Courses", courses:defaultItems}
 ]
 
-const majors: MajorProps[] =
+const majors: MajorProps[] = jsonContent.Majors;
+/*
 [
   {name:"Computer Science", reqCourses:[]},
   {name:"Computer Engineering", reqCourses:[]},
   {name:"Information Systems", reqCourses:[]}
-]
+]*/
 
 function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
