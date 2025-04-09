@@ -26,9 +26,12 @@ function Planner(){
   //store unmet prerequisites to display in error message
   const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
   //TODO: Implement prereq checking and then enable these variables
-  let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
-  let gradreqErrorMsg = ""//"*This plan does not meet graduation requirements for " + userMajor;
+  const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
+  const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
 
+  //used to fix updating bugs
+  const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
+  const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
       //setUnmetPrereqs([]);
@@ -36,6 +39,7 @@ function Planner(){
   function handleDragEnd(event: DragEndEvent){
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
+    console.log("hit");
     if (!over) {
       return;
     }
@@ -44,22 +48,30 @@ function Planner(){
     
     //Updater function for plannerCourses
     //Finds the course we just dragged in the list of courses and updates its semester property
-    updatePlannerCourses(()=>
-      plannerCourses.map((course:DItemType) =>
-        (course.id === courseId) ? {
-          id: course.id,
-          prerequisites: [],
-          semester: newSemester,
-          credits: 3 //TODO: This just hard sets it for now
-        } : course,
-      ),
-      
+    updatePlannerCourses(() =>
+      plannerCourses.map((course: DItemType) =>
+        course.id === courseId
+          ? { ...course, semester: newSemester, credits: 3 }
+          : course
+      )
     );
-    setUnmetPrereqs([]);
+    setLastDraggedCourseId(courseId);
+    setLastDraggedSemester(newSemester);
+    // Run prereq check using the updated course list
     checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
-    if(unmetPrereqs.length > 0){
-      prereqErrorMsg = "The following courses do not meet prerequisites: " + unmetPrereqs.join(", ");
-    }
+  
+    // Update error message based on unmet prereqs
+    setPrereqErrorMsg(() => {
+      if (unmetPrereqs.length > 0) {
+        return "The following courses do not meet prerequisites: " + unmetPrereqs.join(", ");
+      } else {
+        return "";
+      }
+    });
+
+
+
+    
   }
 
   //Adds a new semester
