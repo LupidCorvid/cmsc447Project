@@ -32,6 +32,8 @@ function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
+  const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
 
   //TODO: Implement prereq checking and then enable these variables
   let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
@@ -70,9 +72,26 @@ function Planner(){
     //print past courses
     updateSemesters(
       [...semesters,
-        {semester_id:newId, name: newName, courses:[]}
+        {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
       ]
     )
+    switch (semesterSeason)
+    {
+      case "Fall":
+        setSeason("Spring");
+        break;
+      case "Spring":
+        setSeason("Fall");
+        setYearInput(yearInput + 1);
+        break;
+      case "Winter":
+        setSeason("Spring");
+        setYearInput(yearInput + 1);
+        break;
+      case "Summer":
+        setSeason("Fall");
+        break;
+    }
     return 
   }
 
@@ -119,7 +138,7 @@ function Planner(){
     return 0
   }
 
-  const [yearInput, setYearInput] = useState(2024);
+
   function ChangeYear(e:any)
   {
     if(Number.parseInt(e.target.value))
@@ -127,6 +146,10 @@ function Planner(){
     
   }
 
+  function ChangeSeason(e:any)
+  {
+    setSeason(e.target.value);
+  }
 
   return(
     <div key="Planner" style={{float: 'left'}}>
@@ -153,7 +176,7 @@ function Planner(){
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
         <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
-        <select id="Semester Season Dropdown" className={styles.majorDecideStyle}>
+        <select id="Semester Season Dropdown" className={styles.majorDecideStyle} onChange={ChangeSeason} value={semesterSeason}>
         {/* TODO: Get dropdown to aligh nicely*/}
         <option value={"Fall"}>Fall</option>
         <option value={"Winter"}>Winter</option>
