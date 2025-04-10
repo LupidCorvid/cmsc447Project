@@ -176,7 +176,7 @@ function Planner(){
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
         <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
-        <select id="Semester Season Dropdown" className={styles.majorDecideStyle} onChange={ChangeSeason} value={semesterSeason}>
+        <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
         {/* TODO: Get dropdown to aligh nicely*/}
         <option value={"Fall"}>Fall</option>
         <option value={"Winter"}>Winter</option>
@@ -186,7 +186,7 @@ function Planner(){
         <input type="number"
         placeholder = "Year"
         value={yearInput}
-        onChange={ChangeYear}></input>
+        onChange={ChangeYear} className={styles.semYearStyle}></input>
         {PopulatePlanner()}
       </div>
 
