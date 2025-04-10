@@ -1,5 +1,5 @@
 'use client';
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, InputHTMLAttributes } from 'react';
 import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
 
 import Searchbar from "./searchbar/src/components/Searchbar"
@@ -119,6 +119,15 @@ function Planner(){
     return 0
   }
 
+  const [yearInput, setYearInput] = useState(2024);
+  function ChangeYear(e:any)
+  {
+    if(Number.parseInt(e.target.value))
+      setYearInput(Number.parseInt(e.target.value));
+    
+  }
+
+
   return(
     <div key="Planner" style={{float: 'left'}}>
 
@@ -144,6 +153,17 @@ function Planner(){
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
         <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
+        <select id="Semester Season Dropdown" className={styles.majorDecideStyle}>
+        {/* TODO: Get dropdown to aligh nicely*/}
+        <option value={"Fall"}>Fall</option>
+        <option value={"Winter"}>Winter</option>
+        <option value={"Spring"}>Spring</option>
+        <option value={"Summer"}>Summer</option>
+        </select>
+        <input type="number"
+        placeholder = "Year"
+        value={yearInput}
+        onChange={ChangeYear}></input>
         {PopulatePlanner()}
       </div>
 
