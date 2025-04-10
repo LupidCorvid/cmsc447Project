@@ -83,21 +83,21 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
         //for state support, use: setList(list => [...list, classID])
         if((!checkUnmet(classID, listPrereqsNotMet) && semesterPlaced != 0)){
             console.log("added");
-            setList(listPrereqsNotMet => [...listPrereqsNotMet, classID]);
+            return [...listPrereqsNotMet, classID];
         }else if(semesterPlaced == 0){
             console.log("taken out");
-            setList(list => list.filter(id => id !== classID));
+            return list.filter(id => id !== classID);
         }
         console.log("not met");
     }else{
         if(checkUnmet(classID, listPrereqsNotMet)){
             console.log("taken out");
-            setList(list => list.filter(id => id !== classID));
+            return list.filter(id => id !== classID);
         }
         console.log("met");
     }
     console.log("2", listPrereqsNotMet);
-
+    return ""
 
 }
 export function findIndexByID(classID, classList){

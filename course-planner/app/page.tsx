@@ -25,6 +25,7 @@ function Planner(){
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   //store unmet prerequisites to display in error message
   const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
+  
   //TODO: Implement prereq checking and then enable these variables
   const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
   const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
@@ -32,14 +33,14 @@ function Planner(){
   //used to fix updating bugs
   const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
   const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
+  
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
       //setUnmetPrereqs([]);
-
   function handleDragEnd(event: DragEndEvent){
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
-    console.log("hit");
+    //console.log("hit");
     if (!over) {
       return;
     }
@@ -58,20 +59,20 @@ function Planner(){
     setLastDraggedCourseId(courseId);
     setLastDraggedSemester(newSemester);
     // Run prereq check using the updated course list
-    checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+    let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+
+    setUnmetPrereqs(newString)
+    //console.log(unmetPrereqs)
   
-    // Update error message based on unmet prereqs
+    // Update error message based on unmet prereqs 
     setPrereqErrorMsg(() => {
-      if (unmetPrereqs.length > 0) {
-        return "The following courses do not meet prerequisites: " + unmetPrereqs.join(", ");
+      if (newString.length > 0) {
+        return "The following courses do not meet prerequisites: " + newString.join(", ");
       } else {
-        return "";
+        return "Empty";
       }
     });
 
-
-
-    
   }
 
   //Adds a new semester
