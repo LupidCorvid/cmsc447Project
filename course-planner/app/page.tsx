@@ -62,7 +62,7 @@ function Planner(){
     let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
 
     setUnmetPrereqs(newString)
-    //console.log(unmetPrereqs)
+    console.log(unmetPrereqs)
   
     // Update error message based on unmet prereqs 
     setPrereqErrorMsg(() => {

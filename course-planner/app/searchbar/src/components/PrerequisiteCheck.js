@@ -86,18 +86,19 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
             return [...listPrereqsNotMet, classID];
         }else if(semesterPlaced == 0){
             console.log("taken out");
-            return list.filter(id => id !== classID);
+            return listPrereqsNotMet.filter(id => id !== classID);
         }
         console.log("not met");
+        return listPrereqsNotMet;
     }else{
         if(checkUnmet(classID, listPrereqsNotMet)){
             console.log("taken out");
-            return list.filter(id => id !== classID);
+            return listPrereqsNotMet.filter(id => id !== classID);
         }
         console.log("met");
     }
     console.log("2", listPrereqsNotMet);
-    return ""
+    return listPrereqsNotMet;
 
 }
 export function findIndexByID(classID, classList){
@@ -110,6 +111,7 @@ export function findIndexByID(classID, classList){
     }
     return index;
 }
+//if classID is in list, it returns true
 export function checkUnmet(classID, unmetList){
     let found = false;
     for (let i = 0; i < unmetList.length; i++){
