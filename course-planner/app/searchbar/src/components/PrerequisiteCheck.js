@@ -44,6 +44,12 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
     let prereqClass;
     console.log(classID);
     console.log(semesterPlaced);
+
+    //case of no prerequisites
+    if(theClass.prerequisites.length === 1 && theClass.prerequisites[0].length === 1 && theClass.prerequisites[0][0].length === 0){
+        console.log("empty");
+        return listPrereqsNotMet;
+    }
     //and
     for(let i = 0; i < theClass.prerequisites.length; i++){
         //or
