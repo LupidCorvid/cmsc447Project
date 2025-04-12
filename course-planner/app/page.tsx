@@ -6,7 +6,7 @@ import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
-import {checkPrereq, findIndexByID, checkMultiple} from "./searchbar/src/components/PrerequisiteCheck";
+import {checkPrereq, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
 
 //Debug Draggable items
@@ -60,10 +60,12 @@ function Planner(){
     setLastDraggedSemester(newSemester);
     // Run prereq check using the updated course list
     let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
-
-    setUnmetPrereqs(newString)
-    console.log(unmetPrereqs)
-  
+    //setUnmetPrereqs(newString)
+    console.log("64: ", newString)
+    //check all other classes for prerequisites
+    newString = checkAllPrereqsUnmet(plannerCourses, newString, setUnmetPrereqs, courseId, newSemester);
+    setUnmetPrereqs(newString);
+    console.log("68: ", newString)
     // Update error message based on unmet prereqs 
     setPrereqErrorMsg(() => {
       if (newString.length > 0) {

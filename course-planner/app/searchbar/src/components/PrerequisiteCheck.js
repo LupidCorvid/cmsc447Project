@@ -1,4 +1,4 @@
-
+import React, { useState,useEffect } from 'react';
 import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
 import styles from "./page.module.css";
 import {DItemType, SemesterProps} from './types';
@@ -91,14 +91,14 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
             console.log("added");
             return [...listPrereqsNotMet, classID];
         }else if(semesterPlaced == 0){
-            console.log("taken out");
+            console.log("taken out 94");
             return listPrereqsNotMet.filter(id => id !== classID);
         }
         console.log("not met");
         return listPrereqsNotMet;
     }else{
         if(checkUnmet(classID, listPrereqsNotMet)){
-            console.log("taken out");
+            console.log("taken out 101");
             return listPrereqsNotMet.filter(id => id !== classID);
         }
         console.log("met");
@@ -127,4 +127,18 @@ export function checkUnmet(classID, unmetList){
         }
     }
     return found;
+}
+export function checkAllPrereqsUnmet(classList, unmetList, setUnmetList, currID, currSemester){
+    let newlist = unmetList;
+    console.log("135: ", newlist);
+    for(let i = 0; i < classList.length; i++){
+        //if not currID
+        console.log("t:",classList[i].semester);
+        if(currID !== classList[i].id && classList[i].semester != 0){
+            newlist = checkPrereq(classList, classList[i].id, classList[i].semester, newlist, setUnmetList);
+            console.log("138", newlist);
+        }
+    }
+
+    return newlist;
 }
