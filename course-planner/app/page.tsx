@@ -59,12 +59,14 @@ function Planner(){
     setLastDraggedCourseId(courseId);
     setLastDraggedSemester(newSemester);
     // Run prereq check using the updated course list
-    let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+    //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
     //setUnmetPrereqs(newString)
-    console.log("64: ", newString)
+    //console.log("64: ", newString)
     //check all other classes for prerequisites
-    newString = checkAllPrereqsUnmet(plannerCourses, newString, setUnmetPrereqs, courseId, newSemester);
+    let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
     setUnmetPrereqs(newString);
+    const tempList = unmetPrereqs.slice(1,2);
+    setUnmetPrereqs(tempList);
     console.log("68: ", newString)
     // Update error message based on unmet prereqs 
     setPrereqErrorMsg(() => {
