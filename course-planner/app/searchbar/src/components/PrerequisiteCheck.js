@@ -127,7 +127,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                 //check list for ID and get index
                 //check if index semester is <= semesterPlaced and not 0
                 //if less, return false
-                console.log(prereqList[i][j][k]);
+                //console.log(prereqList[i][j][k]);
                 if(prereqList[i][j][k].slice(0,3) === "MLT"){
                     if(!checkMultiple(classList, prereqList[i][j][k], semesterPlaced, "MAJOR")){
                         thirdLayer = false;
@@ -163,8 +163,8 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
             {
                 listPrereqsNotMet.push(e);
             }); // If the OR condition didn't save it, include each of the things that failed
-            tempPrereqsNotMetList = [""];
         }
+        tempPrereqsNotMetList = [];
         console.log("firstLayer:", firstLayer);
     }
     if(firstLayer == false){
@@ -175,6 +175,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
     }else{
         console.log("major met");
     }
+    console.log(listPrereqsNotMet);
 }
 
 export function findIndexByID(classID, classList){

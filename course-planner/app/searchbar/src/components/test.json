@@ -40,6 +40,7 @@
                                                     [["SCI 101L", "PHYS 122L", "CHEM 122L", "BIO 122L"]]]
                                                 },
         {"name":"EZ Major", "prerequisites":[[["CMSC 201"]]]
-                                                }]
+                                                }
+    ]
 
 }
