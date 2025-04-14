@@ -6,6 +6,7 @@ import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
+import { renderToHTML } from 'next/dist/server/render';
 
 import {checkPrereq, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
@@ -123,10 +124,39 @@ function Planner(){
     return 
   }
 
+  //Checks the planner for courses of semester_id = -2 and removes them
+  function scanPlannerListForRemoval() {
+
+    for (let i = 0; i < plannerCourses.length; i++){
+      //Set a temp array to modify
+      let tempArr = [...plannerCourses];
+      let rerenderFlag = false;
+
+      //If course has semester -2, remove it from temparr
+      if (plannerCourses[i].semester === -2){
+        rerenderFlag = true;
+        console.log("Get rid of it");
+
+        //Remove by making a copy and setting state array to the copy
+        tempArr.splice(i, 1); //index, deleteCount
+        i -= 1;
+      }
+
+      //Update the main array with temparr values
+      if(rerenderFlag){
+        updatePlannerCourses(
+          [...tempArr]
+        );
+      }
+    }
+  }
+
+
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
   //TODO: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
   function PopulatePlanner(){
+    scanPlannerListForRemoval();
     return(
       <div className={styles.plannerScrollStyle}>
         <DndContext onDragEnd={handleDragEnd}>
@@ -282,3 +312,4 @@ export default function App() {
     
   );
   }
+

@@ -21,9 +21,24 @@ export function RenderDItem({course}:DItemProps) {
         transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined
     }
 
+    //TODO: conflicting with the drag event
+    //TODO: not saving changes
+    function removeFromPlanner(){
+        console.log("removeFromPlanner triggered");
+    }
+
+    function showCourseInfo(){
+        console.log("showCourseInfo triggered");
+    }
+
+
+    let nbsp = "\u00A0"
+
     return(
         <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
-            {course.id}
+            {course.id} {nbsp}
+            <button id="info btn" onClick={showCourseInfo} className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
+            <button id="remove btn" onClick={removeFromPlanner} className={styles.remCourseBtnStyle}>X</button>
         </div>
     );
 }
