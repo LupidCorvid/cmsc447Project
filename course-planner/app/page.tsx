@@ -7,7 +7,7 @@ import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
 
-import {checkPrereq, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
+import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
 
 //Debug Draggable items
@@ -35,6 +35,7 @@ function Planner(){
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   //store unmet prerequisites to display in error message
   const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
+  const [unmetMajorReqs, setUnmetMajorReqs] = useState<string[]>([]);
   
   //TODO: Implement prereq checking and then enable these variables
   const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
@@ -79,15 +80,37 @@ function Planner(){
     const tempList = unmetPrereqs.slice(1,2);
     setUnmetPrereqs(tempList);
     console.log("68: ", newString)
+
+
+    let majorList = [""];
+    //Check for missing major requirements
+    if(userMajor != "Undecided")
+      checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList);
+    let majorReqs = "";
+    if(majorList.length > 1)
+      majorReqs += "The following graduation requirements for your major are not met:\n";
+    //majorList.forEach(element => {
+    //  if(element != "")
+    //    majorReqs += element + ", ";
+    //});
+    majorReqs += majorList.join(", ");
+
+
     // Update error message based on unmet prereqs 
     setPrereqErrorMsg(() => {
       if (newString.length > 0) {
-        return "The following courses do not meet prerequisites: " + newString.join(", ");
-      } else {
+        return "The following courses do not meet prerequisites: " + newString.join(", ") + majorReqs;
+      } 
+      else if (majorList.length > 1)
+      {
+        return majorReqs;
+      }
+      else{
         return "Empty";
       }
     });
 
+    
   }
 
   //Adds a new semester
@@ -226,7 +249,7 @@ export default function App() {
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
   let majorList = [""];
-  //checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   console.log(majorList);
   return (
