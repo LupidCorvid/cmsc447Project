@@ -203,7 +203,7 @@ function Planner(){
         {PopulatePlanner()}
       </div>
 
-      <div id="Notifications"  style={{clear:"left", lineHeight: .1}}>
+      <div id="Notifications"  style={{clear:"left", lineHeight: 14}}>
         <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
         <br/>
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
@@ -232,7 +232,7 @@ function CourseSearch(){
     }
 
   return(
-    <div id="Course Search" style={{float: 'right'}}>
+    <div id="Course Search" style={{float: 'right', position: 'absolute', top:0, right:0, padding: '50px'}}>
 
       <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
         Course Search
