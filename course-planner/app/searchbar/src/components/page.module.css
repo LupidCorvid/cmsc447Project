@@ -93,6 +93,7 @@ body {
     display: flex;
     color: var(--primaryTextColor);
     background-color: rgb(216, 206, 206);
+    float:left;
 }
 
 .semTitleStyle{
@@ -103,3 +104,14 @@ body {
     text-align: left;
 }
   
+
+.semSeasonStyle{
+    float:left;
+    height: 25px;
+    margin-top: 10px;
+}
+.semYearStyle{
+    float:left;
+    height: 20px;
+    margin-top: 10px;
+}

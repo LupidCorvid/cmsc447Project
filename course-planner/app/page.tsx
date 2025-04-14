@@ -1,5 +1,5 @@
 'use client';
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, InputHTMLAttributes } from 'react';
 import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
 
 import Searchbar from "./searchbar/src/components/Searchbar"
@@ -33,9 +33,11 @@ function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
+  const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
   //store unmet prerequisites to display in error message
   const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
-  
+
   //TODO: Implement prereq checking and then enable these variables
   const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
   const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
@@ -98,9 +100,26 @@ function Planner(){
     //print past courses
     updateSemesters(
       [...semesters,
-        {semester_id:newId, name: newName, courses:[]}
+        {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
       ]
     )
+    switch (semesterSeason)
+    {
+      case "Fall":
+        setSeason("Spring");
+        break;
+      case "Spring":
+        setSeason("Fall");
+        setYearInput(yearInput + 1);
+        break;
+      case "Winter":
+        setSeason("Spring");
+        setYearInput(yearInput + 1);
+        break;
+      case "Summer":
+        setSeason("Fall");
+        break;
+    }
     return 
   }
 
@@ -147,6 +166,19 @@ function Planner(){
     return 0
   }
 
+
+  function ChangeYear(e:any)
+  {
+    if(Number.parseInt(e.target.value))
+      setYearInput(Number.parseInt(e.target.value));
+    
+  }
+
+  function ChangeSeason(e:any)
+  {
+    setSeason(e.target.value);
+  }
+
   return(
     <div key="Planner" style={{float: 'left'}}>
 
@@ -172,6 +204,17 @@ function Planner(){
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
         <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
+        <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
+        {/* TODO: Get dropdown to aligh nicely*/}
+        <option value={"Fall"}>Fall</option>
+        <option value={"Winter"}>Winter</option>
+        <option value={"Spring"}>Spring</option>
+        <option value={"Summer"}>Summer</option>
+        </select>
+        <input type="number"
+        placeholder = "Year"
+        value={yearInput}
+        onChange={ChangeYear} className={styles.semYearStyle}></input>
         {PopulatePlanner()}
       </div>
 
