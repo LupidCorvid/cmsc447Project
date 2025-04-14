@@ -2,7 +2,8 @@
 
 export type DItemType = {
   id: string;
-  prereqs: string;
+  prerequisites: string[][][];
+
   semester: number; //0 = course search
   credits: number;
 }

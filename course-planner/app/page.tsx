@@ -6,12 +6,13 @@ import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
 import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
-import {checkPrereq, findIndexByID, checkMultiple, checkMajor} from "./searchbar/src/components/PrerequisiteCheck";
+
+import {checkPrereq, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
+import jsonContent from "./searchbar/src/components/test.json";
 
 //Debug Draggable items
-const defaultItems: DItemType[] = [
-  {id:"CMSC 201", prereqs: "", semester: 0, credits:3},
-]
+const defaultItems: DItemType[] = jsonContent.name;
+
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
 ]
@@ -34,16 +35,24 @@ function Planner(){
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
+  //store unmet prerequisites to display in error message
+  const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
 
   //TODO: Implement prereq checking and then enable these variables
-  let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
-  let gradreqErrorMsg = ""//"*This plan does not meet graduation requirements for " + userMajor;
+  const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
+  const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
 
+  //used to fix updating bugs
+  const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
+  const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
+  
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
+      //setUnmetPrereqs([]);
   function handleDragEnd(event: DragEndEvent){
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
+    //console.log("hit");
     if (!over) {
       return;
     }
@@ -52,16 +61,35 @@ function Planner(){
     
     //Updater function for plannerCourses
     //Finds the course we just dragged in the list of courses and updates its semester property
-    updatePlannerCourses(()=>
-      plannerCourses.map((course:DItemType) =>
-        (course.id === courseId) ? {
-          id: course.id,
-          prereqs: "",
-          semester: newSemester,
-          credits: 3 //TODO: This just hard sets it for now
-        } : course,
-      ),
+    updatePlannerCourses(() =>
+      plannerCourses.map((course: DItemType) =>
+        course.id === courseId
+          ? { ...course, semester: newSemester, credits: 3 }
+          : course
+      )
+
     );
+    setLastDraggedCourseId(courseId);
+    setLastDraggedSemester(newSemester);
+    // Run prereq check using the updated course list
+    //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+    //setUnmetPrereqs(newString)
+    //console.log("64: ", newString)
+    //check all other classes for prerequisites
+    let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+    setUnmetPrereqs(newString);
+    const tempList = unmetPrereqs.slice(1,2);
+    setUnmetPrereqs(tempList);
+    console.log("68: ", newString)
+    // Update error message based on unmet prereqs 
+    setPrereqErrorMsg(() => {
+      if (newString.length > 0) {
+        return "The following courses do not meet prerequisites: " + newString.join(", ");
+      } else {
+        return "Empty";
+      }
+    });
+
   }
 
   //Adds a new semester
@@ -234,13 +262,14 @@ function CourseSearch(){
   );
 }
 
-import jsonContent from "./searchbar/src/components/test.json";
+
 export default function App() {
+
   let mylist = [""];
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
   let majorList = [""];
-  checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  //checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   console.log(majorList);
   return (
@@ -248,7 +277,6 @@ export default function App() {
       <body>
           <Planner/>
           <CourseSearch/>
-          <DndContext></DndContext>
       </body>
     </html>
     
