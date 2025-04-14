@@ -226,7 +226,7 @@ export default function App() {
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
   let majorList = [""];
-  checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  //checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   console.log(majorList);
   return (
