@@ -4,13 +4,15 @@ import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } 
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
-import {DItemType, SemesterProps} from './searchbar/src/components/types';
+import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
+
 import {checkPrereq, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
 
 //Debug Draggable items
 const defaultItems: DItemType[] = jsonContent.name;
+
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
 ]
@@ -18,6 +20,14 @@ const defaultSemesters: SemesterProps[] = [
 const pastCoursesSem: SemesterProps[] = [
   {semester_id:0, name: "Past Courses", courses:defaultItems}
 ]
+
+const majors: MajorProps[] = jsonContent.Majors;
+/*
+[
+  {name:"Computer Science", reqCourses:[]},
+  {name:"Computer Engineering", reqCourses:[]},
+  {name:"Information Systems", reqCourses:[]}
+]*/
 
 function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
@@ -55,6 +65,7 @@ function Planner(){
           ? { ...course, semester: newSemester, credits: 3 }
           : course
       )
+
     );
     setLastDraggedCourseId(courseId);
     setLastDraggedSemester(newSemester);
@@ -120,6 +131,7 @@ function Planner(){
   //Updates the value of userMajor
   function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
     setValue(event.target.value);
+    //Change prereqs
   }
 
   function GetRecCredits()
@@ -146,10 +158,11 @@ function Planner(){
         Major: &nbsp;
 
         <select id="Update Major Dropdown" value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
-          <option value={"Undecided"}>Undecided</option>
-          <option value={"Computer Science"}>Computer Science</option>
-          <option value={"Computer Engineering"}>Computer Engineering</option>
-          <option value={"Information Systems"}>Information Systems</option>
+        <option value={"Undecided"}>Undecided</option>
+          {
+            majors.map((major) =>
+            <option value={major.name}>{major.name}</option>)
+          }
         </select>
 
         <br/>
@@ -208,6 +221,14 @@ function CourseSearch(){
 
 
 export default function App() {
+
+  let mylist = [""];
+  const classList = jsonContent.name;
+  checkPrereq(classList, "CMSC 447", 3, mylist);
+  let majorList = [""];
+  checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
+  console.log(majorList);
   return (
     <html>
       <body>

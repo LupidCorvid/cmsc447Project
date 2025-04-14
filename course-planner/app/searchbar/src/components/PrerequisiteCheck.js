@@ -107,6 +107,76 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
     return listPrereqsNotMet;
 
 }
+
+export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNotMet){
+    console.log("start major check");
+    let firstLayer = true;
+    let secondLayer = false;
+    let thirdLayer = true;
+    let prereqClass;
+    let tempPrereqsNotMetList = [];
+    //and
+    for(let i = 0; i < prereqList.length; i++){
+        //or
+        secondLayer = false;
+        for(let j = 0; j < prereqList[i].length; j++){
+            //and
+            thirdLayer = true;
+            for(let k = 0; k < prereqList[i][j].length; k++){
+                //if string "number of required level classes, do something"
+                //check list for ID and get index
+                //check if index semester is <= semesterPlaced and not 0
+                //if less, return false
+                console.log(prereqList[i][j][k]);
+                if(prereqList[i][j][k].slice(0,3) === "MLT"){
+                    if(!checkMultiple(classList, prereqList[i][j][k], semesterPlaced, "MAJOR")){
+                        thirdLayer = false;
+                        //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
+                        //being missing
+                        tempPrereqsNotMetList.push(prereqList[i][j][k]);
+                        console.log("missing" + prereqList[i][j][k]);
+                    }
+                }else{
+                    prereqClass = classList[findIndexByID(prereqList[i][j][k], classList)]
+                    if(prereqClass.semester > semesterPlaced || prereqClass.semester == 0){
+                        thirdLayer = false;
+                        //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
+                        //being missing
+                        tempPrereqsNotMetList.push(prereqList[i][j][k]); 
+                        console.log("missing" + prereqList[i][j][k]);
+                    }
+                console.log(thirdLayer);
+                }
+                if(thirdLayer){
+                    secondLayer = true;
+                }
+                console.log("secondLayer:", secondLayer);
+            //if the and is false, and this is false, this is false
+            //if the and is false, and this is true, this is true
+            }
+        //if the or is false, this is false and add this classID to listPrereqsnotmet
+        }
+        if(!secondLayer){
+            firstLayer = false;
+            console.log("Missing parts: " + tempPrereqsNotMetList);
+            tempPrereqsNotMetList.forEach((e) =>
+            {
+                listPrereqsNotMet.push(e);
+            }); // If the OR condition didn't save it, include each of the things that failed
+            tempPrereqsNotMetList = [""];
+        }
+        console.log("firstLayer:", firstLayer);
+    }
+    if(firstLayer == false){
+        //append classID to listPrereqsNotMet
+        //for state support, use: setList(list => [...list, classID])
+        //listPrereqsNotMet.push(classID);
+        console.log("major not met");
+    }else{
+        console.log("major met");
+    }
+}
+
 export function findIndexByID(classID, classList){
     let index = 0;
     for (let i = 0; i < classList.length; i++){

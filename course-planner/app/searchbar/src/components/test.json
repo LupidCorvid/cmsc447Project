@@ -24,6 +24,7 @@
         {"id": "STAT 355", "semester": 0, "credits": 0, "prerequisites":[[[]]], "Prerequisite Grade":[], "General Description":"Base format for the JSON"},
         {"id": "STAT 451", "semester": 0, "credits": 0, "prerequisites":[[[]]], "Prerequisite Grade":[], "General Description":"Base format for the JSON"},
         {"id": "CMPE 320", "semester": 0, "credits": 0, "prerequisites":[[[]]], "Prerequisite Grade":[], "General Description":"Base format for the JSON"}
+
     ]
 
 }
