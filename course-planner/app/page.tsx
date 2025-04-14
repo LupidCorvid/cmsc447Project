@@ -1,17 +1,19 @@
 'use client';
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, InputHTMLAttributes } from 'react';
 import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
-import {DItemType, SemesterProps} from './searchbar/src/components/types';
+import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
 import { renderToHTML } from 'next/dist/server/render';
 
+import {checkPrereq, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
+import jsonContent from "./searchbar/src/components/test.json";
+
 //Debug Draggable items
-const defaultItems: DItemType[] = [
-  {id:"CMSC 201", prereqs: [], semester: 0, credits:3},
-]
+const defaultItems: DItemType[] = jsonContent.name;
+
 //Debug Semesters
 const defaultSemesters: SemesterProps[] = [
 ]
@@ -20,25 +22,38 @@ const pastCoursesSem: SemesterProps[] = [
   {semester_id:0, name: "Past Courses", courses:defaultItems}
 ]
 
-export function rem(course:DItemType){
-  console.log("yay!");
-  course.semester = -2;
-}
+const majors: MajorProps[] = jsonContent.Majors;
+/*
+[
+  {name:"Computer Science", reqCourses:[]},
+  {name:"Computer Engineering", reqCourses:[]},
+  {name:"Information Systems", reqCourses:[]}
+]*/
 
 function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
+  const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
+  //store unmet prerequisites to display in error message
+  const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
 
   //TODO: Implement prereq checking and then enable these variables
-  let prereqErrorMsg = ""// "*The following courses in your planner do not meet prerequisite requirements:";
-  let gradreqErrorMsg = ""//"*This plan does not meet graduation requirements for " + userMajor;
+  const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
+  const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
 
+  //used to fix updating bugs
+  const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
+  const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
+  
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
+      //setUnmetPrereqs([]);
   function handleDragEnd(event: DragEndEvent){
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
+    //console.log("hit");
     if (!over) {
       return;
     }
@@ -47,16 +62,35 @@ function Planner(){
     
     //Updater function for plannerCourses
     //Finds the course we just dragged in the list of courses and updates its semester property
-    updatePlannerCourses(()=>
-      plannerCourses.map((course:DItemType) =>
-        (course.id === courseId) ? {
-          id: course.id,
-          prereqs: [],
-          semester: newSemester,
-          credits: 3 //TODO: This just hard sets it for now
-        } : course,
-      ),
+    updatePlannerCourses(() =>
+      plannerCourses.map((course: DItemType) =>
+        course.id === courseId
+          ? { ...course, semester: newSemester, credits: 3 }
+          : course
+      )
+
     );
+    setLastDraggedCourseId(courseId);
+    setLastDraggedSemester(newSemester);
+    // Run prereq check using the updated course list
+    //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+    //setUnmetPrereqs(newString)
+    //console.log("64: ", newString)
+    //check all other classes for prerequisites
+    let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+    setUnmetPrereqs(newString);
+    const tempList = unmetPrereqs.slice(1,2);
+    setUnmetPrereqs(tempList);
+    console.log("68: ", newString)
+    // Update error message based on unmet prereqs 
+    setPrereqErrorMsg(() => {
+      if (newString.length > 0) {
+        return "The following courses do not meet prerequisites: " + newString.join(", ");
+      } else {
+        return "Empty";
+      }
+    });
+
   }
 
   //Adds a new semester
@@ -67,9 +101,26 @@ function Planner(){
     //print past courses
     updateSemesters(
       [...semesters,
-        {semester_id:newId, name: newName, courses:[]}
+        {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
       ]
     )
+    switch (semesterSeason)
+    {
+      case "Fall":
+        setSeason("Spring");
+        break;
+      case "Spring":
+        setSeason("Fall");
+        setYearInput(yearInput + 1);
+        break;
+      case "Winter":
+        setSeason("Spring");
+        setYearInput(yearInput + 1);
+        break;
+      case "Summer":
+        setSeason("Fall");
+        break;
+    }
     return 
   }
 
@@ -129,6 +180,7 @@ function Planner(){
   //Updates the value of userMajor
   function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
     setValue(event.target.value);
+    //Change prereqs
   }
 
   function GetRecCredits()
@@ -144,6 +196,19 @@ function Planner(){
     return 0
   }
 
+
+  function ChangeYear(e:any)
+  {
+    if(Number.parseInt(e.target.value))
+      setYearInput(Number.parseInt(e.target.value));
+    
+  }
+
+  function ChangeSeason(e:any)
+  {
+    setSeason(e.target.value);
+  }
+
   return(
     <div key="Planner" style={{float: 'left'}}>
 
@@ -155,10 +220,11 @@ function Planner(){
         Major: &nbsp;
 
         <select id="Update Major Dropdown" value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
-          <option value={"Undecided"}>Undecided</option>
-          <option value={"Computer Science"}>Computer Science</option>
-          <option value={"Computer Engineering"}>Computer Engineering</option>
-          <option value={"Information Systems"}>Information Systems</option>
+        <option value={"Undecided"}>Undecided</option>
+          {
+            majors.map((major) =>
+            <option value={major.name}>{major.name}</option>)
+          }
         </select>
 
         <br/>
@@ -168,6 +234,17 @@ function Planner(){
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
         <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
+        <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
+        {/* TODO: Get dropdown to aligh nicely*/}
+        <option value={"Fall"}>Fall</option>
+        <option value={"Winter"}>Winter</option>
+        <option value={"Spring"}>Spring</option>
+        <option value={"Summer"}>Summer</option>
+        </select>
+        <input type="number"
+        placeholder = "Year"
+        value={yearInput}
+        onChange={ChangeYear} className={styles.semYearStyle}></input>
         {PopulatePlanner()}
       </div>
 
@@ -215,13 +292,21 @@ function CourseSearch(){
   );
 }
 
+
 export default function App() {
+
+  let mylist = [""];
+  const classList = jsonContent.name;
+  checkPrereq(classList, "CMSC 447", 3, mylist);
+  let majorList = [""];
+  //checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
+  console.log(majorList);
   return (
     <html>
       <body>
           <Planner/>
           <CourseSearch/>
-          <DndContext></DndContext>
       </body>
     </html>
     

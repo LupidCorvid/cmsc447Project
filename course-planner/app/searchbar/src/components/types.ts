@@ -2,7 +2,8 @@
 
 export type DItemType = {
   id: string;
-  prereqs: string[];
+  prerequisites: string[][][];
+
   semester: number; //0 = course search
   credits: number;
 }
@@ -24,4 +25,9 @@ export type SemesterProps = {
   semester_id: number;
   name: string;
   courses: DItemType[];
+}
+
+export type MajorProps = {
+  name: string;
+  prerequisites: string[][][]; //This string will need to be parsed similar to course prereqs
 }
