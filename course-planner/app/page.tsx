@@ -84,7 +84,7 @@ function Planner(){
     let majorList:String[] = [];
     //Check for missing major requirements
     if(userMajor != "Undecided")
-      checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, newSemester == 0 ? -1 : courseId);
+      majorList = checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, courseId, newSemester == 0);
     let majorReqs = "";
     if(majorList.length > 0)
       majorReqs += "The following graduation requirements for your major are not met:\n";

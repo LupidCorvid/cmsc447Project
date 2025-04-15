@@ -108,7 +108,7 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
 
 }
 
-export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNotMet, classID){
+export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNotMet, classID, removed){
     console.log("start major check");
     let firstLayer = true;
     let secondLayer = false;
@@ -128,8 +128,15 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                 //check if index semester is <= semesterPlaced and not 0
                 //if less, return false
                 //console.log(prereqList[i][j][k]);
-                if(prereqList[i][j][k] === classID){
+                if(prereqList[i][j][k] === classID)
+                {
                     //Stops the rest from running for now. Usually does check for if its in the right semester
+                    if(removed)
+                    {
+                        tempPrereqsNotMetList.push(prereqList[i][j][k]);
+                        console.log("missing dragged" + prereqList[i][j][k]);
+                        thirdLayer = false;
+                    }
                 }
                 else
                 {
@@ -182,6 +189,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
         console.log("major met");
     }
     console.log(listPrereqsNotMet);
+    return listPrereqsNotMet;
 }
 
 export function findIndexByID(classID, classList){
