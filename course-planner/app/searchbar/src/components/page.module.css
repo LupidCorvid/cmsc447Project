@@ -78,6 +78,8 @@ body {
     line-height: 14px;
     overflow-x: auto;
     height: auto;
+    clear:left;
+    text-align: left;
 }
 
 .dropZoneStyle{

@@ -210,7 +210,7 @@ function Planner(){
         {PopulatePlanner()}
       </div>
 
-      <div id="Notifications"  style={{clear:"left", lineHeight: 14}}>
+      <div id="Notifications"  /*style={{clear:"left", lineHeight: 14}}*/>
         <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
         <br/>
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
