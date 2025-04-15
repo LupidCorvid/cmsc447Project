@@ -31,8 +31,9 @@
         {"name":"Computer Science", "prerequisites": [[["MLTCMSC43"]],
                                                      [["PHYS 122", "PHYS 121"],
                                                       ["CHEM 121", "CHEM 122"]],
-                                                     [["SCI 101L", "PHYS 122L", "CHEM 122L", "BIO 122L"]],
-                                                     [["CMSC 411", "CMSC 421", "CMSC 441", "CMSC 447"]]]
+                                                     [["SCI 101L"], ["PHYS 122L"], ["CHEM 122L"], ["BIO 122L"]],
+                                                     [["CMSC 411", "CMSC 421", "CMSC 441", "CMSC 447"]],
+                                                    [["CMSC 341", "CMSC 313", "CMSC 331", "CMSC 201", "CMSC 202", "CMSC 203"]]]
                                                     },
         {"name":"Information Systems", "prerequisites": [[["MLTCMSC43"]],
                                                     [["PHYS 122", "PHYS 121"],
@@ -40,6 +41,7 @@
                                                     [["SCI 101L", "PHYS 122L", "CHEM 122L", "BIO 122L"]]]
                                                 },
         {"name":"EZ Major", "prerequisites":[[["CMSC 201"]]]
-                                                }]
+                                                }
+    ]
 
 }

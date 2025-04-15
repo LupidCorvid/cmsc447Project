@@ -8,7 +8,7 @@ import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/t
 import { RenderSemester } from './searchbar/src/components/Semester';
 import { renderToHTML } from 'next/dist/server/render';
 
-import {checkPrereq, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
+import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
 
 //Debug Draggable items
@@ -38,6 +38,8 @@ function Planner(){
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
   //store unmet prerequisites to display in error message
   const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
+  const [unmetMajorReqs, setUnmetMajorReqs] = useState<string[]>([]);
+  
 
   //TODO: Implement prereq checking and then enable these variables
   const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
@@ -82,15 +84,49 @@ function Planner(){
     const tempList = unmetPrereqs.slice(1,2);
     setUnmetPrereqs(tempList);
     console.log("68: ", newString)
+
+    let majorList:String[] = [];
+    //Check for missing major requirements
+    if(userMajor != "Undecided")
+      majorList = checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, courseId, newSemester == 0);
+    let majorReqs = "";
+    if(majorList.length > 0)
+      majorReqs += "The following graduation requirements for your major are not met:\n";
+    //majorList.forEach(element => {
+    //  if(element != "")
+    //    majorReqs += element + ", ";
+    //});
+    for(let i = 0; i < majorList.length; i++)
+    {
+      if(majorList[i].substring(0,3) == "MLT")
+      {
+        majorList[i] = majorList[i][8] + " " + majorList[i][7] + "00 " + " level " + majorList[i].substring(3, 7) + " classes";
+      }
+    };
+
+    majorReqs += majorList.join(", ");
+
+
+    if(majorList.length > 0)
+    {
+      setGradReqErrorMsg(majorReqs);
+    }
+    else
+    {
+      setGradReqErrorMsg("");
+    }
+
     // Update error message based on unmet prereqs 
     setPrereqErrorMsg(() => {
       if (newString.length > 0) {
         return "The following courses do not meet prerequisites: " + newString.join(", ");
-      } else {
+      }
+      else{
         return "Empty";
       }
     });
 
+    
   }
 
   //Adds a new semester
@@ -248,7 +284,7 @@ function Planner(){
         {PopulatePlanner()}
       </div>
 
-      <div id="Notifications"  style={{clear:"left", lineHeight: .1}}>
+      <div id="Notifications"  /*style={{clear:"left", lineHeight: 14}}*/>
         <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
         <br/>
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
@@ -277,7 +313,7 @@ function CourseSearch(){
     }
 
   return(
-    <div id="Course Search" style={{float: 'right'}}>
+    <div id="Course Search" style={{float: 'right', position: 'absolute', top:0, right:0, padding: '50px'}}>
 
       <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
         Course Search
@@ -299,7 +335,7 @@ export default function App() {
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
   let majorList = [""];
-  //checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   console.log(majorList);
   return (
