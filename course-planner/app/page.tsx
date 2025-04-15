@@ -81,11 +81,10 @@ function Planner(){
     setUnmetPrereqs(tempList);
     console.log("68: ", newString)
 
-
-    let majorList:any = [];
+    let majorList:String[] = [];
     //Check for missing major requirements
     if(userMajor != "Undecided")
-      checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList);
+      checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, newSemester == 0 ? -1 : courseId);
     let majorReqs = "";
     if(majorList.length > 0)
       majorReqs += "The following graduation requirements for your major are not met:\n";
@@ -93,6 +92,14 @@ function Planner(){
     //  if(element != "")
     //    majorReqs += element + ", ";
     //});
+    for(let i = 0; i < majorList.length; i++)
+    {
+      if(majorList[i].substring(0,3) == "MLT")
+      {
+        majorList[i] = majorList[i][8] + " " + majorList[i][7] + "00 " + " level " + majorList[i].substring(3, 7) + " classes";
+      }
+    };
+
     majorReqs += majorList.join(", ");
 
 

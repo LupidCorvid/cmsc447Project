@@ -108,7 +108,7 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
 
 }
 
-export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNotMet){
+export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNotMet, classID){
     console.log("start major check");
     let firstLayer = true;
     let secondLayer = false;
@@ -128,29 +128,35 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                 //check if index semester is <= semesterPlaced and not 0
                 //if less, return false
                 //console.log(prereqList[i][j][k]);
-                if(prereqList[i][j][k].slice(0,3) === "MLT"){
-                    if(!checkMultiple(classList, prereqList[i][j][k], semesterPlaced, "MAJOR")){
-                        thirdLayer = false;
-                        //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
-                        //being missing
-                        tempPrereqsNotMetList.push(prereqList[i][j][k]);
-                        console.log("missing" + prereqList[i][j][k]);
-                    }
-                }else{
-                    prereqClass = classList[findIndexByID(prereqList[i][j][k], classList)]
-                    if(prereqClass.semester > semesterPlaced || prereqClass.semester == 0){
-                        thirdLayer = false;
-                        //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
-                        //being missing
-                        tempPrereqsNotMetList.push(prereqList[i][j][k]); 
-                        console.log("missing" + prereqList[i][j][k]);
-                    }
-                console.log(thirdLayer);
+                if(prereqList[i][j][k] === classID){
+                    //Stops the rest from running for now. Usually does check for if its in the right semester
                 }
-                if(thirdLayer){
-                    secondLayer = true;
+                else
+                {
+                    if(prereqList[i][j][k].slice(0,3) === "MLT"){
+                        if(!checkMultiple(classList, prereqList[i][j][k], semesterPlaced, "MAJOR")){
+                            thirdLayer = false;
+                            //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
+                            //being missing
+                            tempPrereqsNotMetList.push(prereqList[i][j][k]);
+                            console.log("missing" + prereqList[i][j][k]);
+                        }
+                    }else{
+                        prereqClass = classList[findIndexByID(prereqList[i][j][k], classList)]
+                        if(prereqClass.semester > semesterPlaced || prereqClass.semester == 0){
+                            thirdLayer = false;
+                            //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
+                            //being missing
+                            tempPrereqsNotMetList.push(prereqList[i][j][k]); 
+                            console.log("missing" + prereqList[i][j][k]);
+                        }
+                    console.log(thirdLayer);
+                    }
+                    if(thirdLayer){
+                        secondLayer = true;
+                    }
+                    console.log("secondLayer:", secondLayer);
                 }
-                console.log("secondLayer:", secondLayer);
             //if the and is false, and this is false, this is false
             //if the and is false, and this is true, this is true
             }

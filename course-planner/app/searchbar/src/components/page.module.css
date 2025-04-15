@@ -75,9 +75,8 @@ body {
     font-size: 14px;
     font-weight: bold;
     float:left;
-    height: fit-content;
     line-height: 14px;
-    max-width: 33%;
+
     overflow-x: auto;
     height: auto;
 }
