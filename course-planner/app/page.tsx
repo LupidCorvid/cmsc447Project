@@ -23,12 +23,7 @@ const pastCoursesSem: SemesterProps[] = [
 ]
 
 const majors: MajorProps[] = jsonContent.Majors;
-/*
-[
-  {name:"Computer Science", reqCourses:[]},
-  {name:"Computer Engineering", reqCourses:[]},
-  {name:"Information Systems", reqCourses:[]}
-]*/
+
 
 function Planner(){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
@@ -36,11 +31,11 @@ function Planner(){
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
+  
   //store unmet prerequisites to display in error message
   const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
   const [unmetMajorReqs, setUnmetMajorReqs] = useState<string[]>([]);
   
-
   //TODO: Implement prereq checking and then enable these variables
   const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
   const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
@@ -83,10 +78,11 @@ function Planner(){
     setUnmetPrereqs(newString);
     const tempList = unmetPrereqs.slice(1,2);
     setUnmetPrereqs(tempList);
-    console.log("68: ", newString)
+    //console.log("68: ", newString)
 
-    let majorList:String[] = [];
+
     //Check for missing major requirements
+    let majorList:String[] = [];
     if(userMajor != "Undecided")
       majorList = checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, courseId, newSemester == 0);
     let majorReqs = "";
@@ -125,7 +121,25 @@ function Planner(){
         return "Empty";
       }
     });
+  }
 
+  function removeFromPlanner(courseId:string){
+    console.log("removeFromPlanner triggered: ", courseId);
+    //course.semester = -2; //Doesn't save to page.tsx
+    //scanPlannerListForRemoval()
+    let temp = -1;
+    updatePlannerCourses(() =>
+      plannerCourses.map((course: DItemType) =>
+        course.id === courseId
+          ? { ...course, semester: -2, credits: 3 }
+          : course
+      )
+    )
+    
+    for (let i = 0; i < plannerCourses.length; i++){
+      if (plannerCourses[i].id == courseId) temp = i
+    }
+    console.log("ID: ", temp)
     
   }
 
@@ -163,7 +177,7 @@ function Planner(){
   //Checks the planner for courses of semester_id = -2 and removes them
   function scanPlannerListForRemoval() {
 
-    for (let i = 0; i < plannerCourses.length; i++){
+    for (let i = plannerCourses.length - 1; i >= 0; i--){ //let i = 0; i < plannerCourses.length; i++
       //Set a temp array to modify
       let tempArr = [...plannerCourses];
       let rerenderFlag = false;
@@ -175,7 +189,6 @@ function Planner(){
 
         //Remove by making a copy and setting state array to the copy
         tempArr.splice(i, 1); //index, deleteCount
-        i -= 1;
       }
 
       //Update the main array with temparr values
@@ -183,6 +196,7 @@ function Planner(){
         updatePlannerCourses(
           [...tempArr]
         );
+        rerenderFlag = false;
       }
     }
   }
@@ -201,13 +215,15 @@ function Planner(){
             semester_id={semester.semester_id} 
             name={semester.name} 
             courses={plannerCourses.filter((course:DItemType) => course.semester === semester.semester_id)}
-            key={semester.semester_id}/>
+            key={semester.semester_id}
+            callbackFunction={removeFromPlanner}/>
           )}
         <RenderSemester
           semester_id={0}
           name={"Past Courses"}
           courses={plannerCourses.filter((course:DItemType) => course.semester === 0)}
-          key={0} />
+          key={0} 
+          callbackFunction={removeFromPlanner}/>
         </DndContext>
       </div>
     );
@@ -336,8 +352,8 @@ export default function App() {
   checkPrereq(classList, "CMSC 447", 3, mylist);
   let majorList = [""];
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
-  console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
-  console.log(majorList);
+  //console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
+  //console.log(majorList);
   return (
     <html>
       <body>

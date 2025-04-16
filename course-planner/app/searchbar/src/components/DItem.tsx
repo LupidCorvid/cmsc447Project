@@ -5,11 +5,12 @@ import { DItemType } from './types';
 
 type DItemProps = {
     course: DItemType;
+    callbackFunction: (n:string) => void; //Everything put in HTML should have props associated here (I guess...)
 }
 
 //Render a draggable item as markdown
 //Props: A DItemType object
-export function RenderDItem({course}:DItemProps) {
+export function RenderDItem({course, callbackFunction}:DItemProps) {
     
     //useDraggable: A DnD hook for marking an item as draggable. Defines the ID for the draggable object
     //Transform: holds the x and y coordinates of the thing that's being dragged. 
@@ -23,8 +24,15 @@ export function RenderDItem({course}:DItemProps) {
 
     //TODO: conflicting with the drag event
     //TODO: not saving changes
-    function removeFromPlanner(){
+    /*function removeFromPlanner(){
         console.log("removeFromPlanner triggered");
+        course.semester = -2; //Doesn't save to page.tsx
+        //return RenderDItem();
+        //return <RenderDItem course = {course}/>; //Makes the object float on the sreen
+        //return; //Does nothing
+    }*/
+    function test(){
+        callbackFunction(course.id);
     }
 
     function showCourseInfo(){
@@ -34,11 +42,16 @@ export function RenderDItem({course}:DItemProps) {
 
     let nbsp = "\u00A0"
 
-    return(
-        <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
-            {course.id} {nbsp}
-            <button id="info btn" onClick={showCourseInfo} className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
-            <button id="remove btn" onClick={removeFromPlanner} className={styles.remCourseBtnStyle}>X</button>
-        </div>
-    );
+    if(course.semester > -1){
+        return(
+            <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
+                {course.id} {nbsp}
+                <button id="info btn" onClick={showCourseInfo} className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
+                <button id="remove btn" onClick={test} className={styles.remCourseBtnStyle}>X</button>
+            </div>
+        );
+    }
+    else{
+        return;
+    }
 }
