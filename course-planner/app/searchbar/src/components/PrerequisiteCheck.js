@@ -42,12 +42,12 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
     let index = findIndexByID(classID, classList);
     let theClass = classList[index]; //=to the class which belongs to the classID
     let prereqClass;
-    console.log(classID);
-    console.log(semesterPlaced);
+    //console.log(classID);
+    //console.log(semesterPlaced);
 
     //case of no prerequisites
     if(theClass.prerequisites.length === 1 && theClass.prerequisites[0].length === 1 && theClass.prerequisites[0][0].length === 0){
-        console.log("empty");
+        //console.log("empty");
         return listPrereqsNotMet;
     }
     //and
@@ -88,28 +88,28 @@ export function checkPrereq(classList, classID, semesterPlaced, listPrereqsNotMe
         //append classID to listPrereqsNotMet
         //for state support, use: setList(list => [...list, classID])
         if((!checkUnmet(classID, listPrereqsNotMet) && semesterPlaced != 0)){
-            console.log("added");
+            //console.log("added");
             return [...listPrereqsNotMet, classID];
         }else if(semesterPlaced == 0){
-            console.log("taken out 94");
+            //console.log("taken out 94");
             return listPrereqsNotMet.filter(id => id !== classID);
         }
-        console.log("not met");
+        //console.log("not met");
         return listPrereqsNotMet;
     }else{
         if(checkUnmet(classID, listPrereqsNotMet)){
-            console.log("taken out 101");
+            //console.log("taken out 101");
             return listPrereqsNotMet.filter(id => id !== classID);
         }
-        console.log("met");
+        //console.log("met");
     }
-    console.log("2", listPrereqsNotMet);
+    //console.log("2", listPrereqsNotMet);
     return listPrereqsNotMet;
 
 }
 
 export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNotMet, classID, removed){
-    console.log("start major check");
+    //console.log("start major check");
     let firstLayer = true;
     let secondLayer = false;
     let thirdLayer = true;
@@ -134,7 +134,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                     if(removed)
                     {
                         tempPrereqsNotMetList.push(prereqList[i][j][k]);
-                        console.log("missing dragged" + prereqList[i][j][k]);
+                        //console.log("missing dragged" + prereqList[i][j][k]);
                         thirdLayer = false;
                     }
                 }
@@ -146,7 +146,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                             //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
                             //being missing
                             tempPrereqsNotMetList.push(prereqList[i][j][k]);
-                            console.log("missing" + prereqList[i][j][k]);
+                            //console.log("missing" + prereqList[i][j][k]);
                         }
                     }else{
                         prereqClass = classList[findIndexByID(prereqList[i][j][k], classList)]
@@ -155,14 +155,14 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                             //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
                             //being missing
                             tempPrereqsNotMetList.push(prereqList[i][j][k]); 
-                            console.log("missing" + prereqList[i][j][k]);
+                            //console.log("missing" + prereqList[i][j][k]);
                         }
-                    console.log(thirdLayer);
+                    //console.log(thirdLayer);
                     }
                     if(thirdLayer){
                         secondLayer = true;
                     }
-                    console.log("secondLayer:", secondLayer);
+                    //console.log("secondLayer:", secondLayer);
                 }
             //if the and is false, and this is false, this is false
             //if the and is false, and this is true, this is true
@@ -171,24 +171,24 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
         }
         if(!secondLayer){
             firstLayer = false;
-            console.log("Missing parts: " + tempPrereqsNotMetList);
+            //console.log("Missing parts: " + tempPrereqsNotMetList);
             tempPrereqsNotMetList.forEach((e) =>
             {
                 listPrereqsNotMet.push(e);
             }); // If the OR condition didn't save it, include each of the things that failed
         }
         tempPrereqsNotMetList = [];
-        console.log("firstLayer:", firstLayer);
+        //console.log("firstLayer:", firstLayer);
     }
     if(firstLayer == false){
         //append classID to listPrereqsNotMet
         //for state support, use: setList(list => [...list, classID])
         //listPrereqsNotMet.push(classID);
-        console.log("major not met");
+        //console.log("major not met");
     }else{
-        console.log("major met");
+        //console.log("major met");
     }
-    console.log(listPrereqsNotMet);
+    //console.log(listPrereqsNotMet);
     return listPrereqsNotMet;
 }
 
@@ -221,8 +221,8 @@ export function checkAllPrereqsUnmet(classList, classID, semesterPlaced, listPre
     let index = findIndexByID(classID, classList);
     let theClass = classList[index]; //=to the class which belongs to the classID
     let prereqClass;
-    console.log(classID);
-    console.log(semesterPlaced);
+    //console.log(classID);
+    //console.log(semesterPlaced);
 
     let currID;
     let currSemester = 0;
@@ -251,7 +251,7 @@ for(let h = 0; h < classList.length; h++){
         currSemester = semesterPlaced;
     }
     if(theClass.prerequisites.length === 1 && theClass.prerequisites[0].length === 1 && theClass.prerequisites[0][0].length === 0){
-        console.log("empty");
+        //console.log("empty");
         layers = false;
     }
     if(layers){
@@ -301,25 +301,25 @@ for(let h = 0; h < classList.length; h++){
             //append classID to listPrereqsNotMet
             //for state support, use: setList(list => [...list, classID])
             if((!checkUnmet(currID, currList) && currSemester != 0)){
-                console.log("added");
+                //console.log("added");
                 //return [...listPrereqsNotMet, classID];
                 currList = [...currList, currID];
             }else if(currSemester == 0){
-                console.log("taken out 94");
+                //console.log("taken out 94");
                 //return listPrereqsNotMet.filter(id => id !== classID);
                 currList = currList.filter(id => id !== currID);
             }
-            console.log("not met");
+            //console.log("not met");
             //return listPrereqsNotMet;
         }else{
             if(checkUnmet(currID, currList)){
-                console.log("taken out 101");
+                //console.log("taken out 101");
                 //return listPrereqsNotMet.filter(id => id !== classID);
                 currList = currList.filter(id => id !== currID);
             }
-            console.log("met");
+            //console.log("met");
         }
-        console.log("2", currList);
+        //console.log("2", currList);
         //return listPrereqsNotMet;
     }
     layers = false;
