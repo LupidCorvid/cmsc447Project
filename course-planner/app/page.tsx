@@ -48,9 +48,9 @@ function Planner(){
   //Checks if the final spot was in a semester and updates the item accordingly
       //setUnmetPrereqs([]);
   function handleDragEnd(event: DragEndEvent){
+    console.log("Fired");
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
-    //console.log("hit");
     if (!over) {
       return;
     }
@@ -67,6 +67,7 @@ function Planner(){
       )
 
     );
+
     setLastDraggedCourseId(courseId);
     setLastDraggedSemester(newSemester);
     // Run prereq check using the updated course list
@@ -140,7 +141,6 @@ function Planner(){
       if (plannerCourses[i].id == courseId) temp = i
     }
     console.log("ID: ", temp)
-    
   }
 
   //Adds a new semester
@@ -204,7 +204,7 @@ function Planner(){
 
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
-  //TODO: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
+  //NOTE: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
   function PopulatePlanner(){
     scanPlannerListForRemoval();
     return(
@@ -262,6 +262,8 @@ function Planner(){
   }
 
   return(
+    <div>
+      <DndContext onDragEnd={handleDragEnd}>
     <div key="Planner" style={{float: 'left'}}>
 
       <h1 className={styles.headerStyle} style={{float:'left'}}>
@@ -299,15 +301,14 @@ function Planner(){
         onChange={ChangeYear} className={styles.semYearStyle}></input>
         {PopulatePlanner()}
       </div>
-
+      
       <div id="Notifications"  /*style={{clear:"left", lineHeight: 14}}*/>
+
         <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
         <br/>
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
       </div>
     </div>
-  );
-}
 
 //TODO: Work In Progress
 function CourseSearch(){
@@ -336,14 +337,23 @@ function CourseSearch(){
       </h1>
 
       <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+        <Searchbar/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
         {PopulateCourseSerach()}
       </div>
-
+      </DndContext>
     </div>
   );
 }
 
+
+//Note: in order to drag and drop, the drop spot must be in the same div as the draggable item
+
+//Work In Progress
+function CourseSearch(){
+}
+
+import jsonContent from "./searchbar/src/components/test.json";
 
 export default function App() {
 
@@ -358,7 +368,9 @@ export default function App() {
     <html>
       <body>
           <Planner/>
-          <CourseSearch/>
+          <DndContext></DndContext>
+        <CourseSearch/>
+
       </body>
     </html>
     

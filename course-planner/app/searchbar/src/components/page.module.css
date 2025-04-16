@@ -1,7 +1,7 @@
 :root {
     --boxWidth: 450px;
     --boxHeight: 450px;
-    --searchBoxHeight: 390px;
+    --searchBoxHeight: 380px;
     --primaryTextColor: rgb(34, 31, 25);
     --bodyTextStyle: 18px;
 }
@@ -38,14 +38,16 @@ body {
     width: var(--boxWidth);
 }
 .searchScrollStyle{
-    overflow-Y: scroll;
-    overflow-X: hidden;
+    overflow-Y: visible;
+    overflow-X: visible;
+    padding-top: 60px;
     height: var(--searchBoxHeight);
     width: var(--boxWidth);
 }
 
 .searchbarStyle{
     padding: 10px;
+    margin: 15px 15px 15px 15px;
     float: left;
     width: 200px;
 }
