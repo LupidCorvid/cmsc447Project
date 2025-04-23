@@ -368,7 +368,7 @@ export default function App() {
       <body>
           <Planner/>
           <DndContext></DndContext>
-        <CourseSearch/>
+          <CourseSearch/>
 
       </body>
     </html>

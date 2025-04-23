@@ -6,10 +6,10 @@ import styles from "./page.module.css";
 import test from 'node:test';
 
 const testerValues: DItemType[] = [
-    {id:"CMSC 202", prereqs: "", semester: 0, credits:3},
-    {id:"CMSC 203", prereqs: "", semester: 0, credits:3},
-    {id:"CMSC 331", prereqs: "", semester: 0, credits:3},
-    {id:"CMSC 341", prereqs: "", semester: 0, credits:3},
+    {id:"CMSC 202", prerequisites: [[[]]], semester: 0, credits:3},
+    {id:"CMSC 203", prerequisites: [[[]]], semester: 0, credits:3},
+    {id:"CMSC 331", prerequisites: [[[]]], semester: 0, credits:3},
+    {id:"CMSC 341", prerequisites: [[[]]], semester: 0, credits:3},
 ]
 
 const Searchbar = () =>
@@ -36,6 +36,10 @@ const Searchbar = () =>
         }
     })
 
+    const emptyFunction = () => {
+        //This is only here so that the return doesn't complain. Searchbar will not have callback functions
+    }
+
     return (
         <div>
             <input type="text" placeholder = "Class name..." onChange={filterChanged} value={searchInput} className={styles.searchbarStyle}></input>
@@ -43,7 +47,7 @@ const Searchbar = () =>
                 {
                 (searchInput.length == 0) ? <div>Enter a filter to get started</div> :
                 filteredInputs.map((course) =>
-                {return <RenderDItem course={course} key={course.id} />; }) 
+                {return <RenderDItem course={course} callbackFunction={emptyFunction}key={course.id} />; }) 
                 }
             </div>
         </div>
