@@ -201,6 +201,41 @@ function Planner(){
     }
   }
 
+  function SortSemesters()
+  {
+    semesters.sort((a:SemesterProps, b:SemesterProps) =>
+    {
+      var semA = a.name.split(" ");
+      var semB = a.name.split(" ");
+
+      if(semA[1] < semB[1])
+        return -1;
+      if (semA[1] > semB[1])
+        return 1;
+      
+      return (seasonToInt(semA[0]) - seasonToInt(semB[0]));
+
+      
+
+      return -1;
+    })
+  }
+  function seasonToInt(season:string)
+  {
+    switch(season)
+    {
+      case "winter":
+        return 0;
+      case "spring":
+        return 1;
+      case "summer":
+        return 2;
+      case "fall":
+        return 3;
+      default:
+        return -1;
+    }
+  }
 
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
