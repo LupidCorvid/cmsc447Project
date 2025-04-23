@@ -309,6 +309,11 @@ function Planner(){
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
       </div>
     </div>
+    </DndContext>
+    </div>
+  )}
+  
+
 
 //TODO: Work In Progress
 function CourseSearch(){
@@ -331,7 +336,7 @@ function CourseSearch(){
 
   return(
     <div id="Course Search" style={{float: 'right', position: 'absolute', top:0, right:0, padding: '50px'}}>
-
+      <DndContext>
       <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
         Course Search
       </h1>
