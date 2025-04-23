@@ -354,12 +354,6 @@ function CourseSearch(){
 
 //Note: in order to drag and drop, the drop spot must be in the same div as the draggable item
 
-//Work In Progress
-function CourseSearch(){
-}
-
-import jsonContent from "./searchbar/src/components/test.json";
-
 export default function App() {
 
   let mylist = [""];
