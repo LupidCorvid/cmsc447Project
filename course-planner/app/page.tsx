@@ -257,7 +257,7 @@ function Planner(){
       if (semA[1] > semB[1])
         return 1;
       
-      return (seasonToInt(semA[0]) - seasonToInt(semB[0]));
+      return (seasonToInt(semB[0]) - seasonToInt(semA[0]));
     })
   }
   function seasonToInt(season:string)
