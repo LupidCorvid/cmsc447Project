@@ -149,28 +149,72 @@ function Planner(){
     let newName = "New semester " + (newId) //TODO: Let user name the semester
     //print semesters in order (does not include Past Semesters)
     //print past courses
-    updateSemesters(
-      [...semesters,
-        {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
-      ]
-    )
-    switch (semesterSeason)
+    
+
+    //Only add a semester if it doesn't exist yet
+    if(!semesters.find((e)=>
+        {
+            return e.name == semesterSeason + " " + yearInput;
+        }))
     {
-      case "Fall":
-        setSeason("Spring");
-        break;
-      case "Spring":
-        setSeason("Fall");
-        setYearInput(yearInput + 1);
-        break;
-      case "Winter":
-        setSeason("Spring");
-        setYearInput(yearInput + 1);
-        break;
-      case "Summer":
-        setSeason("Fall");
-        break;
+      updateSemesters(
+        SortSemesters(
+        [...semesters,
+          {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
+        ])
+      )
     }
+   
+    //Update target semester year/season to be one next sequentially, skipping duplicates
+    let Season = semesterSeason;
+    let year = yearInput;
+    do
+    {
+      switch (Season)
+      {
+        case "Fall":
+          Season = "Spring";
+          break;
+        case "Spring":
+          Season = "Fall";
+          year++;
+          break;
+        case "Winter":
+          Season = "Spring";
+          year++;
+          break;
+        case "Summer":
+          Season = "Fall";
+          break;
+      }
+    }
+    while(semesters.find((e)=>
+      {
+        return e.name == Season + " " + year;
+      }) != undefined);
+    setSeason(Season);
+    setYearInput(year);
+    
+     
+
+      /*switch (semesterSeason)
+      {
+        case "Fall":
+          setSeason("Spring");
+          break;
+        case "Spring":
+          setSeason("Fall");
+          setYearInput(yearInput + 1);
+          break;
+        case "Winter":
+          setSeason("Spring");
+          setYearInput(yearInput + 1);
+          break;
+        case "Summer":
+          setSeason("Fall");
+          break;
+      }*/
+    //SortSemesters();
     return 
   }
 
@@ -201,6 +245,37 @@ function Planner(){
     }
   }
 
+  function SortSemesters(target:SemesterProps[])
+  {
+    return target.sort((a:SemesterProps, b:SemesterProps) =>
+    {
+      var semA = a.name.split(" ");
+      var semB = b.name.split(" ");
+      console.log("Sorting " + semA[0] + " and " + semB[0]);
+      if(semA[1] < semB[1])
+        return -1;
+      if (semA[1] > semB[1])
+        return 1;
+      
+      return (seasonToInt(semB[0]) - seasonToInt(semA[0]));
+    })
+  }
+  function seasonToInt(season:string)
+  {
+    switch(season)
+    {
+      case "Winter":
+        return 0;
+      case "Spring":
+        return 1;
+      case "Summer":
+        return 2;
+      case "Fall":
+        return 3;
+      default:
+        return -1;
+    }
+  }
 
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
