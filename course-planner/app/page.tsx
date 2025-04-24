@@ -151,14 +151,21 @@ function Planner(){
     //print past courses
     
 
-    updateSemesters(
-      SortSemesters(
-      [...semesters,
-        {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
-      ])
-    )
+    //Only add a semester if it doesn't exist yet
+    if(!semesters.find((e)=>
+        {
+            return e.name == semesterSeason + " " + yearInput;
+        }))
+    {
+      updateSemesters(
+        SortSemesters(
+        [...semesters,
+          {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
+        ])
+      )
+    }
    
-    let semCopy = [...semesters];
+    //Update target semester year/season to be one next sequentially, skipping duplicates
     let Season = semesterSeason;
     let year = yearInput;
     do
@@ -181,7 +188,7 @@ function Planner(){
           break;
       }
     }
-    while(semCopy.find((e)=>
+    while(semesters.find((e)=>
       {
         return e.name == Season + " " + year;
       }) != undefined);
