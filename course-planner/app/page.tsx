@@ -24,8 +24,12 @@ const pastCoursesSem: SemesterProps[] = [
 
 const majors: MajorProps[] = jsonContent.Majors;
 
+type PlannerParameters = {
+  event: null | DragEndEvent;
+}
 
-function Planner(){
+function Planner({event}:PlannerParameters){
+  console.log("event: " + event);
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
@@ -36,7 +40,6 @@ function Planner(){
   const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
   const [unmetMajorReqs, setUnmetMajorReqs] = useState<string[]>([]);
   
-  //TODO: Implement prereq checking and then enable these variables
   const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
   const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
 
@@ -46,8 +49,8 @@ function Planner(){
   
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
-      //setUnmetPrereqs([]);
-  function handleDragEnd(event: DragEndEvent){
+  if (event != null){
+    console.log("Yippee")
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
     if (!over) {
@@ -201,14 +204,12 @@ function Planner(){
   }
 
 
-  //Renders all of the semesters using a loop
+  //Renders all of the semesters
   //Each semester renders the courses associated with it using the .filter() function
-  //NOTE: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
   function PopulatePlanner(){
     scanPlannerListForRemoval();
     return(
       <div className={styles.plannerScrollStyle}>
-        <DndContext onDragEnd={handleDragEnd}>
         {semesters.map((semester) =>
           <RenderSemester 
             semester_id={semester.semester_id} 
@@ -223,12 +224,10 @@ function Planner(){
           courses={plannerCourses.filter((course:DItemType) => course.semester === 0)}
           key={0} 
           callbackFunction={removeFromPlanner}/>
-        </DndContext>
       </div>
     );
   }
   
-  //Updates the value of userMajor
   function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
     setValue(event.target.value);
     //Change prereqs
@@ -252,90 +251,67 @@ function Planner(){
   {
     if(Number.parseInt(e.target.value))
       setYearInput(Number.parseInt(e.target.value));
-    
   }
-
   function ChangeSeason(e:any)
   {
     setSeason(e.target.value);
   }
 
+  if(event == null){
+    return(
+      <div key="Planner" style={{float: 'left'}}>
 
-  return(
-    <div>
-      <DndContext onDragEnd={handleDragEnd}>
-    <div key="Planner" style={{float: 'left'}}>
+        <h1 className={styles.headerStyle} style={{float:'left'}}>
+          My Planner
+        </h1>
 
-      <h1 className={styles.headerStyle} style={{float:'left'}}>
-        My Planner
-      </h1>
+        <p id="Text Under Planner" className={styles.textStyle} style={{clear:'both', float:'left', textAlign:'left', lineHeight: 1.7}}>
+          Major: &nbsp;
 
-      <p id="Text Under Planner" className={styles.textStyle} style={{clear:'both', float:'left', textAlign:'left', lineHeight: 1.7}}>
-        Major: &nbsp;
+          <select id="Update Major Dropdown" value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
+          <option value={"Undecided"}>Undecided</option>
+            {
+              majors.map((major) =>
+              <option value={major.name}>{major.name}</option>)
+            }
+          </select>
 
-        <select id="Update Major Dropdown" value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
-        <option value={"Undecided"}>Undecided</option>
-          {
-            majors.map((major) =>
-            <option value={major.name}>{major.name}</option>)
-          }
-        </select>
+          <br/>
 
-        <br/>
+          Recommended Credits per Semester: {GetRecCredits()}
+        </p>
 
-        Recommended Credits per Semester: {GetRecCredits()}
-      </p>
+        <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
+          <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
+          <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
+          {/* TODO: Get dropdown to aligh nicely*/}
+          <option value={"Fall"}>Fall</option>
+          <option value={"Winter"}>Winter</option>
+          <option value={"Spring"}>Spring</option>
+          <option value={"Summer"}>Summer</option>
+          </select>
+          <input type="number"
+          placeholder = "Year"
+          value={yearInput}
+          onChange={ChangeYear} className={styles.semYearStyle}></input>
+          {PopulatePlanner()}
+        </div>
+        
+        <div id="Notifications"  /*style={{clear:"left", lineHeight: 14}}*/>
 
-      <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
-        <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
-        <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
-        {/* TODO: Get dropdown to aligh nicely*/}
-        <option value={"Fall"}>Fall</option>
-        <option value={"Winter"}>Winter</option>
-        <option value={"Spring"}>Spring</option>
-        <option value={"Summer"}>Summer</option>
-        </select>
-        <input type="number"
-        placeholder = "Year"
-        value={yearInput}
-        onChange={ChangeYear} className={styles.semYearStyle}></input>
-        {PopulatePlanner()}
+          <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
+          <br/>
+          <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
+        </div>
       </div>
-      
-      <div id="Notifications"  /*style={{clear:"left", lineHeight: 14}}*/>
-
-        <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
-        <br/>
-        <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
-      </div>
-    </div>
-    </DndContext>
-    </div>
-  )}
+    )
+  }
+}
   
-
-
 //TODO: Work In Progress
 function CourseSearch(){
 
-  function handleDragEnd(event: DragEndEvent){
-    console.log("Fired handleDragEnd");
-    
-    const {active, over} = event; //active: The task we're actually dropping
-                                  //over: if you are over something that is droppable
-    console.log("Dropped: " + active.id);
-    if (!over) {
-      //console.log("Not over anything - course search")
-      return;
-    }
-    const courseId = active.id as string; //Note: Must typecast this
-    const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
-    console.log(courseId, newSemester);
-  }
-
-
   return(
-    <DndContext onDragEnd={handleDragEnd}>
     <div id="Course Search" style={{float: 'right', position: 'absolute', top:0, right:0, padding: '50px'}}>
       
       <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
@@ -348,7 +324,6 @@ function CourseSearch(){
       </div>
       
     </div>
-    </DndContext>
   );
 }
 
@@ -373,15 +348,19 @@ export default function App() {
       console.log("Not currently over anything")
       return;
     }
-    console.log(over);
+    console.log("Dragged over this: " + over);
+    //let nullType: PlannerParameters = {event:null}; //How to make an instance of a type
+    Planner({event});
   }
   
+
+
   return (
     <html>
       <body>
           
-          <DndContext onDragOver={handleDragEnd}>
-          <Planner/>
+          <DndContext onDragEnd={handleDragEnd}>
+          <Planner event={null}/>
           <CourseSearch/>
           </DndContext>
           
