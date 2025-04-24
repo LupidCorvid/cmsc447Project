@@ -195,26 +195,6 @@ function Planner(){
     setSeason(Season);
     setYearInput(year);
     
-     
-
-      /*switch (semesterSeason)
-      {
-        case "Fall":
-          setSeason("Spring");
-          break;
-        case "Spring":
-          setSeason("Fall");
-          setYearInput(yearInput + 1);
-          break;
-        case "Winter":
-          setSeason("Spring");
-          setYearInput(yearInput + 1);
-          break;
-        case "Summer":
-          setSeason("Fall");
-          break;
-      }*/
-    //SortSemesters();
     return 
   }
 
