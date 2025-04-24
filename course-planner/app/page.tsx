@@ -29,7 +29,7 @@ type PlannerParameters = {
 }
 
 function Planner({event}:PlannerParameters){
-  console.log("event: " + event);
+  
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
@@ -49,15 +49,18 @@ function Planner({event}:PlannerParameters){
   
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
-  if (event != null){
-    console.log("Yippee")
-    const {active, over} = event; //active: The task we're actually dropping
+  console.log("Event: " + event + " Over: " + event?.over?.id + " Active: " + event?.active.id);
+  console.log("Debug1");
+
+  if (event?.over != null){
+    console.log("Yippee");
+    //const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
-    if (!over) {
+    if (!event.over) {
       return;
     }
-    const courseId = active.id as string; //Note: Must typecast this
-    const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
+    const courseId = event.active.id as string; //Note: Must typecast this
+    const newSemester = event.over.id as DItemType['semester'] //Note: The column id, so the semester id
     
     //Updater function for plannerCourses
     //Finds the course we just dragged in the list of courses and updates its semester property
@@ -125,6 +128,10 @@ function Planner({event}:PlannerParameters){
       }
     });
   }
+  else{
+    console.log("Issue here");
+  }
+  console.log("Debug2");
 
   function removeFromPlanner(courseId:string){
     console.log("removeFromPlanner triggered: ", courseId);
@@ -340,17 +347,24 @@ export default function App() {
   //console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   //console.log(majorList);
 
+  let eventStore = null;
+
   
   function handleDragEnd(event:DragEndEvent){
     console.log("Dragged over something!");
     const {active, over} = event;
     if (!over) {
       console.log("Not currently over anything")
+      eventStore = null;
       return;
     }
-    console.log("Dragged over this: " + over);
+    else{
+      console.log(over);
+      //Planner({event});
+      eventStore = event;
+    }
     //let nullType: PlannerParameters = {event:null}; //How to make an instance of a type
-    Planner({event});
+    
   }
   
 
@@ -360,7 +374,7 @@ export default function App() {
       <body>
           
           <DndContext onDragEnd={handleDragEnd}>
-          <Planner event={null}/>
+          <Planner event={eventStore}/>
           <CourseSearch/>
           </DndContext>
           
