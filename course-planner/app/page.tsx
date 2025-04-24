@@ -25,7 +25,7 @@ const pastCoursesSem: SemesterProps[] = [
 const majors: MajorProps[] = jsonContent.Majors;
 
 
-function Planner(){
+function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
@@ -216,14 +216,16 @@ function Planner(){
             name={semester.name} 
             courses={plannerCourses.filter((course:DItemType) => course.semester === semester.semester_id)}
             key={semester.semester_id}
-            callbackFunction={removeFromPlanner}/>
+            callbackFunction={removeFromPlanner}
+            setSelectedCourse={setSelectedCourse}/>
           )}
         <RenderSemester
           semester_id={0}
           name={"Past Courses"}
           courses={plannerCourses.filter((course:DItemType) => course.semester === 0)}
           key={0} 
-          callbackFunction={removeFromPlanner}/>
+          callbackFunction={removeFromPlanner}
+          setSelectedCourse={setSelectedCourse}/>
         </DndContext>
       </div>
     );
@@ -349,7 +351,33 @@ function CourseSearch(){
     </div>
   );
 }
+function CourseInfo({ course }: { course: DItemType | null }){
+  return (
+    <div id="Course Info" className={styles.plannerStyle} style={{
+      position: 'absolute',
+      top: 0,
+      right:550,
+      padding: '50px',
+      width: '300px'
+    }}>
+      <h1 className={styles.headerStyle} style={{ float: 'left', paddingBottom: '95px' }}>
+        Course Info
+      </h1>
+      {course ? (
+        <div>
+          <p><strong>ID:</strong> {course.id}</p>
+          <p><strong>Semester:</strong> {course.semester}</p>
+          <p><strong>Credits:</strong> {course.credits}</p>
+        </div>
+      ) : (
+        <p>Select a course to view info.</p>
+      )}
+      
+        {/* Course info content goes here */}
 
+    </div>
+  );
+}
 export default function App() {
 
   let mylist = [""];
@@ -359,12 +387,17 @@ export default function App() {
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   //console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   //console.log(majorList);
+
+  //needed for course info
+  const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
   return (
     <html>
       <body>
-          <Planner/>
+        <CourseInfo course={selectedCourse}/>
+          <Planner setSelectedCourse={setSelectedCourse}/>
           <DndContext></DndContext>
         <CourseSearch/>
+        
 
       </body>
     </html>
