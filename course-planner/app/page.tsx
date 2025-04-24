@@ -152,9 +152,10 @@ function Planner(){
     
 
     updateSemesters(
+      SortSemesters(
       [...semesters,
         {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
-      ]
+      ])
     )
    
     let semCopy = [...semesters];
@@ -206,7 +207,7 @@ function Planner(){
           setSeason("Fall");
           break;
       }*/
-    SortSemesters();
+    //SortSemesters();
     return 
   }
 
@@ -237,13 +238,13 @@ function Planner(){
     }
   }
 
-  function SortSemesters()
+  function SortSemesters(target:SemesterProps[])
   {
-    semesters.sort((a:SemesterProps, b:SemesterProps) =>
+    return target.sort((a:SemesterProps, b:SemesterProps) =>
     {
       var semA = a.name.split(" ");
-      var semB = a.name.split(" ");
-
+      var semB = b.name.split(" ");
+      console.log("Sorting " + semA[0] + " and " + semB[0]);
       if(semA[1] < semB[1])
         return -1;
       if (semA[1] > semB[1])
