@@ -353,27 +353,30 @@ function CourseSearch(){
 }
 function CourseInfo({ course }: { course: DItemType | null }){
   return (
-    <div id="Course Info" className={styles.plannerStyle} style={{
+    <div id="Course Info"  style={{
       position: 'absolute',
       top: 0,
       right:550,
       padding: '50px',
+      paddingRight: '150px',
       width: '300px'
     }}>
       <h1 className={styles.headerStyle} style={{ float: 'left', paddingBottom: '95px' }}>
         Course Info
       </h1>
-      {course ? (
-        <div>
-          <p><strong>ID:</strong> {course.id}</p>
-          <p><strong>Semester:</strong> {course.semester}</p>
-          <p><strong>Credits:</strong> {course.credits}</p>
+      <div className={styles.plannerStyle} style={{clear:'both', borderStyle: 'solid'}}>
+        {course ? (
+          <div>
+            <p><strong>ID:</strong> {course.id}</p>
+            <p><strong>Semester:</strong> {course.semester}</p>
+            <p><strong>Credits:</strong> {course.credits}</p>
+          </div>
+          ) : (
+          <p>Select a course to view info.</p>
+          )}
+        
+          {/* Course info content goes here */}
         </div>
-      ) : (
-        <p>Select a course to view info.</p>
-      )}
-      
-        {/* Course info content goes here */}
 
     </div>
   );
