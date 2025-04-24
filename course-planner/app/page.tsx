@@ -149,28 +149,64 @@ function Planner(){
     let newName = "New semester " + (newId) //TODO: Let user name the semester
     //print semesters in order (does not include Past Semesters)
     //print past courses
+    
+
     updateSemesters(
       [...semesters,
         {semester_id:newId, name: semesterSeason + " " + yearInput, courses:[]}
       ]
     )
-    switch (semesterSeason)
+   
+    let semCopy = [...semesters];
+    let Season = semesterSeason;
+    let year = yearInput;
+    do
     {
-      case "Fall":
-        setSeason("Spring");
-        break;
-      case "Spring":
-        setSeason("Fall");
-        setYearInput(yearInput + 1);
-        break;
-      case "Winter":
-        setSeason("Spring");
-        setYearInput(yearInput + 1);
-        break;
-      case "Summer":
-        setSeason("Fall");
-        break;
+      switch (Season)
+      {
+        case "Fall":
+          Season = "Spring";
+          break;
+        case "Spring":
+          Season = "Fall";
+          year++;
+          break;
+        case "Winter":
+          Season = "Spring";
+          year++;
+          break;
+        case "Summer":
+          Season = "Fall";
+          break;
+      }
     }
+    while(semCopy.find((e)=>
+      {
+        return e.name == Season + " " + year;
+      }) != undefined);
+    setSeason(Season);
+    setYearInput(year);
+    
+     
+
+      /*switch (semesterSeason)
+      {
+        case "Fall":
+          setSeason("Spring");
+          break;
+        case "Spring":
+          setSeason("Fall");
+          setYearInput(yearInput + 1);
+          break;
+        case "Winter":
+          setSeason("Spring");
+          setYearInput(yearInput + 1);
+          break;
+        case "Summer":
+          setSeason("Fall");
+          break;
+      }*/
+    SortSemesters();
     return 
   }
 
@@ -214,23 +250,19 @@ function Planner(){
         return 1;
       
       return (seasonToInt(semA[0]) - seasonToInt(semB[0]));
-
-      
-
-      return -1;
     })
   }
   function seasonToInt(season:string)
   {
     switch(season)
     {
-      case "winter":
+      case "Winter":
         return 0;
-      case "spring":
+      case "Spring":
         return 1;
-      case "summer":
+      case "Summer":
         return 2;
-      case "fall":
+      case "Fall":
         return 3;
       default:
         return -1;
