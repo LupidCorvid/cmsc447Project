@@ -352,6 +352,55 @@ function CourseSearch(){
   );
 }
 function CourseInfo({ course }: { course: DItemType | null }){
+  const [prereqString, setString] = useState("");
+  function prerequisiteString(){
+    let finalString = "";
+    let multDep = "";
+    let multQuan = "";
+    let multLevel = "";
+    //And
+    if(course === null){
+      return;
+    }
+    for(let i = 0; i < course.prerequisites.length; i ++){
+      const group = course.prerequisites[i];
+    //Or
+      for (let j = 0; j < group.length; j++) {
+        const orGroup = group[j];
+    //And
+        for (let k = 0; k < orGroup.length; k++) {
+          console.log(orGroup.length);
+          if(orGroup.length > 1 && k == 0){
+            finalString += "(";
+          }
+          if(k > 0){
+            finalString += "and ";
+          }
+          //detect MLT
+          if(orGroup[k].slice(0, 3) === "MLT"){
+            multDep = orGroup[k].slice(3, 7);
+            multLevel = orGroup[k].slice(7, 8);
+            multQuan = orGroup[k].slice(8, 9);
+            finalString += multQuan + " " + multLevel + "XX level " + multDep + " electives" 
+          }else{
+            finalString += orGroup[k];
+          }
+          if(orGroup.length > 1 && k == orGroup.length - 1){
+            finalString += ")";
+          }else{
+            finalString += " ";
+          }
+        }
+        if(group.length > 1 && j != group.length - 1){
+          finalString += "or ";
+        }
+      }
+      if(course.prerequisites.length > 1 && i != course.prerequisites.length - 1){
+        finalString += "and ";
+      }
+    }
+    return finalString;
+  }
   return (
     <div id="Course Info"  style={{
       position: 'absolute',
@@ -368,8 +417,9 @@ function CourseInfo({ course }: { course: DItemType | null }){
         {course ? (
           <div>
             <p><strong>ID:</strong> {course.id}</p>
-            <p><strong>Semester:</strong> {course.semester}</p>
             <p><strong>Credits:</strong> {course.credits}</p>
+            <p><strong>Prerequisties:</strong> {prerequisiteString()}</p>
+            <p><strong>Course Description:</strong> {course.GeneralDescription}</p>
           </div>
           ) : (
           <p>Select a course to view info.</p>
@@ -393,6 +443,9 @@ export default function App() {
 
   //needed for course info
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
+  useEffect(() => {
+    setSelectedCourse(jsonContent.name[9]);
+  }, []);
   return (
     <html>
       <body>
