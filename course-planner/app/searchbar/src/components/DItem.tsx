@@ -49,8 +49,11 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
         return(
             <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
                 {course.id} {nbsp}
-                <button id="info btn" onClick={showCourseInfo} className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
-                <button id="remove btn" onClick={test} className={styles.remCourseBtnStyle}>X</button>
+                <button id="info btn" onClick={showCourseInfo}
+                onPointerDown={(e) => e.stopPropagation()}
+                className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
+                <button id="remove btn" onClick={test}
+                onPointerDown={(e) => e.stopPropagation()} className={styles.remCourseBtnStyle}>X</button>
             </div>
         );
     }
