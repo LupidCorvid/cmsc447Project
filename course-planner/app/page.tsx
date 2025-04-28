@@ -29,6 +29,7 @@ type PlannerParameters = {
 }
 
 function Planner({event}:PlannerParameters){
+  console.log("Is anything happening???");
   
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
@@ -362,6 +363,7 @@ export default function App() {
       console.log(over);
       //Planner({event});
       eventStore = event;
+      return <Planner event={eventStore}/>;
     }
     //let nullType: PlannerParameters = {event:null}; //How to make an instance of a type
     
