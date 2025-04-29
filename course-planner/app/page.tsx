@@ -317,10 +317,13 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   
 
 //TODO: Work In Progress
-function CourseSearch(){
+function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
   //Debug: An array of DItems
   //const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); 
-
+  const removeFromPlanner = () => {
+    console.log("Does Nothing");
+    // Your removal logic here
+  };
   const tester = ["CMSC 331", "CMSC 341", "CMSC 304"]; //Stuff to fill the state array with. Replace with database info later
 
    //TODO: Implement
@@ -343,7 +346,7 @@ function CourseSearch(){
       </h1>
 
       <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
-        <Searchbar/>
+        <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner}/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
         {PopulateCourseSerach()}
       </div>
@@ -395,6 +398,7 @@ function CourseInfo({ course }: { course: DItemType | null }){
           finalString += "or ";
         }
       }
+      finalString += "with a C or better "
       if(course.prerequisites.length > 1 && i != course.prerequisites.length - 1){
         finalString += "and ";
       }
@@ -443,16 +447,13 @@ export default function App() {
 
   //needed for course info
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
-  useEffect(() => {
-    setSelectedCourse(jsonContent.name[9]);
-  }, []);
   return (
     <html>
       <body>
         <CourseInfo course={selectedCourse}/>
           <Planner setSelectedCourse={setSelectedCourse}/>
           <DndContext></DndContext>
-        <CourseSearch/>
+        <CourseSearch setSelectedCourse={setSelectedCourse}/>
         
 
       </body>
