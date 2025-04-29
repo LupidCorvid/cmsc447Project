@@ -4,15 +4,14 @@ import {DItemType, SemesterProps, MajorProps} from './types';
 import {RenderDItem} from './DItem';
 import styles from "./page.module.css";
 import test from 'node:test';
+import jsonData from './test.json';
 
-const testerValues: DItemType[] = [
-    {id:"CMSC 202", prereqs: "", semester: 0, credits:3},
-    {id:"CMSC 203", prereqs: "", semester: 0, credits:3},
-    {id:"CMSC 331", prereqs: "", semester: 0, credits:3},
-    {id:"CMSC 341", prereqs: "", semester: 0, credits:3},
-]
-
-const Searchbar = () =>
+const testerValues: DItemType[] = jsonData.name
+type SearchbarProps = {
+    removeFromPlanner: (courseId: string) => void;
+    setSelectedCourse: (course: DItemType) => void;
+};
+const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
 {
     //Need to find data format for the table
     const [searchInput, setSearchInput] = useState<string>("");
@@ -43,7 +42,8 @@ const Searchbar = () =>
                 {
                 (searchInput.length == 0) ? <div>Enter a filter to get started</div> :
                 filteredInputs.map((course) =>
-                {return <RenderDItem course={course} key={course.id} />; }) 
+                {return <RenderDItem course={course} key={course.id} callbackFunction={removeFromPlanner}
+                setSelectedCourse={setSelectedCourse}/>; }) 
                 }
             </div>
         </div>

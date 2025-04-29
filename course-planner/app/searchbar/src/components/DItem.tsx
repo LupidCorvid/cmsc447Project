@@ -6,11 +6,12 @@ import { DItemType } from './types';
 type DItemProps = {
     course: DItemType;
     callbackFunction: (n:string) => void; //Everything put in HTML should have props associated here (I guess...)
+    setSelectedCourse: (course: DItemType) => void;
 }
 
 //Render a draggable item as markdown
 //Props: A DItemType object
-export function RenderDItem({course, callbackFunction}:DItemProps) {
+export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemProps) {
     
     //useDraggable: A DnD hook for marking an item as draggable. Defines the ID for the draggable object
     //Transform: holds the x and y coordinates of the thing that's being dragged. 
@@ -36,7 +37,9 @@ export function RenderDItem({course, callbackFunction}:DItemProps) {
     }
 
     function showCourseInfo(){
+        setSelectedCourse(course);
         console.log("showCourseInfo triggered");
+
     }
 
 
@@ -46,8 +49,11 @@ export function RenderDItem({course, callbackFunction}:DItemProps) {
         return(
             <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
                 {course.id} {nbsp}
-                <button id="info btn" onClick={showCourseInfo} className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
-                <button id="remove btn" onClick={test} className={styles.remCourseBtnStyle}>X</button>
+                <button id="info btn" onClick={showCourseInfo}
+                onPointerDown={(e) => e.stopPropagation()}
+                className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
+                <button id="remove btn" onClick={test}
+                onPointerDown={(e) => e.stopPropagation()} className={styles.remCourseBtnStyle}>X</button>
             </div>
         );
     }

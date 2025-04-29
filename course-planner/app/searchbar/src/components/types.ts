@@ -6,6 +6,7 @@ export type DItemType = {
 
   semester: number; //0 = course search
   credits: number;
+  GeneralDescription: string;
 }
 
 //Not used yet

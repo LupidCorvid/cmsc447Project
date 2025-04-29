@@ -25,7 +25,7 @@ const pastCoursesSem: SemesterProps[] = [
 const majors: MajorProps[] = jsonContent.Majors;
 
 
-function Planner(){
+function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
@@ -271,14 +271,16 @@ function Planner(){
             name={semester.name} 
             courses={plannerCourses.filter((course:DItemType) => course.semester === semester.semester_id)}
             key={semester.semester_id}
-            callbackFunction={removeFromPlanner}/>
+            callbackFunction={removeFromPlanner}
+            setSelectedCourse={setSelectedCourse}/>
           )}
         <RenderSemester
           semester_id={0}
           name={"Past Courses"}
           courses={plannerCourses.filter((course:DItemType) => course.semester === 0)}
           key={0} 
-          callbackFunction={removeFromPlanner}/>
+          callbackFunction={removeFromPlanner}
+          setSelectedCourse={setSelectedCourse}/>
         </DndContext>
       </div>
     );
@@ -371,10 +373,13 @@ function Planner(){
 
 
 //TODO: Work In Progress
-function CourseSearch(){
+function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
   //Debug: An array of DItems
   //const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); 
-
+  const removeFromPlanner = () => {
+    console.log("Does Nothing");
+    // Your removal logic here
+  };
   const tester = ["CMSC 331", "CMSC 341", "CMSC 304"]; //Stuff to fill the state array with. Replace with database info later
 
    //TODO: Implement
@@ -397,7 +402,7 @@ function CourseSearch(){
       </h1>
 
       <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
-        <Searchbar/>
+        <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner}/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
         {PopulateCourseSerach()}
       </div>
@@ -405,9 +410,87 @@ function CourseSearch(){
     </div>
   );
 }
+function CourseInfo({ course }: { course: DItemType | null }){
+  const [prereqString, setString] = useState("");
+  function prerequisiteString(){
+    let finalString = "";
+    let multDep = "";
+    let multQuan = "";
+    let multLevel = "";
+    //And
+    if(course === null){
+      return;
+    }
+    for(let i = 0; i < course.prerequisites.length; i ++){
+      const group = course.prerequisites[i];
+    //Or
+      for (let j = 0; j < group.length; j++) {
+        const orGroup = group[j];
+    //And
+        for (let k = 0; k < orGroup.length; k++) {
+          console.log(orGroup.length);
+          if(orGroup.length > 1 && k == 0){
+            finalString += "(";
+          }
+          if(k > 0){
+            finalString += "and ";
+          }
+          //detect MLT
+          if(orGroup[k].slice(0, 3) === "MLT"){
+            multDep = orGroup[k].slice(3, 7);
+            multLevel = orGroup[k].slice(7, 8);
+            multQuan = orGroup[k].slice(8, 9);
+            finalString += multQuan + " " + multLevel + "XX level " + multDep + " electives" 
+          }else{
+            finalString += orGroup[k];
+          }
+          if(orGroup.length > 1 && k == orGroup.length - 1){
+            finalString += ")";
+          }else{
+            finalString += " ";
+          }
+        }
+        if(group.length > 1 && j != group.length - 1){
+          finalString += "or ";
+        }
+      }
+      finalString += "with a C or better "
+      if(course.prerequisites.length > 1 && i != course.prerequisites.length - 1){
+        finalString += "and ";
+      }
+    }
+    return finalString;
+  }
+  return (
+    <div id="Course Info"  style={{
+      position: 'absolute',
+      top: 0,
+      right:550,
+      padding: '50px',
+      paddingRight: '150px',
+      width: '300px'
+    }}>
+      <h1 className={styles.headerStyle} style={{ float: 'left', paddingBottom: '95px' }}>
+        Course Info
+      </h1>
+      <div className={styles.plannerStyle} style={{clear:'both', borderStyle: 'solid'}}>
+        {course ? (
+          <div>
+            <p><strong>ID:</strong> {course.id}</p>
+            <p><strong>Credits:</strong> {course.credits}</p>
+            <p><strong>Prerequisties:</strong> {prerequisiteString()}</p>
+            <p><strong>Course Description:</strong> {course.GeneralDescription}</p>
+          </div>
+          ) : (
+          <p>Select a course to view info.</p>
+          )}
+        
+          {/* Course info content goes here */}
+        </div>
 
-
-//Note: in order to drag and drop, the drop spot must be in the same div as the draggable item
+    </div>
+  );
+}
 
 export default function App() {
 
@@ -418,12 +501,17 @@ export default function App() {
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   //console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   //console.log(majorList);
+
+  //needed for course info
+  const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
   return (
     <html>
       <body>
-          <Planner/>
+        <CourseInfo course={selectedCourse}/>
+          <Planner setSelectedCourse={setSelectedCourse}/>
           <DndContext></DndContext>
-        <CourseSearch/>
+        <CourseSearch setSelectedCourse={setSelectedCourse}/>
+        
 
       </body>
     </html>
