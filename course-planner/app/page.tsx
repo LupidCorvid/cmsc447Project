@@ -4,7 +4,7 @@ import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } 
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
-import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
+import {DItemType, SemesterProps, MajorProps, PublicNote} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
 import { renderToHTML } from 'next/dist/server/render';
 
