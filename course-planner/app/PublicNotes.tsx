@@ -1,8 +1,8 @@
 import {DItemType, SemesterProps, MajorProps, PublicNote} from './searchbar/src/components/types';
 
 //Public notes
-const publicNotes: PublicNote[] = [];
-
+let publicNotes: PublicNote[] = [];
+let currNoteID = 0;
 
 
 export function GetNotesForCourse(course:string)
@@ -30,26 +30,34 @@ export function GetNotesByAuthor(author:string)
 export function PublishNote(author:string, course:string, contents:string)
 {
     let newNote:PublicNote = {
+        noteID:currNoteID,
         courseID:course,
         author:author,
         reviewed:false,
         note:contents
     }
 
+    currNoteID++;
     publicNotes.concat(newNote);
 }
 
-export function ReviewNote(accept:boolean)
+export function GetNoteByID(iD:number)
+{
+    return publicNotes.find((e)=>
+    {
+        return e.noteID == iD;
+    });
+}
+
+export function ReviewNote(accept:boolean, noteID:number)
 {
     //Needs to be able to grab a specific note
     //If accept, mark note as reviewed. If not, remove note from notes listing
 
-    let gottenNote:PublicNote = {
-        courseID:'TEMPEMPTY',
-        author:"TEMPEMPTY",
-        reviewed:false,
-        note:"TEMPEMPTY"
-    }
+    let gottenNote = GetNoteByID(noteID);
+
+    if(gottenNote == null)
+        return;
 
     if(accept)
     {
@@ -57,11 +65,14 @@ export function ReviewNote(accept:boolean)
     }
     else
     {
-        RemoveNote();
+        RemoveNote(noteID);
     }
 }
 
-export function RemoveNote()
+export function RemoveNote(noteID:number)
 {
-    //Need a way to identify individual notes
+    publicNotes = publicNotes.filter((e) =>
+    {
+        return e.noteID != noteID
+    })
 }

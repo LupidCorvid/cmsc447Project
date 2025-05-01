@@ -34,6 +34,7 @@ export type MajorProps = {
 }
 
 export type PublicNote = {
+  noteID:number;
   courseID: string;
   author: string;
   reviewed: boolean;
