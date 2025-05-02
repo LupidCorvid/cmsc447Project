@@ -10,6 +10,8 @@ import { renderToHTML } from 'next/dist/server/render';
 
 import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
+import { HashRouter, Routes, Route, BrowserRouter } from 'react-router-dom';
+import NotesPage from './NotesPage.page';
 
 //Debug Draggable items
 const defaultItems: DItemType[] = jsonContent.name;
@@ -505,17 +507,23 @@ export default function App() {
   //needed for course info
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
   return (
-    <html>
-      <body>
-        <CourseInfo course={selectedCourse}/>
-          <Planner setSelectedCourse={setSelectedCourse}/>
-          <DndContext></DndContext>
-        <CourseSearch setSelectedCourse={setSelectedCourse}/>
-        
 
-      </body>
-    </html>
-    
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<html>
+            <body>
+              <CourseInfo course={selectedCourse}/>
+                <Planner setSelectedCourse={setSelectedCourse}/>
+                <DndContext></DndContext>
+              <CourseSearch setSelectedCourse={setSelectedCourse}/>
+              
+
+            </body>
+          </html>}/>
+      <Route path="/PublicNotes" element={<NotesPage/>}/>
+      <Route path="/*" element={<h1>no match</h1>}/>
+    </Routes>
+    </BrowserRouter>
   );
   }
 
