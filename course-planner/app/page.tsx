@@ -10,7 +10,7 @@ import { renderToHTML } from 'next/dist/server/render';
 
 import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
-import { HashRouter, Routes, Route, BrowserRouter } from 'react-router-dom';
+import { HashRouter, Routes, Route, Link, BrowserRouter as Router} from 'react-router-dom';
 import NotesPage from './NotesPage.page';
 
 //Debug Draggable items
@@ -508,14 +508,20 @@ export default function App() {
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
   return (
 
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<html>
             <body>
+              <div>
               <CourseInfo course={selectedCourse}/>
                 <Planner setSelectedCourse={setSelectedCourse}/>
                 <DndContext></DndContext>
               <CourseSearch setSelectedCourse={setSelectedCourse}/>
+              </div>
+
+              <div style={{clear:'both', borderStyle: 'solid'}}>
+                <Link to="/PublicNotes">Click me</Link>
+              </div>
               
 
             </body>
@@ -523,7 +529,7 @@ export default function App() {
       <Route path="/PublicNotes" element={<NotesPage/>}/>
       <Route path="/*" element={<h1>no match</h1>}/>
     </Routes>
-    </BrowserRouter>
+    </Router>
   );
   }
 
