@@ -10,6 +10,7 @@ import { renderToHTML } from 'next/dist/server/render';
 
 import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
+import {NotesMenu} from "./NotesPage.page"
 
 //Debug Draggable items
 const defaultItems: DItemType[] = jsonContent.name;
@@ -511,7 +512,7 @@ export default function App() {
           <Planner setSelectedCourse={setSelectedCourse}/>
           <DndContext></DndContext>
         <CourseSearch setSelectedCourse={setSelectedCourse}/>
-        
+        <NotesMenu/>
 
       </body>
     </html>

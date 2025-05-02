@@ -1,7 +1,15 @@
 import {DItemType, SemesterProps, MajorProps, PublicNote} from './searchbar/src/components/types';
 
 //Public notes
-let publicNotes: PublicNote[] = [];
+let publicNotes: PublicNote[] = [
+    {
+        noteID:0,
+        courseID:"CMSC203",
+        author:"dev",
+        reviewed:true,
+        note:"tester"
+    }
+];
 let currNoteID = 0;
 
 
@@ -14,6 +22,7 @@ export function GetNotesForCourse(course:string)
         if(e.courseID == course && e.reviewed == true)
             returnList.concat(e);
     });
+    return returnList;
 }
 
 export function GetNotesByAuthor(author:string)
