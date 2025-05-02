@@ -46,7 +46,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
-      //setUnmetPrereqs([]);
+  //setUnmetPrereqs([]);
   function handleDragEnd(event: DragEndEvent){
     console.log("Fired");
     const {active, over} = event; //active: The task we're actually dropping
@@ -495,22 +495,35 @@ function CourseInfo({ course }: { course: DItemType | null }){
 export default function App() {
 
   let mylist = [""];
+  let majorList = [""];
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
-  let majorList = [""];
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
-  //console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
-  //console.log(majorList);
+  
 
   //needed for course info
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
   return (
     <html>
       <body>
-        <CourseInfo course={selectedCourse}/>
-          <Planner setSelectedCourse={setSelectedCourse}/>
-          <DndContext></DndContext>
-        <CourseSearch setSelectedCourse={setSelectedCourse}/>
+        <div id="sidebar" className={styles.sidebarStyle}>
+          <div className={styles.picture1}/> <br/> <hr/>
+          <div className={styles.text1}>Major</div>
+          <div className={styles.text1} style={{paddingTop:20, paddingBottom:20}}>Recommended Credits per Semester: XX</div>
+          <div style={{textAlign: 'left'}}>
+            <a className={styles.text2} href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
+          </div>
+        </div>
+
+
+        <div style={{marginLeft:300}}>
+            <DndContext>
+              <Planner setSelectedCourse={setSelectedCourse}/>
+              {/*<CourseSearch setSelectedCourse={setSelectedCourse}/> */}
+            </DndContext>
+            {/*<CourseInfo course={selectedCourse}/>*/}
+          
+        </div>
         
 
       </body>
