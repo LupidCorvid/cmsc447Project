@@ -19,8 +19,10 @@ export function GetNotesForCourse(course:string)
 
     publicNotes.forEach((e)=>
     {
-        if(e.courseID == course && e.reviewed == true)
-            returnList.concat(e);
+        if(e.courseID === course && e.reviewed == true)
+        {
+            returnList = returnList.concat(e);
+        }
     });
     return returnList;
 }
@@ -46,8 +48,10 @@ export function PublishNote(author:string, course:string, contents:string)
         note:contents
     }
 
+    console.log("Added note: " + currNoteID)
     currNoteID++;
-    publicNotes.concat(newNote);
+    publicNotes = publicNotes.concat(newNote);
+    return currNoteID-1;
 }
 
 export function GetNoteByID(iD:number)
@@ -66,7 +70,10 @@ export function ReviewNote(accept:boolean, noteID:number)
     let gottenNote = GetNoteByID(noteID);
 
     if(gottenNote == null)
+    {
+        console.log("Failed to find note: " + noteID)
         return;
+    }
 
     if(accept)
     {

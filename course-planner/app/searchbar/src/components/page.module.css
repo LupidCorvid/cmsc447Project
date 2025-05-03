@@ -59,6 +59,10 @@ body {
     line-height: .1;
 }
 
+.noteTextbox{
+    resize:none
+}
+
 .textStyle{
     color: var(--primaryTextColor);
     font-family: Sans-Serif;

@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState,useEffect, InputHTMLAttributes } from 'react';
 import {DItemType, SemesterProps, MajorProps, PublicNote} from './searchbar/src/components/types';
-import {GetNotesForCourse, GetNoteByID, GetNotesByAuthor, RemoveNote, PublishNote} from './PublicNotes';
+import {GetNotesForCourse, GetNoteByID, GetNotesByAuthor, RemoveNote, PublishNote, ReviewNote} from './PublicNotes';
 import { Righteous } from 'next/font/google';
 import { relative } from 'path';
 import styles from "./searchbar/src/components/page.module.css";
 
 export function NotesMenu()
 {
+    const [noteText, setNoteText] = useState("");
+
+    function PostNote()
+    {
+        let noteId = PublishNote("user", "CMSC203", noteText);
+        ReviewNote(true, noteId);
+        console.log(GetNotesForCourse("CMSC203"))
+    }
+
+    const textChanged = (e:any) =>
+    {
+        setNoteText(e.value)
+    }
+
     return (<><div style={
         {display:"block",
             position:"absolute",
@@ -36,10 +50,11 @@ export function NotesMenu()
     }>
         <h1>Make a note for CMSC 202</h1>
         Note:
-        <textarea name='NoteContents' cols={20} rows={20}></textarea>
+        <textarea name='NoteContents' cols={20} rows={20} className={styles.noteTextbox} onChange={textChanged}></textarea><br/>
+        <button type="button" onClick={PostNote}>Post Note</button>
         {GetNotesForCourse("CMSC203").map((e:PublicNote) =>
-    <h1>{e.note}</h1>
-    )}
+            <h1>{e.note}</h1>
+            )}
 
         
     </div>
