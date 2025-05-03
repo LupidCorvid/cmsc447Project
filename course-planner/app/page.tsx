@@ -25,10 +25,12 @@ const pastCoursesSem: SemesterProps[] = [
 const majors: MajorProps[] = jsonContent.Majors;
 
 
-function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
-  const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
+function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void },
+                  plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
+                  semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function}){
+  
   const [userMajor, setValue] = useState("Undecided"); //The user's major
-  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
   
@@ -320,7 +322,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
 
   return(
     <div>
-      <DndContext onDragEnd={handleDragEnd}>
     <div key="Planner" style={{float: 'left'}}>
 
       <h1 className={styles.headerStyle} style={{float:'left'}}>
@@ -366,7 +367,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
       </div>
     </div>
-    </DndContext>
     </div>
   )}
   
@@ -499,6 +499,9 @@ export default function App() {
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+
+  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   
 
   //needed for course info
@@ -518,8 +521,10 @@ export default function App() {
 
         <div style={{marginLeft:300}}>
             <DndContext>
-              <Planner setSelectedCourse={setSelectedCourse}/>
-              {/*<CourseSearch setSelectedCourse={setSelectedCourse}/> */}
+              {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
+                        semesters, {updateSemesters})}
+              <div style={{marginLeft:600}}> <CourseSearch setSelectedCourse={setSelectedCourse}/></div>
+              
             </DndContext>
             {/*<CourseInfo course={selectedCourse}/>*/}
           
