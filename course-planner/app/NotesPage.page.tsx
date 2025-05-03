@@ -18,7 +18,8 @@ export function NotesMenu()
 
     const textChanged = (e:any) =>
     {
-        setNoteText(e.value)
+        if(e.target.value != undefined)
+            setNoteText(e.target.value)
     }
 
     return (<><div style={
@@ -48,9 +49,10 @@ export function NotesMenu()
         width: "50vw",
     }
     }>
+        
         <h1>Make a note for CMSC 202</h1>
         Note:
-        <textarea name='NoteContents' cols={20} rows={20} className={styles.noteTextbox} onChange={textChanged}></textarea><br/>
+        <textarea name='NoteContents' cols={20} rows={20} className={styles.noteTextbox} onChange={textChanged} value={noteText}></textarea><br/>
         <button type="button" onClick={PostNote}>Post Note</button>
         {GetNotesForCourse("CMSC203").map((e:PublicNote) =>
             <h1>{e.note}</h1>
