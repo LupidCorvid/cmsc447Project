@@ -27,7 +27,7 @@ const majors: MajorProps[] = jsonContent.Majors;
 
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void },
                   plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
-                  semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function}){
+                  semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function}){  //,event:(DragEndEvent | null)
   
   const [userMajor, setValue] = useState("Undecided"); //The user's major
   
@@ -45,12 +45,12 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   //used to fix updating bugs
   const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
   const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
+
   
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
-  //setUnmetPrereqs([]);
-  function handleDragEnd(event: DragEndEvent){
-    console.log("Fired");
+  function handleDragEnd(event:DragEndEvent){ //function handleDragEnd(event: DragEndEvent)
+    //console.log("Fired in planner");
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
     if (!over) {
@@ -91,10 +91,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     let majorReqs = "";
     if(majorList.length > 0)
       majorReqs += "The following graduation requirements for your major are not met:\n";
-    //majorList.forEach(element => {
-    //  if(element != "")
-    //    majorReqs += element + ", ";
-    //});
+
     for(let i = 0; i < majorList.length; i++)
     {
       if(majorList[i].substring(0,3) == "MLT")
@@ -104,7 +101,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     };
 
     majorReqs += majorList.join(", ");
-
 
     if(majorList.length > 0)
     {
@@ -266,7 +262,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     scanPlannerListForRemoval();
     return(
       <div className={styles.plannerScrollStyle}>
-        <DndContext onDragEnd={handleDragEnd}>
         {semesters.map((semester) =>
           <RenderSemester 
             semester_id={semester.semester_id} 
@@ -283,7 +278,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
           key={0} 
           callbackFunction={removeFromPlanner}
           setSelectedCourse={setSelectedCourse}/>
-        </DndContext>
       </div>
     );
   }
@@ -396,7 +390,6 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
 
   return(
     <div id="Course Search" style={{float: 'right', position: 'absolute', top:0, right:0, padding: '50px'}}>
-      <DndContext>
       <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
         Course Search
       </h1>
@@ -406,7 +399,6 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
         {PopulateCourseSerach()}
       </div>
-      </DndContext>
     </div>
   );
 }
@@ -502,10 +494,55 @@ export default function App() {
 
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
-  
+  const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null); //needed for course info
 
-  //needed for course info
-  const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
+  function handleDragEnd(event: DragEndEvent){
+    console.log("Fired in app()");
+
+    const {active, over} = event; //active: The task we're actually dropping
+                                  //over: if you are over something that is droppable
+    if (!over) {
+      return;
+    }
+    const courseId = active.id as string; //Note: Must typecast this
+    const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
+
+    let courseInPlanner = false;
+    for (let i = 0; i < plannerCourses.length; i++){
+      if (plannerCourses[i].id === courseId) courseInPlanner = true;
+    }
+
+    if (courseInPlanner){
+      updatePlannerCourses(() =>
+        
+        //This checks if the item already exists in the planner (semester to semester)
+        plannerCourses.map((course: DItemType) =>
+          course.id === courseId
+            ? { ...course, semester: newSemester, credits: 3 }
+            : course
+        )
+      );
+    }
+
+    //Search for the course in the course listing and add it to the planner
+    else{
+      let newCourse: DItemType;
+
+      for(let i = 0; i < classList.length; i++){
+        if (classList[i].id === active.id){
+          newCourse = classList[i];
+          newCourse.semester = over.id as number;
+          break;
+        }
+      }
+      console.log("test");
+
+      updatePlannerCourses(() =>
+        [...plannerCourses, newCourse]
+      )
+    }
+  }
+  
   return (
     <html>
       <body>
@@ -518,9 +555,8 @@ export default function App() {
           </div>
         </div>
 
-
         <div style={{marginLeft:300}}>
-            <DndContext>
+            <DndContext onDragEnd={handleDragEnd}>
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
                         semesters, {updateSemesters})}
               <div style={{marginLeft:600}}> <CourseSearch setSelectedCourse={setSelectedCourse}/></div>
