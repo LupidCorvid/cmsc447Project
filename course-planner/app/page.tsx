@@ -11,19 +11,16 @@ import { renderToHTML } from 'next/dist/server/render';
 import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
 
-//Debug Draggable items
 const defaultItems: DItemType[] = jsonContent.name;
 
-//Debug Semesters
 const defaultSemesters: SemesterProps[] = [
 ]
-//Past courses semester
+
 const pastCoursesSem: SemesterProps[] = [
   {semester_id:0, name: "Past Courses", courses:defaultItems}
 ]
 
 const majors: MajorProps[] = jsonContent.Majors;
-
 
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void },
                   plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
@@ -286,8 +283,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         My Planner
       </h1>
 
-      
-
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
         <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
         <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
@@ -303,48 +298,33 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         onChange={ChangeYear} className={styles.semYearStyle}></input>
         {PopulatePlanner()}
       </div>
-      
-      
     </div>
     </div>
-  )}
+  )
+}
   
-//TODO: Work In Progress
 function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
-  //Debug: An array of DItems
-  //const [searchItems, updateSearchItems] = useState<DItemType[]>([{id:"CMSC 331", semester: 1 },{id:"CMSC 341", semester: 1}, {id:"CMSC 304", semester: 1 }]); 
+  
+  //TODO: Possibly not needed?
   const removeFromPlanner = () => {
     console.log("Does Nothing");
     // Your removal logic here
   };
-  const tester = ["CMSC 331", "CMSC 341", "CMSC 304"]; //Stuff to fill the state array with. Replace with database info later
-
-   //TODO: Implement
-   //Where all of the courses will go
-   function PopulateCourseSerach(){
-      return(
-        <div>
-          {/*searchItems.map((item) => 
-              <RenderDItem {...item} key={item.id}/>
-            )*/}
-        </div>
-      );
-    }
 
   return(
-    <div id="Course Search" style={{float: 'right', position: 'absolute', top:0, right:0, padding: '50px'}}>
-      <h1 className={styles.headerStyle} style={{float:'left', paddingBottom: '95px'}}>
+    <div id="Course Search" style={{float:'left', marginLeft:50}}>
+      <h1 className={styles.headerStyle} style={{float:'left'}}>
         Course Search
       </h1>
 
-      <div id="Course Search Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+      <div id="Course Search Dynamic List" className={styles.courseSearchStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
         <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner}/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
-        {PopulateCourseSerach()}
       </div>
     </div>
   );
 }
+
 function CourseInfo({ course }: { course: DItemType | null }){
   const [prereqString, setString] = useState("");
   function prerequisiteString(){
@@ -607,7 +587,7 @@ export default function App() {
             <DndContext onDragEnd={handleDragEnd}>
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
                         semesters, {updateSemesters})}
-              <div style={{marginLeft:600}}> <CourseSearch setSelectedCourse={setSelectedCourse}/></div>
+              <CourseSearch setSelectedCourse={setSelectedCourse}/>
             </DndContext>
             {/*<CourseInfo course={selectedCourse}/>*/}
           

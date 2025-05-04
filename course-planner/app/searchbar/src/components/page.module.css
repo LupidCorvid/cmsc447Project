@@ -1,7 +1,4 @@
 :root {
-    --boxWidth: 450px;
-    --boxHeight: 450px;
-    --searchBoxHeight: 380px;
     --primaryTextColor: rgb(34, 31, 25);
     --bodyTextStyle: 18px;
 }
@@ -12,7 +9,6 @@ body {
     font-family: Sans-Serif;
     text-align: center;
 }
-
 
 .picture1 {
     width:200px;
@@ -61,22 +57,63 @@ body {
 .plannerStyle {
     border-style: solid;
     background-color: rgb(241, 241, 241);
-    height: 450px;
-    width: 450px;
+    height: 600px;
+    width: 550px;
 }
 
 .plannerScrollStyle{
     overflow-Y: scroll;
     overflow-X: visible;
-    height: 410px;
-    width: var(--boxWidth);
+    height: 560px;
+    width: 550px;
 }
+
+.courseSearchStyle{
+    border-style: solid;
+    background-color: rgb(241, 241, 241);
+    height: 225px;
+    width: 450px;
+    padding-left: 50px;
+    padding-top: 50px;
+    top:0px;
+    right:0px;
+    float: 'right';
+    position: 'absolute';
+}
+
+.courseSearchScrollStyle{
+    overflow-Y: scroll;
+    overflow-X: visible;
+    height: 410px;
+    width: 450px;
+}
+
+.courseInfoStyle{
+    border-style: solid;
+    background-color: rgb(241, 241, 241);
+    height: 225px;
+    width: 450px;
+    padding-left: 50px;
+    padding-top: 50px;
+    top:0px;
+    right:0px;
+    float: 'right';
+    position: 'absolute';
+}
+
+.courseInfoScrollStyle{
+    overflow-Y: scroll;
+    overflow-X: visible;
+    height: 410px;
+    width: 450px;
+}
+
 .searchScrollStyle{
     overflow-Y: visible;
     overflow-X: visible;
     padding-top: 60px;
-    height: var(--searchBoxHeight);
-    width: var(--boxWidth);
+    height: 380px;
+    width: 450px;
 }
 
 .searchbarStyle{
@@ -91,6 +128,7 @@ body {
     font-family: Sans-Serif;
     font-size: 35px;
     line-height: .1;
+    padding-bottom: 10px;
 }
 
 .textStyle{
@@ -157,7 +195,6 @@ body {
     text-align: left;
 }
   
-
 .semSeasonStyle{
     float:left;
     height: 25px;
