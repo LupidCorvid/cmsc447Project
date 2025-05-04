@@ -26,7 +26,7 @@ const pastCoursesSem: SemesterProps[] = [
 const majors: MajorProps[] = jsonContent.Majors;
 
 let notesOpen = false;
-
+let currSemId = 1;
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [userMajor, setValue] = useState("Undecided"); //The user's major
@@ -48,6 +48,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   
   const [, forceUpdate] = React.useReducer(x => x + 1, 0)
 
+  
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
       //setUnmetPrereqs([]);
@@ -149,7 +150,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
 
   //Adds a new semester
   function updateCoursesInSemester(){
-    let newId = semesters.length + 1; //Must be 1 because semesters.length starts at 0
+    let newId = currSemId; //Must be 1 because semesters.length starts at 0
+    currSemId += 1;
     let newName = "New semester " + (newId) //TODO: Let user name the semester
     //print semesters in order (does not include Past Semesters)
     //print past courses
