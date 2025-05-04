@@ -40,7 +40,7 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
             <input type="text" placeholder = "Class name..." onChange={filterChanged} value={searchInput} className={styles.searchbarStyle}></input>
             <div id="List of courses by filter" className={styles.searchScrollStyle}>
                 {
-                (searchInput.length == 0) ? <div style={{clear:'both'}}>Enter a filter to get started</div> :
+                (searchInput.length == 0) ? <div style={{clear:'both', color:'gray', marginTop: 50}}>Enter a filter to get started</div> :
                 filteredInputs.map((course) =>
                 {return <RenderDItem course={course} key={course.id} callbackFunction={removeFromPlanner}
                 setSelectedCourse={setSelectedCourse}/>; }) 

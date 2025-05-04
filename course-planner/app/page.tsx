@@ -377,18 +377,11 @@ function CourseInfo({ course }: { course: DItemType | null }){
     return finalString;
   }
   return (
-    <div id="Course Info"  style={{
-      position: 'absolute',
-      top: 0,
-      right:550,
-      padding: '50px',
-      paddingRight: '150px',
-      width: '300px'
-    }}>
-      <h1 className={styles.headerStyle} style={{ float: 'left', paddingBottom: '95px' }}>
+    <div id="Course Info" style={{float:'left', marginLeft:50}}>
+      <h1 className={styles.infoHeaderStyle} style={{float: 'left'}}>
         Course Info
       </h1>
-      <div className={styles.plannerStyle} style={{clear:'both', borderStyle: 'solid'}}>
+      <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
         {course ? (
           <div>
             <p><strong>ID:</strong> {course.id}</p>
@@ -397,10 +390,8 @@ function CourseInfo({ course }: { course: DItemType | null }){
             <p><strong>Course Description:</strong> {course.GeneralDescription}</p>
           </div>
           ) : (
-          <p>Select a course to view info.</p>
+          <p style={{float:'left', marginLeft:125, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info.</p>
           )}
-        
-          {/* Course info content goes here */}
         </div>
 
     </div>
@@ -589,7 +580,7 @@ export default function App() {
                         semesters, {updateSemesters})}
               <CourseSearch setSelectedCourse={setSelectedCourse}/>
             </DndContext>
-            {/*<CourseInfo course={selectedCourse}/>*/}
+            <CourseInfo course={selectedCourse}/>
           
         </div>
       </body>
