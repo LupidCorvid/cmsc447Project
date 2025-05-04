@@ -8,12 +8,15 @@ import styles from "./searchbar/src/components/page.module.css";
 export function NotesMenu()
 {
     const [noteText, setNoteText] = useState("");
-
+    const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+        
+      
     function PostNote()
     {
         let noteId = PublishNote("user", "CMSC203", noteText);
         ReviewNote(true, noteId);
         console.log(GetNotesForCourse("CMSC203"))
+        forceUpdate();
     }
 
     const textChanged = (e:any) =>
