@@ -244,6 +244,18 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       return (seasonToInt(semB[0]) - seasonToInt(semA[0]));
     })
   }
+
+  function RemoveSemester(target:number)
+  {
+      updateSemesters(semesters.filter((e)=>
+      {
+        return e.semester_id != target
+      }))
+      updatePlannerCourses(plannerCourses.filter((e) =>
+      {
+        return e.semester != target;
+      }))
+  }
   function seasonToInt(season:string)
   {
     switch(season)
@@ -278,7 +290,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
             courses={plannerCourses.filter((course:DItemType) => course.semester === semester.semester_id)}
             key={semester.semester_id}
             callbackFunction={removeFromPlanner}
-            setSelectedCourse={setSelectedCourse}/>
+            setSelectedCourse={setSelectedCourse}
+            removeSemCallback={RemoveSemester}/>
           )}
         <RenderSemester
           semester_id={0}
@@ -286,7 +299,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
           courses={plannerCourses.filter((course:DItemType) => course.semester === 0)}
           key={0} 
           callbackFunction={removeFromPlanner}
-          setSelectedCourse={setSelectedCourse}/>
+          setSelectedCourse={setSelectedCourse}
+          removeSemCallback={RemoveSemester}/>
         </DndContext>
       </div>
     );
@@ -384,6 +398,7 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
   const removeFromPlanner = () => {
     console.log("Does Nothing");
     // Your removal logic here
+    
   };
   const tester = ["CMSC 331", "CMSC 341", "CMSC 304"]; //Stuff to fill the state array with. Replace with database info later
 
