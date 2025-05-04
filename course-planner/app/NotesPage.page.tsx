@@ -5,7 +5,11 @@ import { Righteous } from 'next/font/google';
 import { relative } from 'path';
 import styles from "./searchbar/src/components/page.module.css";
 
-export function NotesMenu()
+type NoteProps = {
+    callbackFunction: () => void; //Everything put in HTML should have props associated here (I guess...)
+}
+
+export function NotesMenu(input:NoteProps)
 {
     const [noteText, setNoteText] = useState("");
     const [, forceUpdate] = React.useReducer(x => x + 1, 0)
@@ -24,6 +28,13 @@ export function NotesMenu()
         if(e.target.value != undefined)
             setNoteText(e.target.value)
     }
+
+    function closeNotes()
+    {
+        input.callbackFunction();
+    }
+
+   
 
     return (<><div style={
         {display:"block",
@@ -57,6 +68,7 @@ export function NotesMenu()
         Note:
         <textarea name='NoteContents' cols={20} rows={20} className={styles.noteTextbox} onChange={textChanged} value={noteText}></textarea><br/>
         <button type="button" onClick={PostNote}>Post Note</button>
+        <button type="button" onClick={closeNotes}>Close</button>
         {GetNotesForCourse("CMSC203").map((e:PublicNote) =>
             <h1>{e.note}</h1>
             )}

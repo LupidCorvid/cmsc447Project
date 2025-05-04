@@ -25,6 +25,7 @@ const pastCoursesSem: SemesterProps[] = [
 
 const majors: MajorProps[] = jsonContent.Majors;
 
+let notesOpen = false;
 
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
@@ -45,6 +46,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
   const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
   
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+
   //Handles when the user lets go of a dragged object
   //Checks if the final spot was in a semester and updates the item accordingly
       //setUnmetPrereqs([]);
@@ -258,6 +261,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     }
   }
 
+
+
   //Renders all of the semesters using a loop
   //Each semester renders the courses associated with it using the .filter() function
   //NOTE: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
@@ -359,7 +364,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         onChange={ChangeYear} className={styles.semYearStyle}></input>
         {PopulatePlanner()}
       </div>
-      
       <div id="Notifications"  /*style={{clear:"left", lineHeight: 14}}*/>
 
         <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
@@ -502,18 +506,36 @@ export default function App() {
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   //console.log(jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites);
   //console.log(majorList);
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+
+  function openNotes()
+  {
+    notesOpen = true;
+    forceUpdate();
+  }
+
+  function closeNotes()
+  {
+    notesOpen = false;
+    forceUpdate();
+  }
+
 
   //needed for course info
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null);
   return (
     <html>
       <body>
+        <div>
         <CourseInfo course={selectedCourse}/>
           <Planner setSelectedCourse={setSelectedCourse}/>
           <DndContext></DndContext>
         <CourseSearch setSelectedCourse={setSelectedCourse}/>
-        <NotesMenu/>
-
+        </div>
+        <div style={{clear:'both'}}>
+          <button  type="button" onClick={openNotes}>Open notes</button>
+          {notesOpen ? <NotesMenu callbackFunction={closeNotes}/> : <></>}
+        </div>
       </body>
     </html>
     

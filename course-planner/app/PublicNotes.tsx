@@ -1,15 +1,7 @@
 import {DItemType, SemesterProps, MajorProps, PublicNote} from './searchbar/src/components/types';
 
 //Public notes
-let publicNotes: PublicNote[] = [
-    {
-        noteID:0,
-        courseID:"CMSC203",
-        author:"dev",
-        reviewed:true,
-        note:"tester"
-    }
-];
+let publicNotes: PublicNote[] = [];
 let currNoteID = 0;
 
 
