@@ -245,11 +245,15 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     })
   }
 
-  function RemoveSemester(target:string)
+  function RemoveSemester(target:number)
   {
       updateSemesters(semesters.filter((e)=>
       {
-        return e.name != target
+        return e.semester_id != target
+      }))
+      updatePlannerCourses(plannerCourses.filter((e) =>
+      {
+        return e.semester != target;
       }))
   }
   function seasonToInt(season:string)

@@ -9,7 +9,7 @@ type SemesterProps = {
     courses: DItemType[];
     callbackFunction: (n:string) => void;
     setSelectedCourse: (course: DItemType) => void;
-    removeSemCallback: (sem:string)=>void;
+    removeSemCallback: (sem:number)=>void;
 }
 
 type FunctionType = () => void;
@@ -24,7 +24,7 @@ export function RenderSemester({semester_id, name, courses, callbackFunction, se
     function removeThisSem()
     {
         removeSemCallback(
-            name
+            semester_id
         );
     }
 
