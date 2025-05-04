@@ -38,7 +38,7 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
     return (
         <div>
             <input type="text" placeholder = "Class name..." onChange={filterChanged} value={searchInput} className={styles.searchbarStyle}></input>
-            <div id="List of courses by filter" className={styles.courseSearchScrollStyle}>
+            <div id="List of courses by filter" style = {{paddingTop: 60}}/*className={styles.courseSearchScrollStyle}*/>
                 {
                 (searchInput.length == 0) ? <div style={{clear:'both', color:'gray', marginTop: 50}}>Enter a filter to get started</div> :
                 filteredInputs.map((course) =>
