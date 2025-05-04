@@ -383,7 +383,7 @@ function CourseInfo({ course }: { course: DItemType | null }){
       </h1>
       <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
         {course ? (
-          <div>
+          <div className={styles.courseInfoScrollStyle}>
             <p><strong>ID:</strong> {course.id}</p>
             <p><strong>Credits:</strong> {course.credits}</p>
             <p><strong>Prerequisties:</strong> {prerequisiteString()}</p>
