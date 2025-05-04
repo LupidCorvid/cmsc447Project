@@ -29,35 +29,20 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
                   plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
                   semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function}){  //,event:(DragEndEvent | null)
   
-  const [userMajor, setValue] = useState("Undecided"); //The user's major
-  
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
   
-  //store unmet prerequisites to display in error message
-  const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
-  const [unmetMajorReqs, setUnmetMajorReqs] = useState<string[]>([]);
-  
-  //TODO: Implement prereq checking and then enable these variables
-  const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
-  const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
-
-  //used to fix updating bugs
-  const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
-  const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
-
-  
-  //Handles when the user lets go of a dragged object
-  //Checks if the final spot was in a semester and updates the item accordingly
-  function handleDragEnd(event:DragEndEvent){ //function handleDragEnd(event: DragEndEvent)
-    //console.log("Fired in planner");
-    const {active, over} = event; //active: The task we're actually dropping
-                                  //over: if you are over something that is droppable
+  /*//Everything that used to be in handleDragEnd(event:DragEndEvent)
+  { 
+    
+    console.log("Fired in planner");
+    //const {active, over} = event; //active: The task we're actually dropping
+                                    //over: if you are over something that is droppable
     if (!over) {
       return;
     }
-    const courseId = active.id as string; //Note: Must typecast this
-    const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
+    //const courseId = active.id as string; //Note: Must typecast this
+    //const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
     
     //Updater function for plannerCourses
     //Finds the course we just dragged in the list of courses and updates its semester property
@@ -72,16 +57,16 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
 
     setLastDraggedCourseId(courseId);
     setLastDraggedSemester(newSemester);
+    
     // Run prereq check using the updated course list
     //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
     //setUnmetPrereqs(newString)
-    //console.log("64: ", newString)
+
     //check all other classes for prerequisites
     let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
     setUnmetPrereqs(newString);
     const tempList = unmetPrereqs.slice(1,2);
     setUnmetPrereqs(tempList);
-    //console.log("68: ", newString)
 
 
     //Check for missing major requirements
@@ -121,9 +106,10 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       }
     });
   }
+  */
 
   function removeFromPlanner(courseId:string){
-    console.log("removeFromPlanner triggered: ", courseId);
+    //console.log("removeFromPlanner triggered: ", courseId);
     //course.semester = -2; //Doesn't save to page.tsx
     //scanPlannerListForRemoval()
     let temp = -1;
@@ -138,7 +124,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     for (let i = 0; i < plannerCourses.length; i++){
       if (plannerCourses[i].id == courseId) temp = i
     }
-    console.log("ID: ", temp)
   }
 
   //Adds a new semester
@@ -229,7 +214,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     {
       var semA = a.name.split(" ");
       var semB = b.name.split(" ");
-      console.log("Sorting " + semA[0] + " and " + semB[0]);
+      //console.log("Sorting " + semA[0] + " and " + semB[0]);
       if(semA[1] < semB[1])
         return -1;
       if (semA[1] > semB[1])
@@ -238,6 +223,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       return (seasonToInt(semB[0]) - seasonToInt(semA[0]));
     })
   }
+
   function seasonToInt(season:string)
   {
     switch(season)
@@ -255,9 +241,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     }
   }
 
-  //Renders all of the semesters using a loop
-  //Each semester renders the courses associated with it using the .filter() function
-  //NOTE: The plannerScrollStyle overflow-x may cause issues with transferring from course search to planner
+  //Renders all of the semesters using a map loop and filters the courses per semester using .filter()
   function PopulatePlanner(){
     scanPlannerListForRemoval();
     return(
@@ -282,26 +266,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     );
   }
   
-  //Updates the value of userMajor
-  function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
-    setValue(event.target.value);
-    //Change prereqs
-  }
-
-  function GetRecCredits()
-  {
-    if(semesters.length > 0)
-    {
-      var takenCredits = 0;
-      plannerCourses.filter((course:DItemType) => course.semester === 0).forEach(element =>
-        takenCredits += element.credits
-      );
-      return Math.ceil(((120 - takenCredits)/semesters.length));
-    }
-    return 0
-  }
-
-
   function ChangeYear(e:any)
   {
     if(Number.parseInt(e.target.value))
@@ -322,21 +286,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         My Planner
       </h1>
 
-      <p id="Text Under Planner" className={styles.textStyle} style={{clear:'both', float:'left', textAlign:'left', lineHeight: 1.7}}>
-        Major: &nbsp;
-
-        <select id="Update Major Dropdown" value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
-        <option value={"Undecided"}>Undecided</option>
-          {
-            majors.map((major) =>
-            <option value={major.name}>{major.name}</option>)
-          }
-        </select>
-
-        <br/>
-
-        Recommended Credits per Semester: {GetRecCredits()}
-      </p>
+      
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
         <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
@@ -354,18 +304,11 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         {PopulatePlanner()}
       </div>
       
-      <div id="Notifications"  /*style={{clear:"left", lineHeight: 14}}*/>
-
-        <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
-        <br/>
-        <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
-      </div>
+      
     </div>
     </div>
   )}
   
-
-
 //TODO: Work In Progress
 function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
   //Debug: An array of DItems
@@ -420,7 +363,7 @@ function CourseInfo({ course }: { course: DItemType | null }){
         const orGroup = group[j];
     //And
         for (let k = 0; k < orGroup.length; k++) {
-          console.log(orGroup.length);
+          //console.log(orGroup.length);
           if(orGroup.length > 1 && k == 0){
             finalString += "(";
           }
@@ -496,8 +439,39 @@ export default function App() {
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null); //needed for course info
 
+  //used to fix updating bugs
+  const [lastDraggedCourseId, setLastDraggedCourseId] = useState<string | null>(null);
+  const [lastDraggedSemester, setLastDraggedSemester] = useState<number | null>(null);
+
+  //store unmet prerequisites to display in error message
+  const [unmetPrereqs, setUnmetPrereqs] = useState<string[]>([]);
+  const [unmetMajorReqs, setUnmetMajorReqs] = useState<string[]>([]);
+  
+  //The strings holding the prereq error messages
+  const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
+  const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
+
+  const [userMajor, setValue] = useState("Undecided");
+
+  //Updates the value of userMajor
+  function UpdateMajor(event: React.ChangeEvent<HTMLSelectElement>){
+    setValue(event.target.value);
+  }
+
+  function GetRecCredits()
+  {
+    if(semesters.length > 0)
+    {
+      var takenCredits = 0;
+      plannerCourses.filter((course:DItemType) => course.semester === 0).forEach(element =>
+        takenCredits += element.credits
+      );
+      return Math.ceil(((120 - takenCredits)/semesters.length));
+    }
+    return 0
+  }
+
   function handleDragEnd(event: DragEndEvent){
-    console.log("Fired in app()");
 
     const {active, over} = event; //active: The task we're actually dropping
                                   //over: if you are over something that is droppable
@@ -507,11 +481,11 @@ export default function App() {
     const courseId = active.id as string; //Note: Must typecast this
     const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
 
+    //Checks if the course exists in the planner to see if planner -> planner or courseSearch -> planner logic is used
     let courseInPlanner = false;
     for (let i = 0; i < plannerCourses.length; i++){
       if (plannerCourses[i].id === courseId) courseInPlanner = true;
     }
-
     if (courseInPlanner){
       updatePlannerCourses(() =>
         
@@ -523,7 +497,6 @@ export default function App() {
         )
       );
     }
-
     //Search for the course in the course listing and add it to the planner
     else{
       let newCourse: DItemType;
@@ -535,24 +508,99 @@ export default function App() {
           break;
         }
       }
-      console.log("test");
 
       updatePlannerCourses(() =>
         [...plannerCourses, newCourse]
       )
     }
+  
+    //Every other check to do when a course is dragged
+    {
+      setLastDraggedCourseId(courseId);
+      setLastDraggedSemester(newSemester);
+    
+      // Run prereq check using the updated course list
+      //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+      //setUnmetPrereqs(newString)
+
+      //check all other classes for prerequisites
+      let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+      setUnmetPrereqs(newString);
+      const tempList = unmetPrereqs.slice(1,2);
+      setUnmetPrereqs(tempList);
+
+
+      //Check for missing major requirements
+      let majorList:String[] = [];
+      if(userMajor != "Undecided")
+        majorList = checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, courseId, newSemester == 0);
+      let majorReqs = "";
+      if(majorList.length > 0)
+        majorReqs += "The following graduation requirements for your major are not met:\n";
+
+      for(let i = 0; i < majorList.length; i++)
+      {
+        if(majorList[i].substring(0,3) == "MLT")
+        {
+          majorList[i] = majorList[i][8] + " " + majorList[i][7] + "00 " + " level " + majorList[i].substring(3, 7) + " classes";
+        }
+      };
+
+      majorReqs += majorList.join(", ");
+
+      if(majorList.length > 0)
+      {
+        setGradReqErrorMsg(majorReqs);
+      }
+      else
+      {
+        setGradReqErrorMsg("");
+      }
+
+      // Update error message based on unmet prereqs 
+      setPrereqErrorMsg(() => {
+        if (newString.length > 0) {
+          return "The following courses do not meet prerequisites: " + newString.join(", ");
+        }
+        else{
+          return "Empty";
+        }
+      });
+    }
   }
+
+  /*TODO: 
+    Format the UI to show everything and be able to be committed to main
+  */
   
   return (
     <html>
       <body>
         <div id="sidebar" className={styles.sidebarStyle}>
           <div className={styles.picture1}/> <br/> <hr/>
-          <div className={styles.text1}>Major</div>
-          <div className={styles.text1} style={{paddingTop:20, paddingBottom:20}}>Recommended Credits per Semester: XX</div>
+
+          <p id="Update Major Dropdown"className={styles.text1}>
+            Major: &nbsp;
+            <select  value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
+            <option value={"Undecided"}>Undecided</option>
+              {
+                majors.map((major) =>
+                <option value={major.name}>{major.name}</option>)
+              }
+            </select>
+          </p>
+          
+          <div className={styles.text1} style={{paddingTop:5, paddingBottom:20}}>Recommended Credits per Semester: {GetRecCredits()}</div>
           <div style={{textAlign: 'left'}}>
             <a className={styles.text2} href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
           </div>
+
+          <div id="Prereq Notifications" style={{paddingTop:20}}>
+            <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
+            <br/>
+            <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
+          </div>
+
         </div>
 
         <div style={{marginLeft:300}}>
@@ -560,13 +608,10 @@ export default function App() {
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
                         semesters, {updateSemesters})}
               <div style={{marginLeft:600}}> <CourseSearch setSelectedCourse={setSelectedCourse}/></div>
-              
             </DndContext>
             {/*<CourseInfo course={selectedCourse}/>*/}
           
         </div>
-        
-
       </body>
     </html>
     
