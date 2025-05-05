@@ -1,6 +1,6 @@
 'use client';
-import React, { useState,useEffect, InputHTMLAttributes } from 'react';
-import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
+import React, { useState,useEffect, InputHTMLAttributes, act } from 'react';
+import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners, DragOverlay, DragStartEvent } from '@dnd-kit/core';
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
@@ -11,6 +11,7 @@ import { renderToHTML } from 'next/dist/server/render';
 import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
 import {NotesMenu} from "./NotesPage.page"
+import { RenderDItem } from './searchbar/src/components/DItem';
 
 const defaultItems: DItemType[] = jsonContent.name;
 
@@ -317,6 +318,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         value={yearInput}
         onChange={ChangeYear} className={styles.semYearStyle}></input>
         {PopulatePlanner()}
+        
       </div>
     </div>
     </div>
@@ -476,6 +478,8 @@ export default function App() {
     return 0
   }
 
+  const [activeCourse, setActiveCourse] = useState<DItemType | null>(null); //The currently dragged course (may be redundant?)
+
   function handleDragEnd(event: DragEndEvent){
 
     const {active, over} = event; //active: The task we're actually dropping
@@ -572,6 +576,17 @@ export default function App() {
         }
       });
     }
+    setActiveCourse(null);
+  }
+
+  function handleDragStart(event:DragStartEvent) {
+    const {active} = event;
+    if(active){
+      const courseId = active.id as string;
+      for(let i = 0; i < plannerCourses.length; i++)
+        if(plannerCourses[i].id == courseId)
+          setActiveCourse(plannerCourses[i]);
+    }
   }
   
   return (
@@ -604,10 +619,18 @@ export default function App() {
         </div>
 
         <div style={{marginLeft:300}}>
-            <DndContext onDragEnd={handleDragEnd}>
+            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+              
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
                         semesters, {updateSemesters})}
               <CourseSearch setSelectedCourse={setSelectedCourse}/>
+
+              <DragOverlay>
+                {activeCourse ? (
+                  <RenderDItem course={activeCourse} callbackFunction={() => ""} setSelectedCourse={setSelectedCourse} />
+                ): null}
+              </DragOverlay>
+
             </DndContext>
             <CourseInfo course={selectedCourse}/>
           
