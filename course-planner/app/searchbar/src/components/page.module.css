@@ -1,7 +1,4 @@
 :root {
-    --boxWidth: 450px;
-    --boxHeight: 450px;
-    --searchBoxHeight: 380px;
     --primaryTextColor: rgb(34, 31, 25);
     --bodyTextStyle: 18px;
 }
@@ -11,6 +8,39 @@ body {
     padding: 40px;
     font-family: Sans-Serif;
     text-align: center;
+}
+
+.picture1 {
+    width:200px;
+    height:74px;
+    background-image:url('myUmbcImage.png');
+    margin:auto;
+    padding:0;
+    margin-top:25px;
+}
+
+.text1{
+    color:white;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+    font-size: 20;
+}
+
+.text2{
+    color:rgb(84, 187, 255);
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+    font-size: 20;
+}
+
+.sidebarStyle{
+    background-color:rgb(99, 100, 102);
+    max-width:300px;
+    min-height:100dvh;
+    left:0px;
+    top:0px;
+    padding-left:15px;
+    position:absolute;
 }
 
 .draggableStyle {
@@ -27,22 +57,51 @@ body {
 .plannerStyle {
     border-style: solid;
     background-color: rgb(241, 241, 241);
-    height: 450px;
-    width: 450px;
+    height: 600px;
+    width: 550px;
 }
 
 .plannerScrollStyle{
     overflow-Y: scroll;
     overflow-X: visible;
-    height: 410px;
-    width: var(--boxWidth);
+    height: 560px;
+    width: 550px;
 }
-.searchScrollStyle{
-    overflow-Y: visible;
+
+.courseSearchStyle{
+    border-style: solid;
+    background-color: rgb(241, 241, 241);
+    height: 325px;
+    width: 480px;
+    top:0px;
+    right:0px;
+    float: 'right';
+    position: 'absolute';
+}
+
+.courseSearchScrollStyle{
+    overflow-Y: scroll;
     overflow-X: visible;
-    padding-top: 60px;
-    height: var(--searchBoxHeight);
-    width: var(--boxWidth);
+    height: 250px;
+    width: 480px;
+}
+
+.courseInfoStyle{
+    border-style: solid;
+    background-color: rgb(241, 241, 241);
+    height: 200px;
+    width: 450px;
+    float: 'right';
+    position: 'absolute';
+    padding: 15px 15px 15px 15px;
+}
+
+.courseInfoScrollStyle{
+    overflow-Y: scroll;
+    overflow-X: visible;
+    height: 215px;
+    width: 455px;
+    padding-right:10px;
 }
 
 .searchbarStyle{
@@ -57,6 +116,15 @@ body {
     font-family: Sans-Serif;
     font-size: 35px;
     line-height: .1;
+    padding-bottom: 10px;
+}
+
+.infoHeaderStyle {
+    color: var(--primaryTextColor);
+    font-family: Sans-Serif;
+    font-size: 25px;
+    line-height: .1;
+    padding-top: 5px;
 }
 
 .noteTextbox{
@@ -76,7 +144,7 @@ body {
 }
 
 .notificationStyle{
-    color: rgb(230, 32, 32);
+    color: rgb(255, 122, 122);
     font-family: sans-serif;
     font-size: 14px;
     font-weight: bold;
@@ -127,7 +195,6 @@ body {
     text-align: left;
 }
   
-
 .semSeasonStyle{
     float:left;
     height: 25px;
