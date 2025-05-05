@@ -502,26 +502,28 @@ export default function App() {
         <div id="sidebar" className={styles.sidebarStyle}>
           <div className={styles.picture1}/> <br/> <hr/>
 
-          <p id="Update Major Dropdown" className={styles.text1}>
-            Major: &nbsp;
-            <select  value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
-            <option value={"Undecided"}>Undecided</option>
-              {
-                majors.map((major) =>
-                <option value={major.name}>{major.name}</option>)
-              }
-            </select>
-          </p>
-          
-          <div className={styles.text1} style={{paddingTop:5, paddingBottom:20}}>Recommended Credits per Semester: {GetRecCredits()}</div>
-          <div style={{textAlign: 'left'}}>
-            <a className={styles.text2} href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
-          </div>
+          <div style={{paddingLeft:15}}>
+            <p id="Update Major Dropdown" className={styles.text1}>
+              Major: &nbsp;
+              <select  value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
+              <option value={"Undecided"}>Undecided</option>
+                {
+                  majors.map((major) =>
+                  <option value={major.name}>{major.name}</option>)
+                }
+              </select>
+            </p>
+            
+            <div className={styles.text1} style={{paddingTop:5, paddingBottom:20}}>Recommended Credits per Semester: {GetRecCredits()}</div>
+            <div style={{textAlign: 'left'}}>
+              <a className={styles.text2} href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
+            </div>
 
-          <div id="Prereq Notifications" style={{paddingTop:20}}>
-            <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
-            <br/>
-            <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
+            <div id="Prereq Notifications" style={{paddingTop:20}}>
+              <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
+              <br/>
+              <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
+            </div>
           </div>
         </div>
 
