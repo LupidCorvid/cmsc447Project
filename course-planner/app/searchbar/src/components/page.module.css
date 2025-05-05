@@ -4,10 +4,14 @@
 }
 
 body {
-    background-color: rgb(241, 241, 241);
+    background-color: rgb(245, 246, 250);
     padding: 40px;
     font-family: Sans-Serif;
     text-align: center;
+}
+
+html {
+    scrollbar-color: white;
 }
 
 .picture1 {
@@ -58,8 +62,6 @@ body {
 }
 
 .plannerStyle {
-    border-style: solid;
-    background-color: rgb(241, 241, 241);
     height: 600px;
     width: 550px;
 }
@@ -73,7 +75,6 @@ body {
 
 .courseSearchStyle{
     border-style: solid;
-    background-color: rgb(241, 241, 241);
     height: 325px;
     width: 480px;
     top:0px;
@@ -91,7 +92,6 @@ body {
 
 .courseInfoStyle{
     border-style: solid;
-    background-color: rgb(241, 241, 241);
     height: 200px;
     width: 450px;
     float: 'right';
@@ -120,7 +120,8 @@ body {
     font-weight: 450;
     font-size: 35px;
     line-height: .1;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
+    padding-left: 20px;
 }
 
 .infoHeaderStyle {
@@ -161,7 +162,8 @@ body {
 }
 
 .dropZoneStyle{
-    background-color: rgb(216, 206, 206);
+    background-color: white;
+    box-shadow: 1px 1px 5px 5px rgba(65, 63, 63, 0.05);
     min-height: 100px;
     width: 400px;
     margin: 10px;
@@ -192,7 +194,7 @@ body {
 }
 
 .semTitleStyle{
-    color:rgb(132, 124, 124);
+    color:rgb(119, 116, 116);
     font-size:20px;
     padding: 10px;
     padding-right: 4px;

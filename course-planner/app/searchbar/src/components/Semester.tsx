@@ -36,7 +36,7 @@ export function RenderSemester({semester_id, name, courses, callbackFunction, se
             
             {name != "Past Courses" ? <button type='button' 
             style={{paddingTop:0, float:'right', fontWeight: 'bold', fontSize: 15, backgroundColor:'transparent', 
-                    border:'none', cursor: 'pointer', outline: 'inherit', color:'rgb(132, 124, 124)'}} 
+                    border:'none', cursor: 'pointer', outline: 'inherit', color:'rgb(119, 116, 116)'}} 
             onClick={removeThisSem}>X</button> : <></>}
         </div>
         

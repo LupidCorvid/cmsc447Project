@@ -146,7 +146,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     })
   }
 
-
   function RemoveSemester(target:number)
   {
       updateSemesters(semesters.filter((e)=>
@@ -223,19 +222,23 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
         My Planner
       </h1>
 
-      <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
-        <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
-        <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
-        {/* TODO: Get dropdown to aligh nicely*/}
-        <option value={"Fall"}>Fall</option>
-        <option value={"Winter"}>Winter</option>
-        <option value={"Spring"}>Spring</option>
-        <option value={"Summer"}>Summer</option>
-        </select>
-        <input type="number"
-        placeholder = "Year"
-        value={yearInput}
-        onChange={ChangeYear} className={styles.semYearStyle}></input>
+      <hr style={{clear:'both'}}/>
+
+      <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', paddingLeft:10}}>
+        <div  style={{paddingLeft:10}}>
+          <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
+          {/* TODO: Get dropdown to aligh nicely*/}
+          <option value={"Fall"}>Fall</option>
+          <option value={"Winter"}>Winter</option>
+          <option value={"Spring"}>Spring</option>
+          <option value={"Summer"}>Summer</option>
+          </select>
+          <input type="number"
+          placeholder = "Year"
+          value={yearInput}
+          onChange={ChangeYear} className={styles.semYearStyle}></input>
+          <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Create semester</button>
+        </div>
         {PopulatePlanner()}
       </div>
     </div>
@@ -527,7 +530,7 @@ export default function App() {
           </div>
         </div>
 
-        <div style={{marginLeft:300}}>
+        <div style={{marginLeft:250}}>
             <DndContext onDragEnd={handleDragEnd}>
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
                         semesters, {updateSemesters})}
@@ -535,10 +538,10 @@ export default function App() {
             </DndContext>
             <CourseInfo course={selectedCourse}/>
           
-           <div style={{clear:'both'}}>
+           {/*<div style={{clear:'both'}}>
             <button  type="button" onClick={openNotes}>Open notes</button>
             {notesOpen ? <NotesMenu callbackFunction={closeNotes}/> : <></>}
-          </div>
+          </div>*/}
         </div>
       </body>
     </html>
