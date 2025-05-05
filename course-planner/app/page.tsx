@@ -418,7 +418,7 @@ function CourseInfo({ course }: { course: DItemType | null }){
     </div>
   );
 }
-
+let notesOpen = false;
 export default function App() {
 
   let mylist = [""];
@@ -611,13 +611,13 @@ export default function App() {
             </DndContext>
             <CourseInfo course={selectedCourse}/>
           
-
            <div style={{clear:'both'}}>
-          <button  type="button" onClick={openNotes}>Open notes</button>
-          {notesOpen ? <NotesMenu callbackFunction={closeNotes}/> : <></>}
+            <button  type="button" onClick={openNotes}>Open notes</button>
+            {notesOpen ? <NotesMenu callbackFunction={closeNotes}/> : <></>}
+          </div>
         </div>
       </body>
     </html>
   );
-  }
+}
 
