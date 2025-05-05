@@ -520,7 +520,7 @@ export default function App() {
             
             <div className={styles.text1} style={{paddingTop:5, paddingBottom:20}}>Recommended Credits per Semester: {GetRecCredits()}</div>
             <div style={{textAlign: 'left'}}>
-              <a className={styles.text2} href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
+              <a className={styles.text2} target="_blank" href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
             </div>
 
             <div id="Prereq Notifications" style={{paddingTop:20}}>
