@@ -38,7 +38,7 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
 
     if(course.semester >= -1){
         return(
-            <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
+            <div ref={setNodeRef} {...listeners} {...attributes} className={styles.draggableStyle}>
                 {course.id} &nbsp;
                 <div style={{float:'right', top:0}}>
                     <button id="info btn" onClick={showCourseInfo}
