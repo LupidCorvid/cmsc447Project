@@ -127,6 +127,10 @@ body {
     padding-top: 5px;
 }
 
+.noteTextbox{
+    resize:none
+}
+
 .textStyle{
     color: var(--primaryTextColor);
     font-family: Sans-Serif;

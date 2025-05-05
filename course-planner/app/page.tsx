@@ -4,12 +4,13 @@ import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } 
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
-import {DItemType, SemesterProps, MajorProps} from './searchbar/src/components/types';
+import {DItemType, SemesterProps, MajorProps, PublicNote} from './searchbar/src/components/types';
 import { RenderSemester } from './searchbar/src/components/Semester';
 import { renderToHTML } from 'next/dist/server/render';
 
 import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
+import {NotesMenu} from "./NotesPage.page"
 
 const defaultItems: DItemType[] = jsonContent.name;
 
@@ -22,19 +23,23 @@ const pastCoursesSem: SemesterProps[] = [
 
 const majors: MajorProps[] = jsonContent.Majors;
 
+
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void },
                   plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
                   semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function}){  //,event:(DragEndEvent | null)
   
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
+  let notesOpen = false;
   
   /*//Everything that used to be in handleDragEnd(event:DragEndEvent)
   { 
     
     console.log("Fired in planner");
+    const [, forceUpdate] = React.useReducer(x => x + 1, 0)
     //const {active, over} = event; //active: The task we're actually dropping
                                     //over: if you are over something that is droppable
+
     if (!over) {
       return;
     }
@@ -221,6 +226,19 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     })
   }
 
+
+  function RemoveSemester(target:number)
+  {
+      updateSemesters(semesters.filter((e)=>
+      {
+        return e.semester_id != target
+      }))
+      updatePlannerCourses(plannerCourses.filter((e) =>
+      {
+        return e.semester != target;
+      }))
+  }
+                    
   function seasonToInt(season:string)
   {
     switch(season)
@@ -250,7 +268,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
             courses={plannerCourses.filter((course:DItemType) => course.semester === semester.semester_id)}
             key={semester.semester_id}
             callbackFunction={removeFromPlanner}
-            setSelectedCourse={setSelectedCourse}/>
+            setSelectedCourse={setSelectedCourse}
+            removeSemCallback={RemoveSemester}/>
           )}
         <RenderSemester
           semester_id={0}
@@ -258,7 +277,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
           courses={plannerCourses.filter((course:DItemType) => course.semester === 0)}
           key={0} 
           callbackFunction={removeFromPlanner}
-          setSelectedCourse={setSelectedCourse}/>
+          setSelectedCourse={setSelectedCourse}
+          removeSemCallback={RemoveSemester}/>
       </div>
     );
   }
@@ -309,6 +329,7 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
   const removeFromPlanner = () => {
     console.log("Does Nothing");
     // Your removal logic here
+    
   };
 
   return(
@@ -405,6 +426,19 @@ export default function App() {
   const classList = jsonContent.name;
   checkPrereq(classList, "CMSC 447", 3, mylist);
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
+  
+  //Note popup functionality
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+  function openNotes()
+  {
+    notesOpen = true;
+    forceUpdate();
+  }
+  function closeNotes()
+  {
+    notesOpen = false;
+    forceUpdate();
+  }
 
   const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
@@ -539,10 +573,6 @@ export default function App() {
       });
     }
   }
-
-  /*TODO: 
-    Format the UI to show everything and be able to be committed to main
-  */
   
   return (
     <html>
@@ -571,7 +601,6 @@ export default function App() {
             <br/>
             <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
           </div>
-
         </div>
 
         <div style={{marginLeft:300}}>
@@ -582,10 +611,13 @@ export default function App() {
             </DndContext>
             <CourseInfo course={selectedCourse}/>
           
+
+           <div style={{clear:'both'}}>
+          <button  type="button" onClick={openNotes}>Open notes</button>
+          {notesOpen ? <NotesMenu callbackFunction={closeNotes}/> : <></>}
         </div>
       </body>
     </html>
-    
   );
   }
 

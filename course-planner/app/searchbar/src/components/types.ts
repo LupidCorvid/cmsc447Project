@@ -32,3 +32,11 @@ export type MajorProps = {
   name: string;
   prerequisites: string[][][]; //This string will need to be parsed similar to course prereqs
 }
+
+export type PublicNote = {
+  noteID:number;
+  courseID: string;
+  author: string;
+  reviewed: boolean;
+  note: string;
+}
