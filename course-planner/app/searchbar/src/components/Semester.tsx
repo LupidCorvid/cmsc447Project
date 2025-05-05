@@ -31,8 +31,13 @@ export function RenderSemester({semester_id, name, courses, callbackFunction, se
     return(
     //setNodeRef: a marker so that useDroppable knows to apply its functionality to this specific div
     <div ref={setNodeRef} className ={styles.dropZoneStyle}>
-        <div className={styles.semTitleStyle}>{name}
-        {name != "Past Courses" ? <button type='button' onClick={removeThisSem}>Remove semester</button> : <></>}
+        <div className={styles.semTitleStyle}>
+            {name}
+            
+            {name != "Past Courses" ? <button type='button' 
+            style={{paddingTop:0, float:'right', fontWeight: 'bold', fontSize: 15, backgroundColor:'transparent', 
+                    border:'none', cursor: 'pointer', outline: 'inherit', color:'rgb(119, 116, 116)'}} 
+            onClick={removeThisSem}>X</button> : <></>}
         </div>
         
         {courses.map((course) =>

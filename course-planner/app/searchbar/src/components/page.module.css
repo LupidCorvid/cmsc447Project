@@ -4,10 +4,14 @@
 }
 
 body {
-    background-color: rgb(241, 241, 241);
+    background-color: rgb(245, 246, 250);
     padding: 40px;
     font-family: Sans-Serif;
     text-align: center;
+}
+
+html {
+    scrollbar-color: white;
 }
 
 .picture1 {
@@ -21,16 +25,20 @@ body {
 
 .text1{
     color:white;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Helvetica, sans-serif;
     text-align: left;
     font-size: 20;
 }
 
 .text2{
     color:rgb(84, 187, 255);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Helvetica, sans-serif;
     text-align: left;
     font-size: 20;
+}
+
+.textFont{
+    font-family: Helvetica, sans-serif; 
 }
 
 .sidebarStyle{
@@ -39,58 +47,57 @@ body {
     min-height:100dvh;
     left:0px;
     top:0px;
-    padding-left:15px;
     position:absolute;
 }
 
 .draggableStyle {
     padding: 15px;
     color: rgb(34, 31, 25);
-    background-color: rgb(129, 128, 209);
+    background-color: rgb(193, 191, 191);
     cursor: grab;
     width: 150px;
+    min-height: 25px;
     font-family: Sans-Serif;
     text-align: left;
     margin: 15px 15px 15px 15px;
+    border-radius: 2px;
 }
 
 .plannerStyle {
-    border-style: solid;
-    background-color: rgb(241, 241, 241);
-    height: 600px;
+    height: 615px;
     width: 550px;
+    border-right: 2px solid rgb(99, 100, 102);
+    border-top: 2px solid rgb(99, 100, 102);
 }
 
 .plannerScrollStyle{
     overflow-Y: scroll;
     overflow-X: visible;
-    height: 560px;
+    height: 580px;
     width: 550px;
 }
 
 .courseSearchStyle{
-    border-style: solid;
-    background-color: rgb(241, 241, 241);
     height: 325px;
-    width: 480px;
+    width: 580px;
     top:0px;
     right:0px;
     float: 'right';
     position: 'absolute';
+    background-color: white;
+    box-shadow: 1px 1px 5px 5px rgba(65, 63, 63, 0.08);
 }
 
 .courseSearchScrollStyle{
     overflow-Y: scroll;
     overflow-X: visible;
     height: 250px;
-    width: 480px;
+    width: 580px;
 }
 
 .courseInfoStyle{
-    border-style: solid;
-    background-color: rgb(241, 241, 241);
     height: 200px;
-    width: 450px;
+    width: 550px;
     float: 'right';
     position: 'absolute';
     padding: 15px 15px 15px 15px;
@@ -100,7 +107,7 @@ body {
     overflow-Y: scroll;
     overflow-X: visible;
     height: 215px;
-    width: 455px;
+    width: 555px;
     padding-right:10px;
 }
 
@@ -113,10 +120,12 @@ body {
 
 .headerStyle {
     color: var(--primaryTextColor);
-    font-family: Sans-Serif;
+    font-family: "Helvetica", sans-serif;
+    font-weight: 450;
     font-size: 35px;
     line-height: .1;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
 }
 
 .infoHeaderStyle {
@@ -157,9 +166,10 @@ body {
 }
 
 .dropZoneStyle{
-    background-color: rgb(216, 206, 206);
+    background-color: white;
+    box-shadow: 1px 1px 5px 5px rgba(65, 63, 63, 0.05);
     min-height: 100px;
-    width: 400px;
+    width: 500px;
     margin: 10px;
     padding-bottom: 10px;
 }
@@ -179,20 +189,37 @@ body {
     width:25px;
     height:25px;
     background-color: rgb(201, 88, 88);
+    color: white;
 }
 
 .courseInfoBtnStyle{
     width:25px;
     height:25px;
-    background-color: rgb(195, 209, 202);
+    background-color: white;
+    color: rgb(167, 164, 164);
+    font-family: 'Sofia';
+    border-radius: 50%;
 }
 
 .semTitleStyle{
-    color:rgb(132, 124, 124);
+    color:rgb(119, 116, 116);
     font-size:20px;
     padding: 10px;
+    padding-right: 4px;
     font-weight: bold;
     text-align: left;
+    font-family: Helvetica, sans-serif; 
+}
+
+.removeSemBtnStyle{
+    float:'right';
+    font-weight: 'bold';
+    font-size: 15;
+    background-color:'transparent';
+    border:'none';
+    cursor: 'pointer';
+    outline: 'inherit';
+    color:rgb(132, 124, 124);
 }
   
 .semSeasonStyle{

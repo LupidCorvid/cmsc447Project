@@ -22,16 +22,8 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
     /*const transformStyle = {
         transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined
     }*/
+    
 
-    //TODO: conflicting with the drag event
-    //TODO: not saving changes
-    /*function removeFromPlanner(){
-        console.log("removeFromPlanner triggered");
-        course.semester = -2; //Doesn't save to page.tsx
-        //return RenderDItem();
-        //return <RenderDItem course = {course}/>; //Makes the object float on the sreen
-        //return; //Does nothing
-    }*/
     function test(){
         callbackFunction(course.id);
     }
@@ -42,18 +34,24 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
 
     }
 
-
     let nbsp = "\u00A0"
 
     if(course.semester >= -1){
         return(
             <div ref={setNodeRef} {...listeners} {...attributes} className={styles.draggableStyle}>
-                {course.id} {nbsp}
-                <button id="info btn" onClick={showCourseInfo}
-                onPointerDown={(e) => e.stopPropagation()}
-                className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
-                <button id="remove btn" onClick={test}
-                onPointerDown={(e) => e.stopPropagation()} className={styles.remCourseBtnStyle}>X</button>
+                {course.id} &nbsp;
+                <div style={{float:'right', top:0}}>
+                    <button id="info btn" onClick={showCourseInfo}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    className={styles.courseInfoBtnStyle}
+                    style={{marginRight:0, border:'none', cursor: 'pointer', 
+                            outline: 'inherit', color:'rgb(119, 116, 116)'}} ><i>i</i></button> {nbsp}
+
+                    <button id="remove btn" onClick={test}
+                    onPointerDown={(e) => e.stopPropagation()} className={styles.remCourseBtnStyle}
+                    style={{border:'none', cursor: 'pointer', 
+                        outline: 'inherit', color:'rgb(255, 255, 255)', backgroundColor: 'rgb(201, 88, 88)'}}>X</button>
+                </div>
             </div>
         );
     }

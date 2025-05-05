@@ -13,7 +13,7 @@ import jsonContent from "./searchbar/src/components/test.json";
 import {NotesMenu} from "./NotesPage.page"
 import { RenderDItem } from './searchbar/src/components/DItem';
 
-const defaultItems: DItemType[] = jsonContent.name;
+const defaultItems: DItemType[] = [];
 
 const defaultSemesters: SemesterProps[] = [
 ]
@@ -23,7 +23,6 @@ const pastCoursesSem: SemesterProps[] = [
 ]
 
 const majors: MajorProps[] = jsonContent.Majors;
-
 
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void },
                   plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
@@ -35,86 +34,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
-  let notesOpen = false;
   
-  /*//Everything that used to be in handleDragEnd(event:DragEndEvent)
-  { 
-    
-    console.log("Fired in planner");
-    const [, forceUpdate] = React.useReducer(x => x + 1, 0)
-    //const {active, over} = event; //active: The task we're actually dropping
-                                    //over: if you are over something that is droppable
-
-    if (!over) {
-      return;
-    }
-    //const courseId = active.id as string; //Note: Must typecast this
-    //const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
-    
-    //Updater function for plannerCourses
-    //Finds the course we just dragged in the list of courses and updates its semester property
-    updatePlannerCourses(() =>
-      plannerCourses.map((course: DItemType) =>
-        course.id === courseId
-          ? { ...course, semester: newSemester, credits: 3 }
-          : course
-      )
-
-    );
-
-    setLastDraggedCourseId(courseId);
-    setLastDraggedSemester(newSemester);
-    
-    // Run prereq check using the updated course list
-    //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
-    //setUnmetPrereqs(newString)
-
-    //check all other classes for prerequisites
-    let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
-    setUnmetPrereqs(newString);
-    const tempList = unmetPrereqs.slice(1,2);
-    setUnmetPrereqs(tempList);
-
-
-    //Check for missing major requirements
-    let majorList:String[] = [];
-    if(userMajor != "Undecided")
-      majorList = checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, courseId, newSemester == 0);
-    let majorReqs = "";
-    if(majorList.length > 0)
-      majorReqs += "The following graduation requirements for your major are not met:\n";
-
-    for(let i = 0; i < majorList.length; i++)
-    {
-      if(majorList[i].substring(0,3) == "MLT")
-      {
-        majorList[i] = majorList[i][8] + " " + majorList[i][7] + "00 " + " level " + majorList[i].substring(3, 7) + " classes";
-      }
-    };
-
-    majorReqs += majorList.join(", ");
-
-    if(majorList.length > 0)
-    {
-      setGradReqErrorMsg(majorReqs);
-    }
-    else
-    {
-      setGradReqErrorMsg("");
-    }
-
-    // Update error message based on unmet prereqs 
-    setPrereqErrorMsg(() => {
-      if (newString.length > 0) {
-        return "The following courses do not meet prerequisites: " + newString.join(", ");
-      }
-      else{
-        return "Empty";
-      }
-    });
-  }
-  */
-
   function removeFromPlanner(courseId:string){
     //console.log("removeFromPlanner triggered: ", courseId);
     //course.semester = -2; //Doesn't save to page.tsx
@@ -247,7 +167,6 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     })
   }
 
-
   function RemoveSemester(target:number)
   {
       updateSemesters(semesters.filter((e)=>
@@ -352,23 +271,26 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     <div>
     <div key="Planner" style={{float: 'left'}}>
 
-      <h1 className={styles.headerStyle} style={{float:'left'}}>
+      <h1 className={styles.headerStyle} style={{float:'left', paddingLeft:20}}>
         My Planner
       </h1>
 
-      <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', borderStyle: 'solid'}}>
-        <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Add new semester</button>
-        <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
-        {/* TODO: Get dropdown to aligh nicely*/}
-        <option value={"Fall"}>Fall</option>
-        <option value={"Winter"}>Winter</option>
-        <option value={"Spring"}>Spring</option>
-        <option value={"Summer"}>Summer</option>
-        </select>
-        <input type="number"
-        placeholder = "Year"
-        value={yearInput}
-        onChange={ChangeYear} className={styles.semYearStyle}></input>
+
+      <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', paddingLeft:10}}>
+        <div  style={{paddingLeft:10}}>
+          <select id="Semester Season Dropdown" className={styles.semSeasonStyle} onChange={ChangeSeason} value={semesterSeason}>
+          {/* TODO: Get dropdown to aligh nicely*/}
+          <option value={"Fall"}>Fall</option>
+          <option value={"Winter"}>Winter</option>
+          <option value={"Spring"}>Spring</option>
+          <option value={"Summer"}>Summer</option>
+          </select>
+          <input type="number"
+          placeholder = "Year"
+          value={yearInput}
+          onChange={ChangeYear} className={styles.semYearStyle}></input>
+          <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Create semester</button>
+        </div>
         {PopulatePlanner()}
         
       </div>
@@ -387,12 +309,12 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
   };
 
   return(
-    <div id="Course Search" style={{float:'left', marginLeft:50}}>
+    <div id="Course Search" style={{float:'left', marginLeft:15, paddingBottom: 15}}>
       <h1 className={styles.headerStyle} style={{float:'left'}}>
         Course Search
       </h1>
 
-      <div id="Course Search Dynamic List" className={styles.courseSearchStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+      <div id="Course Search Dynamic List" className={styles.courseSearchStyle} style={{clear:'both', float: 'right'}}>
         <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner}/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
       </div>
@@ -452,11 +374,12 @@ function CourseInfo({ course }: { course: DItemType | null }){
     return finalString;
   }
   return (
-    <div id="Course Info" style={{float:'left', marginLeft:50}}>
-      <h1 className={styles.infoHeaderStyle} style={{float: 'left'}}>
-        Course Info
+    <div id="Course Information" style={{float:'left', marginLeft:5}}>
+      <h1 className={styles.infoHeaderStyle} style={{float: 'left', fontFamily: "Helvetica", fontWeight: 450,  paddingLeft:15}}>
+        Course Information
       </h1>
-      <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+      <hr style={{clear:'both'}}/>
+      <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right'}}>
         {course ? (
           <div className={styles.courseInfoScrollStyle}>
             <p><strong>ID:</strong> {course.id}</p>
@@ -465,13 +388,14 @@ function CourseInfo({ course }: { course: DItemType | null }){
             <p><strong>Course Description:</strong> {course.GeneralDescription}</p>
           </div>
           ) : (
-          <p style={{float:'left', marginLeft:125, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info.</p>
+          <p className={styles.textFont} style={{float:'left', marginLeft:190, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info</p>
           )}
         </div>
 
     </div>
   );
 }
+
 let notesOpen = false;
 export default function App() {
 
@@ -653,33 +577,38 @@ export default function App() {
   return (
     <html>
       <body>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica"/>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia"/>
         <div id="sidebar" className={styles.sidebarStyle}>
           <div className={styles.picture1}/> <br/> <hr/>
 
-          <p id="Update Major Dropdown"className={styles.text1}>
-            Major: &nbsp;
-            <select  value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
-            <option value={"Undecided"}>Undecided</option>
-              {
-                majors.map((major) =>
-                <option value={major.name}>{major.name}</option>)
-              }
-            </select>
-          </p>
-          
-          <div className={styles.text1} style={{paddingTop:5, paddingBottom:20}}>Recommended Credits per Semester: {GetRecCredits()}</div>
-          <div style={{textAlign: 'left'}}>
-            <a className={styles.text2} href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
-          </div>
+          <div style={{paddingLeft:15}}>
+            <p id="Update Major Dropdown" className={styles.text1}>
+              Major: &nbsp;
+              <select  value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
+              <option value={"Undecided"}>Undecided</option>
+                {
+                  majors.map((major) =>
+                  <option value={major.name}>{major.name}</option>)
+                }
+              </select>
+            </p>
+            
+            <div className={styles.text1} style={{paddingTop:5, paddingBottom:20}}>Recommended Credits per Semester: {GetRecCredits()}</div>
+            <div style={{textAlign: 'left'}}>
+              <a className={styles.text2} target="_blank" href="https://apps.my.umbc.edu/pathways/">See four year pathways</a>
+            </div>
 
-          <div id="Prereq Notifications" style={{paddingTop:20}}>
-            <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
-            <br/>
-            <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
+            <div id="Prereq Notifications" style={{paddingTop:20}}>
+              <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
+              <br/>
+              <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
+            </div>
           </div>
         </div>
 
-        <div style={{marginLeft:300}}>
+
+        <div style={{marginLeft:250}}>
             <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
               
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
@@ -695,12 +624,13 @@ export default function App() {
               </DragOverlay>
 
             </DndContext>
+            
             <CourseInfo course={selectedCourse}/>
           
-           <div style={{clear:'both'}}>
+           {/*<div style={{clear:'both'}}>
             <button  type="button" onClick={openNotes}>Open notes</button>
             {notesOpen ? <NotesMenu callbackFunction={closeNotes}/> : <></>}
-          </div>
+          </div>*/}
         </div>
       </body>
     </html>

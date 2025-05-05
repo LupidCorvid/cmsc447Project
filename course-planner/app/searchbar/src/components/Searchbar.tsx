@@ -15,7 +15,6 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
 {
     //Need to find data format for the table
     const [searchInput, setSearchInput] = useState<string>("");
-    const input = ["tester", "tester2"];
     
     //React.ChangeEvent<any> is the type for variable e
     const filterChanged = (e: React.ChangeEvent<any>) =>
@@ -37,10 +36,11 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
 
     return (
         <div>
-            <input type="text" placeholder = "Class name..." onChange={filterChanged} value={searchInput} className={styles.searchbarStyle}></input>
-            <div id="List of courses by filter" style = {{paddingTop: 60}}className={styles.courseSearchScrollStyle}>
+            <input type="text" placeholder = "Enter a course name or number" onChange={filterChanged} value={searchInput} className={styles.searchbarStyle}></input>
+            <div id="List of courses by filter" className={styles.courseSearchScrollStyle}>
+
                 {
-                (searchInput.length == 0) ? <div style={{clear:'both', color:'gray', marginTop: 50}}>Enter a filter to get started</div> :
+                (searchInput.length == 0) ? <div style={{clear:'both', color:'gray', marginTop: 50}}></div> :
                 filteredInputs.map((course) =>
                 {return <RenderDItem course={course} key={course.id} callbackFunction={removeFromPlanner}
                 setSelectedCourse={setSelectedCourse}/>; }) 
