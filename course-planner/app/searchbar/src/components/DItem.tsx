@@ -45,7 +45,7 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
 
     let nbsp = "\u00A0"
 
-    if(course.semester > -1){
+    if(course.semester >= -1){
         return(
             <div ref={setNodeRef} {...listeners} {...attributes} className={styles.draggableStyle}>
                 {course.id} {nbsp}

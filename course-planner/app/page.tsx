@@ -119,7 +119,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     updatePlannerCourses(() =>
       plannerCourses.map((course: DItemType) =>
         course.id === courseId
-          ? { ...course, semester: -2, credits: 3 }
+          ? { ...course, semester: -1, credits: 3 }
           : course
       )
     )
@@ -193,7 +193,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       let rerenderFlag = false;
 
       //If course has semester -2, remove it from temparr
-      if (plannerCourses[i].semester === -2){
+      if (plannerCourses[i].semester === -1){
         rerenderFlag = true;
         console.log("Get rid of it");
 
@@ -441,8 +441,10 @@ export default function App() {
     notesOpen = false;
     forceUpdate();
   }
+  //stores all classes and their current states
+  const[masterList, setMasterList] = useState<DItemType[]>(jsonContent.name);
 
-  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>([]); //List of all courses in the planner
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null); //needed for course info
 
@@ -501,7 +503,7 @@ export default function App() {
         //This checks if the item already exists in the planner (semester to semester)
         plannerCourses.map((course: DItemType) =>
           course.id === courseId
-            ? { ...course, semester: newSemester, credits: 3 }
+            ? { ...course, semester: newSemester}
             : course
         )
       );
@@ -522,7 +524,13 @@ export default function App() {
         [...plannerCourses, newCourse]
       )
     }
-  
+    setMasterList(() =>
+      masterList.map((course: DItemType) =>
+        course.id === courseId
+          ? { ...course, semester: newSemester,}
+          : course
+      )
+    )
     //Every other check to do when a course is dragged
     {
       setLastDraggedCourseId(courseId);
@@ -533,7 +541,7 @@ export default function App() {
       //setUnmetPrereqs(newString)
 
       //check all other classes for prerequisites
-      let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+      let newString = checkAllPrereqsUnmet(masterList, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
       setUnmetPrereqs(newString);
       const tempList = unmetPrereqs.slice(1,2);
       setUnmetPrereqs(tempList);
