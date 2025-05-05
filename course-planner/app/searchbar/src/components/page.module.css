@@ -62,38 +62,40 @@ html {
 }
 
 .plannerStyle {
-    height: 600px;
+    height: 615px;
     width: 550px;
+    border-right: 2px solid rgb(99, 100, 102);
+    border-top: 2px solid rgb(99, 100, 102);
 }
 
 .plannerScrollStyle{
     overflow-Y: scroll;
     overflow-X: visible;
-    height: 560px;
+    height: 580px;
     width: 550px;
 }
 
 .courseSearchStyle{
-    border-style: solid;
     height: 325px;
-    width: 480px;
+    width: 580px;
     top:0px;
     right:0px;
     float: 'right';
     position: 'absolute';
+    background-color: white;
+    box-shadow: 1px 1px 5px 5px rgba(65, 63, 63, 0.08);
 }
 
 .courseSearchScrollStyle{
     overflow-Y: scroll;
     overflow-X: visible;
     height: 250px;
-    width: 480px;
+    width: 580px;
 }
 
 .courseInfoStyle{
-    border-style: solid;
     height: 200px;
-    width: 450px;
+    width: 550px;
     float: 'right';
     position: 'absolute';
     padding: 15px 15px 15px 15px;
@@ -103,7 +105,7 @@ html {
     overflow-Y: scroll;
     overflow-X: visible;
     height: 215px;
-    width: 455px;
+    width: 555px;
     padding-right:10px;
 }
 
@@ -121,7 +123,7 @@ html {
     font-size: 35px;
     line-height: .1;
     padding-bottom: 5px;
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .infoHeaderStyle {

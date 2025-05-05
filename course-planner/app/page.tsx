@@ -218,11 +218,10 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     <div>
     <div key="Planner" style={{float: 'left'}}>
 
-      <h1 className={styles.headerStyle} style={{float:'left'}}>
+      <h1 className={styles.headerStyle} style={{float:'left', paddingLeft:20}}>
         My Planner
       </h1>
 
-      <hr style={{clear:'both'}}/>
 
       <div id="Planner Dynamic List" className={styles.plannerStyle} style={{clear:'both', float: 'left', paddingLeft:10}}>
         <div  style={{paddingLeft:10}}>
@@ -256,12 +255,12 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
   };
 
   return(
-    <div id="Course Search" style={{float:'left', marginLeft:50}}>
+    <div id="Course Search" style={{float:'left', marginLeft:15, paddingBottom: 15}}>
       <h1 className={styles.headerStyle} style={{float:'left'}}>
         Course Search
       </h1>
 
-      <div id="Course Search Dynamic List" className={styles.courseSearchStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+      <div id="Course Search Dynamic List" className={styles.courseSearchStyle} style={{clear:'both', float: 'right'}}>
         <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner}/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
       </div>
@@ -321,11 +320,12 @@ function CourseInfo({ course }: { course: DItemType | null }){
     return finalString;
   }
   return (
-    <div id="Course Info" style={{float:'left', marginLeft:50}}>
-      <h1 className={styles.infoHeaderStyle} style={{float: 'left', fontFamily: "Helvetica", fontWeight: 450}}>
-        Course Info
+    <div id="Course Information" style={{float:'left', marginLeft:5}}>
+      <h1 className={styles.infoHeaderStyle} style={{float: 'left', fontFamily: "Helvetica", fontWeight: 450,  paddingLeft:15}}>
+        Course Information
       </h1>
-      <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
+      <hr style={{clear:'both'}}/>
+      <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right'}}>
         {course ? (
           <div className={styles.courseInfoScrollStyle}>
             <p><strong>ID:</strong> {course.id}</p>
@@ -536,6 +536,7 @@ export default function App() {
                         semesters, {updateSemesters})}
               <CourseSearch setSelectedCourse={setSelectedCourse}/>
             </DndContext>
+            
             <CourseInfo course={selectedCourse}/>
           
            {/*<div style={{clear:'both'}}>
