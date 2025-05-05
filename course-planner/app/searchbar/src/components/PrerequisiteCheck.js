@@ -215,7 +215,7 @@ export function checkUnmet(classID, unmetList){
 }
 
 export function checkAllPrereqsUnmet(classList, classID, semesterPlaced, listPrereqsNotMet, setList){
-    console.log(classList);
+
     let firstLayer = true;
     let secondLayer = false;
     let thirdLayer = true;
@@ -255,11 +255,13 @@ for(let h = 0; h < classList.length; h++){
     }
     //no prerequisites
     if(theClass.prerequisites.length === 1 && theClass.prerequisites[0].length === 1 && theClass.prerequisites[0][0].length === 0){
-        console.log("empty");
+
+        layers = false;
+    }else if(currSemester == 0){
         layers = false;
     }
     if(layers){
-        console.log("262", theClass);
+
         //and
         for(let i = 0; i < theClass.prerequisites.length; i++){
             //or
@@ -274,7 +276,6 @@ for(let h = 0; h < classList.length; h++){
                             thirdLayer = false;
                         }
                     }else{
-                        console.log("278")
                         //if string "number of required level classes, do something"
                         //check list for ID and get index
                         //check if index semester is <= semesterPlaced and not 0
@@ -285,13 +286,10 @@ for(let h = 0; h < classList.length; h++){
                             }
                         }else{
                             prereqClass = classList[findIndexByID(theClass.prerequisites[i][j][k], classList)]
-                            console.log("288:", classList[findIndexByID(theClass.prerequisites[i][j][k], classList)])
                             //if prereq semester > than needed or it is not planned
                             if(prereqClass.semester > currSemester || prereqClass.semester < 0){
                                 thirdLayer = false;
-                                console.log("291:", prereqClass.id, prereqClass.semester)
                             }else{
-                                console.log("292:", prereqClass.id, prereqClass.semester)
                             }
                         }
                     }
@@ -311,23 +309,18 @@ for(let h = 0; h < classList.length; h++){
             //append classID to listPrereqsNotMet
             //for state support, use: setList(list => [...list, classID])
             if((!checkUnmet(currID, currList) && currSemester >= 0)){
-                console.log("added");
                 //return [...listPrereqsNotMet, classID];
                 currList = [...currList, currID];
             }else if(currSemester < 0){
-                console.log("taken out 94");
                 //return listPrereqsNotMet.filter(id => id !== classID);
                 currList = currList.filter(id => id !== currID);
             }
-            console.log("not met");
             //return listPrereqsNotMet;
         }else{
             if(checkUnmet(currID, currList)){
-                console.log("taken out 101");
                 //return listPrereqsNotMet.filter(id => id !== classID);
                 currList = currList.filter(id => id !== currID);
             }
-            console.log("met");
         }
         //console.log("2", currList);
         //return listPrereqsNotMet;
