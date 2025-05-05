@@ -53,12 +53,14 @@ html {
 .draggableStyle {
     padding: 15px;
     color: rgb(34, 31, 25);
-    background-color: rgb(129, 128, 209);
+    background-color: rgb(193, 191, 191);
     cursor: grab;
     width: 150px;
+    min-height: 25px;
     font-family: Sans-Serif;
     text-align: left;
     margin: 15px 15px 15px 15px;
+    border-radius: 2px;
 }
 
 .plannerStyle {
@@ -167,7 +169,7 @@ html {
     background-color: white;
     box-shadow: 1px 1px 5px 5px rgba(65, 63, 63, 0.05);
     min-height: 100px;
-    width: 400px;
+    width: 500px;
     margin: 10px;
     padding-bottom: 10px;
 }
@@ -187,12 +189,16 @@ html {
     width:25px;
     height:25px;
     background-color: rgb(201, 88, 88);
+    color: white;
 }
 
 .courseInfoBtnStyle{
     width:25px;
     height:25px;
-    background-color: rgb(195, 209, 202);
+    background-color: white;
+    color: rgb(167, 164, 164);
+    font-family: 'Sofia';
+    border-radius: 50%;
 }
 
 .semTitleStyle{

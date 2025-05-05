@@ -334,7 +334,7 @@ function CourseInfo({ course }: { course: DItemType | null }){
             <p><strong>Course Description:</strong> {course.GeneralDescription}</p>
           </div>
           ) : (
-          <p className={styles.textFont} style={{float:'left', marginLeft:125, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info</p>
+          <p className={styles.textFont} style={{float:'left', marginLeft:190, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info</p>
           )}
         </div>
 
@@ -502,6 +502,7 @@ export default function App() {
     <html>
       <body>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica"/>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia"/>
         <div id="sidebar" className={styles.sidebarStyle}>
           <div className={styles.picture1}/> <br/> <hr/>
 

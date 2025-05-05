@@ -38,12 +38,19 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
     if(course.semester > -1){
         return(
             <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
-                {course.id} {nbsp}
-                <button id="info btn" onClick={showCourseInfo}
-                onPointerDown={(e) => e.stopPropagation()}
-                className={styles.courseInfoBtnStyle}><i>i</i></button> {nbsp}
-                <button id="remove btn" onClick={test}
-                onPointerDown={(e) => e.stopPropagation()} className={styles.remCourseBtnStyle}>X</button>
+                {course.id} &nbsp;
+                <div style={{float:'right', top:0}}>
+                    <button id="info btn" onClick={showCourseInfo}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    className={styles.courseInfoBtnStyle}
+                    style={{marginRight:0, border:'none', cursor: 'pointer', 
+                            outline: 'inherit', color:'rgb(119, 116, 116)'}} ><i>i</i></button> {nbsp}
+
+                    <button id="remove btn" onClick={test}
+                    onPointerDown={(e) => e.stopPropagation()} className={styles.remCourseBtnStyle}
+                    style={{border:'none', cursor: 'pointer', 
+                        outline: 'inherit', color:'rgb(255, 255, 255)', backgroundColor: 'rgb(201, 88, 88)'}}>X</button>
+                </div>
             </div>
         );
     }
