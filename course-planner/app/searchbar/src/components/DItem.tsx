@@ -22,16 +22,7 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
     const transformStyle = {
         transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined
     }
-
-    //TODO: conflicting with the drag event
-    //TODO: not saving changes
-    /*function removeFromPlanner(){
-        console.log("removeFromPlanner triggered");
-        course.semester = -2; //Doesn't save to page.tsx
-        //return RenderDItem();
-        //return <RenderDItem course = {course}/>; //Makes the object float on the sreen
-        //return; //Does nothing
-    }*/
+    
     function test(){
         callbackFunction(course.id);
     }
@@ -41,7 +32,6 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
         console.log("showCourseInfo triggered");
 
     }
-
 
     let nbsp = "\u00A0"
 

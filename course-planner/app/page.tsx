@@ -12,7 +12,7 @@ import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUn
 import jsonContent from "./searchbar/src/components/test.json";
 import {NotesMenu} from "./NotesPage.page"
 
-const defaultItems: DItemType[] = jsonContent.name;
+const defaultItems: DItemType[] = [];
 
 const defaultSemesters: SemesterProps[] = [
 ]
@@ -23,93 +23,13 @@ const pastCoursesSem: SemesterProps[] = [
 
 const majors: MajorProps[] = jsonContent.Majors;
 
-
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void },
                   plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
                   semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function}){  //,event:(DragEndEvent | null)
   
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
-  let notesOpen = false;
   
-  /*//Everything that used to be in handleDragEnd(event:DragEndEvent)
-  { 
-    
-    console.log("Fired in planner");
-    const [, forceUpdate] = React.useReducer(x => x + 1, 0)
-    //const {active, over} = event; //active: The task we're actually dropping
-                                    //over: if you are over something that is droppable
-
-    if (!over) {
-      return;
-    }
-    //const courseId = active.id as string; //Note: Must typecast this
-    //const newSemester = over.id as DItemType['semester'] //Note: The column id, so the semester id
-    
-    //Updater function for plannerCourses
-    //Finds the course we just dragged in the list of courses and updates its semester property
-    updatePlannerCourses(() =>
-      plannerCourses.map((course: DItemType) =>
-        course.id === courseId
-          ? { ...course, semester: newSemester, credits: 3 }
-          : course
-      )
-
-    );
-
-    setLastDraggedCourseId(courseId);
-    setLastDraggedSemester(newSemester);
-    
-    // Run prereq check using the updated course list
-    //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
-    //setUnmetPrereqs(newString)
-
-    //check all other classes for prerequisites
-    let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
-    setUnmetPrereqs(newString);
-    const tempList = unmetPrereqs.slice(1,2);
-    setUnmetPrereqs(tempList);
-
-
-    //Check for missing major requirements
-    let majorList:String[] = [];
-    if(userMajor != "Undecided")
-      majorList = checkMajor(plannerCourses, jsonContent.Majors.find((m)=>(m.name == userMajor))?.prerequisites, 5000, majorList, courseId, newSemester == 0);
-    let majorReqs = "";
-    if(majorList.length > 0)
-      majorReqs += "The following graduation requirements for your major are not met:\n";
-
-    for(let i = 0; i < majorList.length; i++)
-    {
-      if(majorList[i].substring(0,3) == "MLT")
-      {
-        majorList[i] = majorList[i][8] + " " + majorList[i][7] + "00 " + " level " + majorList[i].substring(3, 7) + " classes";
-      }
-    };
-
-    majorReqs += majorList.join(", ");
-
-    if(majorList.length > 0)
-    {
-      setGradReqErrorMsg(majorReqs);
-    }
-    else
-    {
-      setGradReqErrorMsg("");
-    }
-
-    // Update error message based on unmet prereqs 
-    setPrereqErrorMsg(() => {
-      if (newString.length > 0) {
-        return "The following courses do not meet prerequisites: " + newString.join(", ");
-      }
-      else{
-        return "Empty";
-      }
-    });
-  }
-  */
-
   function removeFromPlanner(courseId:string){
     //console.log("removeFromPlanner triggered: ", courseId);
     //course.semester = -2; //Doesn't save to page.tsx
@@ -399,7 +319,7 @@ function CourseInfo({ course }: { course: DItemType | null }){
   }
   return (
     <div id="Course Info" style={{float:'left', marginLeft:50}}>
-      <h1 className={styles.infoHeaderStyle} style={{float: 'left'}}>
+      <h1 className={styles.infoHeaderStyle} style={{float: 'left', fontFamily: "Helvetica", fontWeight: 450}}>
         Course Info
       </h1>
       <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right', borderStyle: 'solid'}}>
@@ -411,13 +331,14 @@ function CourseInfo({ course }: { course: DItemType | null }){
             <p><strong>Course Description:</strong> {course.GeneralDescription}</p>
           </div>
           ) : (
-          <p style={{float:'left', marginLeft:125, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info.</p>
+          <p className={styles.textFont} style={{float:'left', marginLeft:125, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info</p>
           )}
         </div>
 
     </div>
   );
 }
+
 let notesOpen = false;
 export default function App() {
 
@@ -577,10 +498,11 @@ export default function App() {
   return (
     <html>
       <body>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica"/>
         <div id="sidebar" className={styles.sidebarStyle}>
           <div className={styles.picture1}/> <br/> <hr/>
 
-          <p id="Update Major Dropdown"className={styles.text1}>
+          <p id="Update Major Dropdown" className={styles.text1}>
             Major: &nbsp;
             <select  value={userMajor} onChange={event => UpdateMajor(event)} className={styles.majorDecideStyle}>
             <option value={"Undecided"}>Undecided</option>
