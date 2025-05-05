@@ -17,12 +17,13 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
     //Transform: holds the x and y coordinates of the thing that's being dragged. 
         //Needs to be updated in the div's style so that you can visibly see it be dragged
     //You don't have to worry about what attributes and listeners are, just spread them in the div
-    const {attributes, listeners, setNodeRef, transform} = useDraggable({id: course.id});
+    const {attributes, listeners, setNodeRef} = useDraggable({id: course.id});
 
-    const transformStyle = {
+    /*const transformStyle = {
         transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined
-    }
+    }*/
     
+
     function test(){
         callbackFunction(course.id);
     }
@@ -35,7 +36,7 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
 
     let nbsp = "\u00A0"
 
-    if(course.semester > -1){
+    if(course.semester >= -1){
         return(
             <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes} className={styles.draggableStyle}>
                 {course.id} &nbsp;

@@ -17,7 +17,7 @@ export function checkMultiple(classList, prereqString, prereqPlacement, classID)
             //if prereqplacement >= semester and semester != 0
                 //numberValid++
         if(classList[i].id.slice(0, 4) === department && Number(classList[i].id.slice(5, 6)) >= Number(level) && classList[i].id != classID){
-            if(prereqPlacement >= classList[i].semester && classList[i].semester != 0){
+            if(prereqPlacement >= classList[i].semester && classList[i].semester >= 0){
                 numberValid++;
                 if(numberValid >= Number(number)){
                     break;
@@ -150,7 +150,7 @@ export function checkMajor(classList, prereqList, semesterPlaced, listPrereqsNot
                         }
                     }else{
                         prereqClass = classList[findIndexByID(prereqList[i][j][k], classList)]
-                        if(prereqClass.semester > semesterPlaced || prereqClass.semester == 0){
+                        if(prereqClass.semester > semesterPlaced || prereqClass.semester < 0){
                             thirdLayer = false;
                             //Add the reason for failure to a temp list, which is only used if an OR statement doesn't make up for this
                             //being missing
@@ -215,6 +215,7 @@ export function checkUnmet(classID, unmetList){
 }
 
 export function checkAllPrereqsUnmet(classList, classID, semesterPlaced, listPrereqsNotMet, setList){
+
     let firstLayer = true;
     let secondLayer = false;
     let thirdLayer = true;
@@ -244,18 +245,23 @@ for(let h = 0; h < classList.length; h++){
     theClass = classList[h];
     currID = theClass.id;
     currSemester = theClass.semester;
-    if(currID != classID && currSemester != 0){
+    //if class is in planner but not recently dragged check prereqs
+    if(currID != classID && currSemester >= 0){
         layers = true;
+    //if class is in planner semester hasn't been updated yet check prereqs
     }else if(currID === classID){
         layers = true;
-        currSemester = semesterPlaced;
+        currSemester = semesterPlaced
     }
+    //no prerequisites
     if(theClass.prerequisites.length === 1 && theClass.prerequisites[0].length === 1 && theClass.prerequisites[0][0].length === 0){
-        //console.log("empty");
+
+        layers = false;
+    }else if(currSemester == 0){
         layers = false;
     }
     if(layers){
-        
+
         //and
         for(let i = 0; i < theClass.prerequisites.length; i++){
             //or
@@ -265,8 +271,8 @@ for(let h = 0; h < classList.length; h++){
                 thirdLayer = true;
                 for(let k = 0; k < theClass.prerequisites[i][j].length; k++){
                     if(theClass.prerequisites[i][j][k] === classID){
-                        //do something different
-                        if(semesterPlaced > currSemester || semesterPlaced == 0){
+                        //checks if the prerequisite is the updated class
+                        if(semesterPlaced > currSemester || semesterPlaced < 0){
                             thirdLayer = false;
                         }
                     }else{
@@ -280,8 +286,10 @@ for(let h = 0; h < classList.length; h++){
                             }
                         }else{
                             prereqClass = classList[findIndexByID(theClass.prerequisites[i][j][k], classList)]
-                            if(prereqClass.semester > currSemester || prereqClass.semester == 0){
+                            //if prereq semester > than needed or it is not planned
+                            if(prereqClass.semester > currSemester || prereqClass.semester < 0){
                                 thirdLayer = false;
+                            }else{
                             }
                         }
                     }
@@ -300,24 +308,19 @@ for(let h = 0; h < classList.length; h++){
         if(firstLayer == false){
             //append classID to listPrereqsNotMet
             //for state support, use: setList(list => [...list, classID])
-            if((!checkUnmet(currID, currList) && currSemester != 0)){
-                //console.log("added");
+            if((!checkUnmet(currID, currList) && currSemester >= 0)){
                 //return [...listPrereqsNotMet, classID];
                 currList = [...currList, currID];
-            }else if(currSemester == 0){
-                //console.log("taken out 94");
+            }else if(currSemester < 0){
                 //return listPrereqsNotMet.filter(id => id !== classID);
                 currList = currList.filter(id => id !== currID);
             }
-            //console.log("not met");
             //return listPrereqsNotMet;
         }else{
             if(checkUnmet(currID, currList)){
-                //console.log("taken out 101");
                 //return listPrereqsNotMet.filter(id => id !== classID);
                 currList = currList.filter(id => id !== currID);
             }
-            //console.log("met");
         }
         //console.log("2", currList);
         //return listPrereqsNotMet;

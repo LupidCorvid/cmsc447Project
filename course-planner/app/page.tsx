@@ -1,6 +1,6 @@
 'use client';
-import React, { useState,useEffect, InputHTMLAttributes } from 'react';
-import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners } from '@dnd-kit/core';
+import React, { useState,useEffect, InputHTMLAttributes, act } from 'react';
+import { DndContext, DragEndEvent, useDraggable, useDroppable, closestCorners, DragOverlay, DragStartEvent } from '@dnd-kit/core';
 
 import Searchbar from "./searchbar/src/components/Searchbar"
 import styles from "./searchbar/src/components/page.module.css";
@@ -11,6 +11,7 @@ import { renderToHTML } from 'next/dist/server/render';
 import {checkPrereq, checkMajor, findIndexByID, checkMultiple, checkAllPrereqsUnmet} from "./searchbar/src/components/PrerequisiteCheck";
 import jsonContent from "./searchbar/src/components/test.json";
 import {NotesMenu} from "./NotesPage.page"
+import { RenderDItem } from './searchbar/src/components/DItem';
 
 const defaultItems: DItemType[] = [];
 
@@ -25,7 +26,11 @@ const majors: MajorProps[] = jsonContent.Majors;
 
 function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void },
                   plannerCourses:DItemType[], {updatePlannerCourses}:{updatePlannerCourses:Function}, 
-                  semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function}){  //,event:(DragEndEvent | null)
+                  semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function},
+                  masterList:DItemType[], {setMasterList}:{setMasterList:Function},
+                  prereqErrorMsg:string, {setPrereqErrorMsg}:{setPrereqErrorMsg:Function},
+                  unmetPrereqs:string[], {setUnmetPrereqs}:{setUnmetPrereqs:Function}
+                ){  //,event:(DragEndEvent | null)
   
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
   const [semesterSeason, setSeason] = useState("Fall"); //What season the new semester is
@@ -38,14 +43,30 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     updatePlannerCourses(() =>
       plannerCourses.map((course: DItemType) =>
         course.id === courseId
-          ? { ...course, semester: -2, credits: 3 }
+          ? { ...course, semester: -1}
           : course
       )
     )
-    
+    setMasterList(() =>
+      masterList.map((course: DItemType) =>
+        course.id === courseId ? {...course, semester: -1}: course
+      )
+    )
     for (let i = 0; i < plannerCourses.length; i++){
       if (plannerCourses[i].id == courseId) temp = i
     }
+    let newString = checkAllPrereqsUnmet(masterList, courseId, -1, unmetPrereqs, setUnmetPrereqs);
+      setUnmetPrereqs(newString);
+      const tempList = unmetPrereqs.slice(1,2);
+      setUnmetPrereqs(tempList);
+      setPrereqErrorMsg(() => {
+        if (newString.length > 0) {
+          return "The following courses do not meet prerequisites: " + newString.join(", ");
+        }
+        else{
+          return "Empty";
+        }
+      });
   }
 
   //Adds a new semester
@@ -103,7 +124,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
     return 
   }
 
-  //Checks the planner for courses of semester_id = -2 and removes them
+  //Checks the planner for courses of semester_id = -1 and removes them
   function scanPlannerListForRemoval() {
 
     for (let i = plannerCourses.length - 1; i >= 0; i--){ //let i = 0; i < plannerCourses.length; i++
@@ -111,8 +132,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       let tempArr = [...plannerCourses];
       let rerenderFlag = false;
 
-      //If course has semester -2, remove it from temparr
-      if (plannerCourses[i].semester === -2){
+      //If course has semester -1, remove it from temparr
+      if (plannerCourses[i].semester === -1){
         rerenderFlag = true;
         console.log("Get rid of it");
 
@@ -156,6 +177,38 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       {
         return e.semester != target;
       }))
+      setMasterList(() =>
+        masterList.map((e) =>
+          e.semester === target ? {...e, semester: -1}: e
+        ),
+      )
+      let newString = checkAllPrereqsUnmet(masterList, masterList[0].id, masterList[0].semester, unmetPrereqs, setUnmetPrereqs);
+      setUnmetPrereqs(newString);
+      const tempList = unmetPrereqs.slice(1,2);
+      setUnmetPrereqs(tempList);
+      masterList.map((e)=>
+        {if(e.semester == target){
+          console.log(newString[0])
+          newString[0] = newString[0].replace(e.id + ",", "")
+          newString[0] = newString[0].replace(e.id, "")
+          for(let m = 0; m < newString.length; m++){
+            //console.log(".",e.id,".",newString[m],".")
+            
+          }
+        }}
+      )
+      console.log(newString)
+      setPrereqErrorMsg(() => {
+        if (newString.length > 0) {
+          return "The following courses do not meet prerequisites: " + newString.join(", ");
+        }
+        else{
+          return "Empty";
+        }
+      });
+      
+        //if course semester = target set seemster to -1
+      
   }
                     
   function seasonToInt(season:string)
@@ -239,6 +292,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
           <button id="New Semester Button" onClick={updateCoursesInSemester} className={styles.addSemBtnStyle}>Create semester</button>
         </div>
         {PopulatePlanner()}
+        
       </div>
     </div>
     </div>
@@ -363,8 +417,10 @@ export default function App() {
     notesOpen = false;
     forceUpdate();
   }
+  //stores all classes and their current states
+  const[masterList, setMasterList] = useState<DItemType[]>(jsonContent.name);
 
-  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>(defaultItems); //List of all courses in the planner
+  const [plannerCourses, updatePlannerCourses] = useState<DItemType[]>([]); //List of all courses in the planner
   const [semesters, updateSemesters] = useState(defaultSemesters); //An array of semesters in the planner
   const [selectedCourse, setSelectedCourse] = useState<DItemType | null>(null); //needed for course info
 
@@ -400,6 +456,8 @@ export default function App() {
     return 0
   }
 
+  const [activeCourse, setActiveCourse] = useState<DItemType | null>(null); //The currently dragged course (may be redundant?)
+
   function handleDragEnd(event: DragEndEvent){
 
     const {active, over} = event; //active: The task we're actually dropping
@@ -421,7 +479,7 @@ export default function App() {
         //This checks if the item already exists in the planner (semester to semester)
         plannerCourses.map((course: DItemType) =>
           course.id === courseId
-            ? { ...course, semester: newSemester, credits: 3 }
+            ? { ...course, semester: newSemester}
             : course
         )
       );
@@ -442,7 +500,13 @@ export default function App() {
         [...plannerCourses, newCourse]
       )
     }
-  
+    setMasterList(() =>
+      masterList.map((course: DItemType) =>
+        course.id === courseId
+          ? { ...course, semester: newSemester,}
+          : course
+      )
+    )
     //Every other check to do when a course is dragged
     {
       setLastDraggedCourseId(courseId);
@@ -452,11 +516,7 @@ export default function App() {
       //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
       //setUnmetPrereqs(newString)
 
-      //check all other classes for prerequisites
-      let newString = checkAllPrereqsUnmet(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
-      setUnmetPrereqs(newString);
-      const tempList = unmetPrereqs.slice(1,2);
-      setUnmetPrereqs(tempList);
+      
 
 
       //Check for missing major requirements
@@ -487,6 +547,11 @@ export default function App() {
       }
 
       // Update error message based on unmet prereqs 
+      //check all other classes for prerequisites
+      let newString = checkAllPrereqsUnmet(masterList, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
+      setUnmetPrereqs(newString);
+      const tempList = unmetPrereqs.slice(1,2);
+      setUnmetPrereqs(tempList);
       setPrereqErrorMsg(() => {
         if (newString.length > 0) {
           return "The following courses do not meet prerequisites: " + newString.join(", ");
@@ -495,6 +560,17 @@ export default function App() {
           return "Empty";
         }
       });
+    }
+    setActiveCourse(null);
+  }
+
+  function handleDragStart(event:DragStartEvent) {
+    const {active} = event;
+    if(active){
+      const courseId = active.id as string;
+      for(let i = 0; i < plannerCourses.length; i++)
+        if(plannerCourses[i].id == courseId)
+          setActiveCourse(plannerCourses[i]);
     }
   }
   
@@ -531,11 +607,22 @@ export default function App() {
           </div>
         </div>
 
+
         <div style={{marginLeft:250}}>
-            <DndContext onDragEnd={handleDragEnd}>
+            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+              
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
-                        semesters, {updateSemesters})}
+                        semesters, {updateSemesters}, 
+                        masterList, {setMasterList}, prereqErrorMsg, {setPrereqErrorMsg}, unmetPrereqs, {setUnmetPrereqs})//used for error msgs
+                        }
               <CourseSearch setSelectedCourse={setSelectedCourse}/>
+
+              <DragOverlay>
+                {activeCourse ? (
+                  <RenderDItem course={activeCourse} callbackFunction={() => ""} setSelectedCourse={setSelectedCourse} />
+                ): null}
+              </DragOverlay>
+
             </DndContext>
             
             <CourseInfo course={selectedCourse}/>

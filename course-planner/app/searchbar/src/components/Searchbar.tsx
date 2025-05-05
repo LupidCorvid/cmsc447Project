@@ -38,6 +38,7 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
         <div>
             <input type="text" placeholder = "Enter a course name or number" onChange={filterChanged} value={searchInput} className={styles.searchbarStyle}></input>
             <div id="List of courses by filter" className={styles.courseSearchScrollStyle}>
+
                 {
                 (searchInput.length == 0) ? <div style={{clear:'both', color:'gray', marginTop: 50}}></div> :
                 filteredInputs.map((course) =>
