@@ -52,7 +52,7 @@ export function NotesMenu(input:NoteProps)
     </div>
     <div style={{
         opacity:1,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: 'rgb(245, 246, 250)',
         position: "relative",
         top: "7%",
         bottom: "10%",
@@ -69,11 +69,13 @@ export function NotesMenu(input:NoteProps)
                             border:'none', cursor: 'pointer', outline: 'inherit', color:'rgb(119, 116, 116)'}}>X</button>
         </div>
 
-        <h2 style={{paddingTop:10, paddingLeft:150, float: 'left'}}>Notes from Students</h2> 
-        <h2 style={{paddingTop:10, paddingRight:130, float: 'right'}}>Make a note for CMSC 202</h2>
-        <div className={styles.noteboxStyle} style={{clear:'both', float:'left'}}>{GetNotesForCourse("CMSC203").map((e:PublicNote) =>
-            <div key={e.noteID} className={styles.noteStyle}>{e.note}</div>
-            )}</div>
+        <h2 style={{paddingTop:10, paddingLeft:150, float: 'left', fontFamily: "Helvetica", fontWeight: 450}}>Notes from Students</h2> 
+        <h2 style={{paddingTop:10, paddingRight:130, float: 'right', fontFamily: "Helvetica", fontWeight: 450}}>Make a note for CMSC 202</h2>
+        <div className={styles.noteboxStyle} style={{clear:'both', float:'left'}}>
+            {GetNotesForCourse("CMSC203").map((e:PublicNote) =>
+                <div key={e.noteID} className={styles.noteStyle} style={{overflowWrap:'break-word'}}>{e.note}</div>
+            )}
+        </div>
         
         <div style={{clear:'right', float:'right', paddingRight:90}}>
             <div style={{}}>Note Contents:</div>
