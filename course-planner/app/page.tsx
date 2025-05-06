@@ -29,7 +29,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
                   semesters:SemesterProps[], {updateSemesters}:{updateSemesters:Function},
                   masterList:DItemType[], {setMasterList}:{setMasterList:Function},
                   prereqErrorMsg:string, {setPrereqErrorMsg}:{setPrereqErrorMsg:Function},
-                  unmetPrereqs:string[], {setUnmetPrereqs}:{setUnmetPrereqs:Function}
+                  unmetPrereqs:string[], {setUnmetPrereqs}:{setUnmetPrereqs:Function},
+                  {CheckSemesterCredits2}:{CheckSemesterCredits2: Function}, creditErrorMsg:string, {setCreditErrorMsg}:{setCreditErrorMsg:Function}
                 ){  //,event:(DragEndEvent | null)
   
   const [yearInput, setYearInput] = useState<number>(2024); //What year to add new semesters to
@@ -67,6 +68,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
           return "Empty";
         }
       });
+      CheckSemesterCredits2(courseId, masterList[findIndexByID(courseId, masterList)].credits, -1);
   }
 
   //Adds a new semester
@@ -169,6 +171,18 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
 
   function RemoveSemester(target:number)
   {
+      let tempCreditString = creditErrorMsg;
+      tempCreditString = tempCreditString.replace(semesters[target - 1].name, "");
+      tempCreditString = tempCreditString.replace(semesters[target - 1].name + ", ", "");
+      setCreditErrorMsg(() =>
+      {
+        if(tempCreditString === "Semesters have too many credits "){
+          return "";
+        }else{
+          return tempCreditString;
+        }
+      }
+      )
       updateSemesters(semesters.filter((e)=>
       {
         return e.semester_id != target
@@ -206,6 +220,8 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
           return "Empty";
         }
       });
+
+      
       
         //if course semester = target set seemster to -1
       
@@ -458,29 +474,41 @@ export default function App() {
   }
 
   //too many credits error check
-  function CheckSemesterCredits2(credit: number, newSemester: number){
+  function CheckSemesterCredits2(courseID: string, credit: number, newSemester: number){
     console.log("activated")
     let numSemesters = semesters.length;
     let tempString = "";
     let countingArray = new Array(numSemesters).fill(0);
+    let tracker = 0;
     for(let i = 0; i < numSemesters + 1; i++){
       countingArray[i] = 0;
     }
     //insert all credit totals for each semester into countingArray
-    countingArray[newSemester] += credit;
+    
     plannerCourses.map((course) =>
     {
+      if(course.id === courseID){
+        if(newSemester >= 0){
+          countingArray[newSemester] += credit;
+          tracker = 1;
+        }
+      }else{
         if(course.semester >= 0){
           console.log(course)
           countingArray[course.semester] += course.credits;
         }
+      }
     }
     )
+    if(tracker == 0){
+      countingArray[newSemester] += credit;
+    }
     console.log(countingArray)
     console.log(semesters)
     //go through each credit total, and look at semester name. If winter and summer, > 4. If fall and spring >= 20
-    for( let i = 1; i < numSemesters; i++){
-      if(semesters[i - 1].name.slice(0, 4) !== "Fall" || semesters[i - 1].name.slice(0, 6) !== "Spring"){
+    for( let i = 1; i <= numSemesters; i++){
+      if(semesters[i - 1].name.slice(0, 4) === "Fall" || semesters[i - 1].name.slice(0, 6) === "Spring"){
+        console.log("main", semesters[i - 1].name)
         if(countingArray[i] > 19.5){
           if(tempString.length != 0){
             tempString += ", " + semesters[i - 1].name;
@@ -488,7 +516,8 @@ export default function App() {
             tempString += semesters[i - 1].name;
           }
         }
-      }else{
+      }else if(semesters[i - 1].name.slice(0, 6) === "Winter" || semesters[i - 1].name.slice(0, 6) === "Summer"){
+        console.log("else")
         if(countingArray[i] > 4){
           if(tempString.length != 0){
             tempString += ", " + semesters[i - 1].name;
@@ -610,7 +639,7 @@ export default function App() {
           return "Empty";
         }
       });
-      CheckSemesterCredits2(masterList[findIndexByID(courseId, masterList)].credits, newSemester);
+      CheckSemesterCredits2(courseId, masterList[findIndexByID(courseId, masterList)].credits, newSemester);
       
     }
     setActiveCourse(null);
@@ -667,7 +696,9 @@ export default function App() {
               
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
                         semesters, {updateSemesters}, 
-                        masterList, {setMasterList}, prereqErrorMsg, {setPrereqErrorMsg}, unmetPrereqs, {setUnmetPrereqs})//used for error msgs
+                        masterList, {setMasterList}, prereqErrorMsg, {setPrereqErrorMsg}, unmetPrereqs, {setUnmetPrereqs},
+                        {CheckSemesterCredits2}, creditErrorMsg, {setCreditErrorMsg}
+                      )//used for error msgs
                         }
               <CourseSearch setSelectedCourse={setSelectedCourse}/>
 
