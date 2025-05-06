@@ -299,7 +299,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   )
 }
   
-function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
+function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }, masterList:DItemType[]){
   
   //TODO: Possibly not needed?
   const removeFromPlanner = () => {
@@ -315,7 +315,7 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
       </h1>
 
       <div id="Course Search Dynamic List" className={styles.courseSearchStyle} style={{clear:'both', float: 'right'}}>
-        <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner}/>
+        <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner} masterList={masterList}/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
       </div>
     </div>
@@ -629,7 +629,7 @@ export default function App() {
                         semesters, {updateSemesters}, 
                         masterList, {setMasterList}, prereqErrorMsg, {setPrereqErrorMsg}, unmetPrereqs, {setUnmetPrereqs})//used for error msgs
                         }
-              <CourseSearch setSelectedCourse={setSelectedCourse}/>
+              {CourseSearch ({setSelectedCourse}, masterList)}
 
               <DragOverlay>
                 {activeCourse ? (

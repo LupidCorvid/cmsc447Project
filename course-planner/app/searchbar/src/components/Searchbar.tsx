@@ -10,8 +10,9 @@ const testerValues: DItemType[] = jsonData.name
 type SearchbarProps = {
     removeFromPlanner: (courseId: string) => void;
     setSelectedCourse: (course: DItemType) => void;
+    masterList: DItemType[];
 };
-const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
+const Searchbar = ({ removeFromPlanner, setSelectedCourse, masterList }: SearchbarProps) =>
 {
     //Need to find data format for the table
     const [searchInput, setSearchInput] = useState<string>("");
@@ -22,7 +23,7 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
         setSearchInput(e.target.value);
     }
 
-    const filteredInputs = testerValues.filter((element) =>
+    const filteredInputs = masterList.filter((element) =>
     {
         if(searchInput === '')
         {
@@ -30,7 +31,10 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
         }
         else
         {
-            return element.id.toLowerCase().includes(searchInput.toLowerCase());
+            if (element.semester == -1)
+                return element.id.toLowerCase().includes(searchInput.toLowerCase());
+            else
+                return false;
         }
     })
 
