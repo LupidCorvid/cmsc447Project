@@ -136,10 +136,6 @@ html {
     padding-top: 5px;
 }
 
-.noteTextbox{
-    resize:none
-}
-
 .textStyle{
     color: var(--primaryTextColor);
     font-family: Sans-Serif;
@@ -231,4 +227,15 @@ html {
     float:left;
     height: 20px;
     margin-top: 10px;
+}
+
+.noteboxStyle{
+    overflow-y: scroll;
+    height: 450px;
+    width: 300px;
+    padding-top: 30px;
+    padding-left: 150px;
+    padding-right: 80px;
+    border-right: solid gray;
+    border-width: 2px;
 }
