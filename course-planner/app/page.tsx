@@ -177,7 +177,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       tempCreditString = tempCreditString.replace(semesters[target - 1].name + ", ", "");
       setCreditErrorMsg(() =>
       {
-        if(tempCreditString === "Semesters have too many credits "){
+        if(tempCreditString === "Semesters have too many credits: "){
           return "";
         }else{
           return tempCreditString;
