@@ -102,10 +102,10 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       {
         case "Fall":
           Season = "Spring";
+          year++;
           break;
         case "Spring":
           Season = "Fall";
-          year++;
           break;
         case "Winter":
           Season = "Spring";
@@ -160,12 +160,12 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       var semA = a.name.split(" ");
       var semB = b.name.split(" ");
       //console.log("Sorting " + semA[0] + " and " + semB[0]);
-      if(semA[1] < semB[1])
+      if(Number.parseInt(semA[1]) < Number.parseInt(semB[1]))
         return -1;
-      if (semA[1] > semB[1])
+      if (Number.parseInt(semA[1]) > Number.parseInt(semB[1]))
         return 1;
       
-      return (seasonToInt(semB[0]) - seasonToInt(semA[0]));
+      return (seasonToInt(semA[0]) - seasonToInt(semB[0]));
     })
   }
 
@@ -315,7 +315,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
   )
 }
   
-function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }){
+function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItemType) => void }, masterList:DItemType[]){
   
   //TODO: Possibly not needed?
   const removeFromPlanner = () => {
@@ -331,7 +331,7 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
       </h1>
 
       <div id="Course Search Dynamic List" className={styles.courseSearchStyle} style={{clear:'both', float: 'right'}}>
-        <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner}/>
+        <Searchbar setSelectedCourse={setSelectedCourse} removeFromPlanner={removeFromPlanner} masterList={masterList}/>
         <div id="SearchbarSpot" style={{padding: '15px'}}> </div>
       </div>
     </div>
@@ -568,6 +568,7 @@ export default function App() {
       let newCourse: DItemType;
 
       for(let i = 0; i < classList.length; i++){
+        console.log(classList[i].id + " " + active.id)
         if (classList[i].id === active.id){
           newCourse = classList[i];
           newCourse.semester = over.id as number;
@@ -594,9 +595,6 @@ export default function App() {
       // Run prereq check using the updated course list
       //let newString = checkPrereq(plannerCourses, courseId, newSemester, unmetPrereqs, setUnmetPrereqs);
       //setUnmetPrereqs(newString)
-
-      
-
 
       //Check for missing major requirements
       let majorList:String[] = [];
@@ -649,9 +647,25 @@ export default function App() {
     const {active} = event;
     if(active){
       const courseId = active.id as string;
-      for(let i = 0; i < plannerCourses.length; i++)
-        if(plannerCourses[i].id == courseId)
+
+      //If the course is in the planner
+      for(let i = 0; i < plannerCourses.length; i++){
+        if(plannerCourses[i].id == courseId){
           setActiveCourse(plannerCourses[i]);
+          return;
+        }
+      }
+
+      //If the course is in course search
+      //O(n) time, kind of bad runtime
+      for(let i = 0; i < masterList.length; i++){
+        console.log("test!!!");
+        if(masterList[i].id == courseId){
+          setActiveCourse(masterList[i]);
+          return;
+        }
+      }
+      console.log("done");
     }
   }
   
@@ -670,7 +684,7 @@ export default function App() {
               <option value={"Undecided"}>Undecided</option>
                 {
                   majors.map((major) =>
-                  <option value={major.name}>{major.name}</option>)
+                  <option value={major.name} key={major.name}>{major.name}</option>)
                 }
               </select>
             </p>
@@ -700,7 +714,7 @@ export default function App() {
                         {CheckSemesterCredits2}, creditErrorMsg, {setCreditErrorMsg}
                       )//used for error msgs
                         }
-              <CourseSearch setSelectedCourse={setSelectedCourse}/>
+              {CourseSearch ({setSelectedCourse}, masterList)}
 
               <DragOverlay>
                 {activeCourse ? (
