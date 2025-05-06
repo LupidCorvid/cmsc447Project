@@ -100,10 +100,10 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       {
         case "Fall":
           Season = "Spring";
+          year++;
           break;
         case "Spring":
           Season = "Fall";
-          year++;
           break;
         case "Winter":
           Season = "Spring";
@@ -163,7 +163,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       if (semA[1] > semB[1])
         return 1;
       
-      return (seasonToInt(semB[0]) - seasonToInt(semA[0]));
+      return (seasonToInt(semA[0]) - seasonToInt(semB[0]));
     })
   }
 
