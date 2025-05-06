@@ -60,6 +60,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       setUnmetPrereqs(newString);
       const tempList = unmetPrereqs.slice(1,2);
       setUnmetPrereqs(tempList);
+      CheckSemesterCredits2(courseId, masterList[findIndexByID(courseId, masterList)].credits, -1); //Used to be below setPrereqErrorMsg()
       setPrereqErrorMsg(() => {
         if (newString.length > 0) {
           return "The following courses do not meet prerequisites: " + newString.join(", ");
@@ -68,7 +69,7 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
           return "Empty";
         }
       });
-      CheckSemesterCredits2(courseId, masterList[findIndexByID(courseId, masterList)].credits, -1);
+      
   }
 
   //Adds a new semester
