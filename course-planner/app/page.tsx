@@ -435,6 +435,7 @@ export default function App() {
   //The strings holding the prereq error messages
   const [prereqErrorMsg, setPrereqErrorMsg] = useState("");// "*The following courses in your planner do not meet prerequisite requirements:";
   const [gradreqErrorMsg, setGradReqErrorMsg] = useState("");//"*This plan does not meet graduation requirements for " + userMajor;
+  const [creditErrorMsg, setCreditErrorMsg] = useState("");
 
   const [userMajor, setValue] = useState("Undecided");
 
@@ -455,6 +456,55 @@ export default function App() {
     }
     return 0
   }
+
+  //too many credits error check
+  function CheckSemesterCredits2(credit: number, newSemester: number){
+    console.log("activated")
+    let numSemesters = semesters.length;
+    let tempString = "";
+    let countingArray = new Array(numSemesters).fill(0);
+    for(let i = 0; i < numSemesters + 1; i++){
+      countingArray[i] = 0;
+    }
+    //insert all credit totals for each semester into countingArray
+    countingArray[newSemester] += credit;
+    plannerCourses.map((course) =>
+    {
+        if(course.semester >= 0){
+          console.log(course)
+          countingArray[course.semester] += course.credits;
+        }
+    }
+    )
+    console.log(countingArray)
+    console.log(semesters)
+    //go through each credit total, and look at semester name. If winter and summer, > 4. If fall and spring >= 20
+    for( let i = 1; i < numSemesters; i++){
+      if(semesters[i - 1].name.slice(0, 4) !== "Fall" || semesters[i - 1].name.slice(0, 6) !== "Spring"){
+        if(countingArray[i] > 19.5){
+          if(tempString.length != 0){
+            tempString += ", " + semesters[i - 1].name;
+          }else{
+            tempString += semesters[i - 1].name;
+          }
+        }
+      }else{
+        if(countingArray[i] > 4){
+          if(tempString.length != 0){
+            tempString += ", " + semesters[i - 1].name;
+          }else{
+            tempString += semesters[i - 1].name;
+          }
+        }
+      }
+    }
+    if(tempString.length > 0){
+      setCreditErrorMsg("Semesters have too many credits " + tempString);
+    }else{
+      setCreditErrorMsg("");
+    }
+  }
+
 
   const [activeCourse, setActiveCourse] = useState<DItemType | null>(null); //The currently dragged course (may be redundant?)
 
@@ -560,6 +610,8 @@ export default function App() {
           return "Empty";
         }
       });
+      CheckSemesterCredits2(masterList[findIndexByID(courseId, masterList)].credits, newSemester);
+      
     }
     setActiveCourse(null);
   }
@@ -603,6 +655,8 @@ export default function App() {
               <p className={styles.notificationStyle}>{prereqErrorMsg}</p>
               <br/>
               <p className={styles.notificationStyle}>{gradreqErrorMsg}</p>
+              <br/>
+              <p className={styles.notificationStyle}>{creditErrorMsg}</p>
             </div>
           </div>
         </div>
