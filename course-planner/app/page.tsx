@@ -529,7 +529,7 @@ export default function App() {
       }
     }
     if(tempString.length > 0){
-      setCreditErrorMsg("Semesters have too many credits " + tempString);
+      setCreditErrorMsg("Semesters have too many credits: " + tempString);
     }else{
       setCreditErrorMsg("");
     }
