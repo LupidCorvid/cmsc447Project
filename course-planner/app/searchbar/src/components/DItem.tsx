@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useDraggable} from '@dnd-kit/core';
 import styles from "./page.module.css";
 import { DItemType } from './types';
+import { relative } from 'path';
 
 type DItemProps = {
     course: DItemType;
@@ -39,8 +40,8 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
     if(course.semester >= -1){
         return(
             <div ref={setNodeRef} {...listeners} {...attributes} className={styles.draggableStyle}>
-                {course.id} &nbsp;
-                <div style={{float:'right', top:0}}>
+                
+                <div style={{float:'right'}}>
                     <button id="info btn" onClick={showCourseInfo}
                     onPointerDown={(e) => e.stopPropagation()}
                     className={styles.courseInfoBtnStyle}
@@ -52,6 +53,7 @@ export function RenderDItem({course, callbackFunction, setSelectedCourse}:DItemP
                     style={{border:'none', cursor: 'pointer', 
                         outline: 'inherit', color:'rgb(255, 255, 255)', backgroundColor: 'rgb(201, 88, 88)'}}>X</button>
                 </div>
+                <div style={{width: 100, paddingTop:3}}>{course.id} &nbsp; </div>
             </div>
         );
     }

@@ -340,6 +340,19 @@ function CourseSearch({ setSelectedCourse }: { setSelectedCourse: (course: DItem
 }
 
 function CourseInfo({ course }: { course: DItemType | null }){
+  //Note popup functionality
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+  function openNotes()
+  {
+    notesOpen = true;
+    forceUpdate();
+  }
+  function closeNotes()
+  {
+    notesOpen = false;
+    forceUpdate();
+  }
+
   const [prereqString, setString] = useState("");
   function prerequisiteString(){
     let finalString = "";
@@ -399,10 +412,15 @@ function CourseInfo({ course }: { course: DItemType | null }){
       <div className={styles.courseInfoStyle} style={{clear:'both', float: 'right'}}>
         {course ? (
           <div className={styles.courseInfoScrollStyle}>
-            <p><strong>ID:</strong> {course.id}</p>
+            <p><strong>Name:</strong> {course.id}</p>
             <p><strong>Credits:</strong> {course.credits}</p>
             <p><strong>Prerequisties:</strong> {prerequisiteString()}</p>
             <p><strong>Course Description:</strong> {course.GeneralDescription}</p>
+            <div>
+            <button  type="button" onClick={openNotes}>Open notes</button>
+            
+            <div style={{position:'absolute', top:0, left:0}}>{notesOpen ? <NotesMenu callbackFunction={closeNotes}/> : <></>} </div>
+            </div>
           </div>
           ) : (
           <p className={styles.textFont} style={{float:'left', marginLeft:190, marginTop: 50, textAlign:'center', color:'gray'}}>Select a course to view info</p>
@@ -422,18 +440,7 @@ export default function App() {
   checkPrereq(classList, "CMSC 447", 3, mylist);
   checkMajor(classList, jsonContent.Majors.find((m)=>(m.name == "Computer Science"))?.prerequisites, 5000, majorList);
   
-  //Note popup functionality
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0)
-  function openNotes()
-  {
-    notesOpen = true;
-    forceUpdate();
-  }
-  function closeNotes()
-  {
-    notesOpen = false;
-    forceUpdate();
-  }
+  
   //stores all classes and their current states
   const[masterList, setMasterList] = useState<DItemType[]>(jsonContent.name);
 
@@ -669,6 +676,12 @@ export default function App() {
       console.log("done");
     }
   }
+
+  function closeNotes()
+  {
+    notesOpen = false;
+    //forceUpdate();
+  }
   
   return (
     <html>
@@ -707,6 +720,7 @@ export default function App() {
 
 
         <div style={{marginLeft:250}}>
+          
             <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
               
               {Planner ({setSelectedCourse}, plannerCourses, {updatePlannerCourses},
