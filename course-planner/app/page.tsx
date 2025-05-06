@@ -158,9 +158,9 @@ function Planner({ setSelectedCourse }: { setSelectedCourse: (course: DItemType)
       var semA = a.name.split(" ");
       var semB = b.name.split(" ");
       //console.log("Sorting " + semA[0] + " and " + semB[0]);
-      if(semA[1] < semB[1])
+      if(Number.parseInt(semA[1]) < Number.parseInt(semB[1]))
         return -1;
-      if (semA[1] > semB[1])
+      if (Number.parseInt(semA[1]) > Number.parseInt(semB[1]))
         return 1;
       
       return (seasonToInt(semA[0]) - seasonToInt(semB[0]));
