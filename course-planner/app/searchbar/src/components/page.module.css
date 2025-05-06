@@ -232,10 +232,20 @@ html {
 .noteboxStyle{
     overflow-y: scroll;
     height: 450px;
-    width: 300px;
+    width: 420px;
     padding-top: 30px;
-    padding-left: 150px;
+    padding-left: 30px;
     padding-right: 80px;
     border-right: solid gray;
     border-width: 2px;
+}
+
+.noteStyle{
+    min-height: 100px;
+    width: 400px;
+    background-color: white;
+    box-shadow: 1px 1px 5px 5px rgba(65, 63, 63, 0.05);
+    margin: 10px;
+    padding:10px;
+    padding-bottom: 10px;
 }

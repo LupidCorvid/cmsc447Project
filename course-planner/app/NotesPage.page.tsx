@@ -72,7 +72,7 @@ export function NotesMenu(input:NoteProps)
         <h2 style={{paddingTop:10, paddingLeft:150, float: 'left'}}>Notes from Students</h2> 
         <h2 style={{paddingTop:10, paddingRight:130, float: 'right'}}>Make a note for CMSC 202</h2>
         <div className={styles.noteboxStyle} style={{clear:'both', float:'left'}}>{GetNotesForCourse("CMSC203").map((e:PublicNote) =>
-            <h1>{e.note}</h1>
+            <div key={e.noteID} className={styles.noteStyle}>{e.note}</div>
             )}</div>
         
         <div style={{clear:'right', float:'right', paddingRight:90}}>
@@ -82,6 +82,7 @@ export function NotesMenu(input:NoteProps)
             <button type="button" onClick={PostNote}>Post Note</button>
             
         </div>
+
     </div>
     </>);
 }
