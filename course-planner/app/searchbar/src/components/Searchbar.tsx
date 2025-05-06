@@ -42,7 +42,7 @@ const Searchbar = ({ removeFromPlanner, setSelectedCourse }: SearchbarProps) =>
                 {
                 (searchInput.length == 0) ? <div style={{clear:'both', color:'gray', marginTop: 50}}></div> :
                 filteredInputs.map((course) =>
-                {return <RenderDItem course={course} key={course.id} callbackFunction={removeFromPlanner}
+                {return <RenderDItem course={course} key={course.id + "_CS"} callbackFunction={removeFromPlanner}
                 setSelectedCourse={setSelectedCourse}/>; }) 
                 }
             </div>
